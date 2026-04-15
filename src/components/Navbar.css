@@ -1,0 +1,685 @@
+/* ============================================================
+   Glossy Treasures — Navbar Styles
+   Mobile-first at 390px
+   ============================================================ */
+
+/* ── Announcement Bar ───────────────────────────────────── */
+.gt-announcement-bar {
+  display: flex;
+  align-items: center;
+  height: var(--bar-height, 35px);
+  background-color: #1A1A1A;
+  overflow: hidden;
+}
+
+/* Scrolling track viewport */
+.gt-ann-text-wrap {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+/* The moving track — two identical segments for seamless loop */
+.gt-ticker-track {
+  display: flex;
+  flex-shrink: 0;
+  white-space: nowrap;
+  animation: marquee 30s linear infinite;
+  will-change: transform;
+}
+
+/* One full message segment */
+.gt-ticker-segment {
+  display: inline-flex;
+  align-items: center;
+  font-family: 'Jost', sans-serif;
+  font-weight: 300;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: #ffffff;
+  padding-right: 48px;
+  /* gap before the duplicate copy starts */
+}
+
+.gt-ticker-dot {
+  opacity: 0.55;
+  padding: 0 10px;
+}
+
+/* Screen-reader only text */
+.gt-ann-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Continuous marquee — 0% → 100% scrolls exactly one copy width */
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* ── Main Navbar ─────────────────────────────────────────── */
+.gt-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  /* always above the menu overlay (z-index: 200) */
+  width: 100%;
+}
+
+.gt-navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 70px;
+  background-color: var(--bg-primary);
+  border-bottom: 1px solid var(--border-light);
+  padding: 0 16px;
+  box-shadow: var(--shadow-navbar);
+  transition: background-color 300ms ease, backdrop-filter 300ms ease;
+  position: relative;
+}
+
+/* Scrolled state — subtle blur */
+.gt-navbar--scrolled {
+  background-color: var(--bg-overlay);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* ── Three-zone layout ── */
+.gt-nav-left,
+.gt-nav-right {
+  display: flex;
+  align-items: center;
+  min-width: 72px;
+  /* keeps center balanced */
+}
+
+.gt-nav-left {
+  justify-content: flex-start;
+}
+
+.gt-nav-right {
+  justify-content: flex-end;
+  gap: 16px;
+}
+
+.gt-nav-center {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* ── Brand name ── */
+.gt-brand {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 300;
+  font-style: italic;
+  font-size: 28px;
+  color: var(--text-primary, #3A2E28);
+  text-decoration: none;
+  white-space: nowrap;
+  letter-spacing: 0.02em;
+  transition: opacity 200ms ease;
+}
+
+.gt-brand:hover {
+  opacity: 0.75;
+}
+
+/* ── Icon buttons (hamburger, search, cart) ── */
+.gt-icon-btn {
+  background: none;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  border-radius: 6px;
+  transition: opacity var(--transition-base), background-color var(--transition-base);
+  position: relative;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.gt-icon-btn:hover,
+.gt-icon-btn:focus-visible {
+  opacity: 0.65;
+  outline: none;
+}
+
+.gt-icon-btn:active {
+  background-color: rgba(196, 148, 138, 0.08);
+}
+
+/* ── Cart badge ── */
+.gt-cart-btn {
+  position: relative;
+}
+
+.gt-cart-badge {
+  position: absolute;
+  top: -0px;
+  right: -0px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background-color: var(--accent-rose);
+  color: #ffffff;
+  font-family: var(--font-body, 'Jost', sans-serif);
+  font-weight: 500;
+  font-size: 10px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  animation: gt-badge-pop 300ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes gt-badge-pop {
+  from {
+    transform: scale(0);
+    opacity: 0;
+  }
+
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* ── Mobile Full-Screen Menu ─────────────────────────────── */
+.gt-mobile-menu {
+  position: fixed;
+  top: 70;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 200;
+  /* below navbar (300) so header stays visible */
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.gt-mobile-menu.gt-mobile-menu--open {
+  visibility: visible;
+  pointer-events: auto;
+}
+
+/* Semi-transparent backdrop */
+.gt-menu-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(30, 20, 15, 0.4);
+  opacity: 0;
+  transition: opacity 350ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.gt-mobile-menu--open .gt-menu-backdrop {
+  opacity: 1;
+}
+
+/* Slide panel — always in DOM, translated off-screen when closed */
+.gt-menu-panel {
+  position: absolute;
+  top: -70px;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: rgba(248, 228, 228, 0.6);
+  transform: translateX(-100%);
+  transition: transform 350ms cubic-bezier(0.4, 0, 0.2, 1);
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+
+.gt-mobile-menu--open .gt-menu-panel {
+  transform: translateX(0);
+}
+
+/* × Close button — absolutely pinned to top-right corner */
+.gt-menu-close {
+  position: absolute;
+  top: 0px;
+  right: 20px;
+  background: none;
+  border: none;
+  padding: 4px 8px;
+  cursor: pointer;
+  font-family: 'Jost', sans-serif;
+  font-size: 22px;
+  font-weight: 400;
+  line-height: 1;
+  color: var(--text-secondary, #7A7068);
+  transition: opacity 200ms ease;
+  -webkit-tap-highlight-color: transparent;
+  z-index: 1;
+}
+
+.gt-menu-close:hover,
+.gt-menu-close:focus-visible {
+  opacity: 0.5;
+  outline: none;
+}
+
+/* Full-height flex container centres the nav list */
+.gt-menu-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 80vh;
+  width: 100%;
+}
+
+/* Nav link list */
+.gt-menu-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+}
+
+/* Individual menu link */
+.gt-menu-link {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 300;
+  font-style: italic;
+  font-size: 38px;
+  color: var(--text-primary, #3A2E28);
+  text-decoration: none;
+  display: inline-block;
+  position: relative;
+  padding-bottom: 4px;
+  transition: color 300ms ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Gold underline grows from centre to 60% width on hover */
+.gt-menu-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 20%;
+  /* (100% - 60%) / 2 = 20% — centres a 60% bar */
+  width: 0;
+  height: 1px;
+  background-color: var(--accent-gold, #B8965A);
+  transition: width 300ms ease;
+}
+
+.gt-menu-link:hover::after,
+.gt-menu-link:focus-visible::after {
+  width: 60%;
+}
+
+.gt-menu-link:hover,
+.gt-menu-link:focus-visible {
+  color: var(--accent-gold, #B8965A);
+  outline: none;
+}
+
+/* ── Utility — hide scrollbar on menu panel ── */
+.gt-menu-panel::-webkit-scrollbar {
+  display: none;
+}
+
+.gt-menu-panel {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* ── Nav SVG icon sizing ── */
+.nav-icon {
+  display: block;
+  flex-shrink: 0;
+}
+
+.ig-follow-cta {
+  display: block;
+  text-align: center;
+  margin-top: 20px;
+  font-family: 'Jost', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent-rose);
+  text-decoration: none;
+  border-bottom: 1px solid var(--accent-rose);
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+  padding-bottom: 2px;
+}
+
+/* ── Search Full-Screen Panel ───────────────────────────── */
+.gt-search-panel {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 2000;
+  background-color: #FFFFFF;
+  transform: translateY(-100%);
+  transition: transform 400ms cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 20px 24px;
+  box-sizing: border-box;
+}
+
+.gt-search-panel.gt-search-panel--open {
+  transform: translateY(0);
+}
+
+.gt-search-close {
+  display: block;
+  margin-left: auto;
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: var(--text-secondary, #7A7068);
+  cursor: pointer;
+  line-height: 1;
+}
+
+.gt-search-input-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 1px solid var(--text-primary, #1A1A1A);
+  padding-bottom: 12px;
+  margin-top: 16px;
+}
+
+.gt-search-input-row svg {
+  color: var(--text-secondary, #7A7068);
+  width: 18px;
+  height: 18px;
+}
+
+.gt-search-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 22px;
+  color: var(--text-primary, #1A1A1A);
+  background-color: transparent;
+}
+
+.gt-search-input::placeholder {
+  color: var(--text-secondary, #7A7068);
+}
+
+.gt-quick-links {
+  margin-top: 24px;
+}
+
+.gt-quick-links-label {
+  font-family: 'Jost', sans-serif;
+  font-weight: 300;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: var(--text-secondary, #7A7068);
+  margin: 0 0 12px 0;
+  text-transform: uppercase;
+}
+
+.gt-quick-links-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.gt-quick-link-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: 'Jost', sans-serif;
+  font-weight: 300;
+  font-size: 13px;
+  color: var(--text-primary, #1A1A1A);
+  padding: 10px 0;
+  border-bottom: 1px solid #F0EBE3;
+  text-decoration: none;
+}
+
+/* ── Search Featured ────────────────────────────────────── */
+.gt-search-featured {
+  padding: 24px 20px;
+}
+
+.gt-search-featured-label {
+  font-family: 'Jost', sans-serif;
+  font-weight: 300;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: var(--text-secondary, #7A7068);
+  margin: 0 0 12px 0;
+  text-transform: uppercase;
+}
+
+.gt-search-featured-row {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.gt-search-featured-row::-webkit-scrollbar {
+  display: none;
+}
+
+.gt-search-featured-card {
+  width: 140px;
+  flex-shrink: 0;
+  cursor: pointer;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+}
+
+.gt-search-featured-card img {
+  width: 100%;
+  aspect-ratio: 1/1;
+  object-fit: cover;
+  display: block;
+}
+
+.gt-search-featured-card p {
+  font-family: 'Jost', sans-serif;
+  font-weight: 300;
+  font-size: 11px;
+  color: var(--text-primary, #1A1A1A);
+  margin: 8px 0 0 0;
+  text-align: center;
+}
+
+/* ── Motion Drawer ─────────────────────────────────────── */
+.gt-menu-backdrop-motion {
+  position: fixed;
+  inset: 0;
+  background: rgba(26, 26, 26, 0.45);
+  backdrop-filter: blur(3px);
+  z-index: 200;
+}
+
+.gt-menu-panel-motion {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100dvh;
+  width: min(300px, 82vw);
+  background: var(--bg-primary, #FAF8F5);
+  z-index: 201;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+
+.gt-menu-panel-motion::-webkit-scrollbar {
+  display: none;
+}
+
+/* Drawer Header */
+.gt-drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 20px 16px;
+  border-bottom: 1px solid #E8E0D5;
+  flex-shrink: 0;
+}
+
+.gt-drawer-brand {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 17px;
+  color: var(--text-primary, #1A1A1A);
+  letter-spacing: 0.02em;
+}
+
+.gt-menu-close-motion {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-secondary, #7A7068);
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 150ms ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.gt-menu-close-motion:hover {
+  color: var(--text-primary);
+}
+
+/* Drawer Nav List */
+.gt-drawer-nav {
+  flex: 1;
+  padding: 8px 0;
+}
+
+.gt-drawer-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.gt-drawer-item {
+  border-bottom: 1px solid rgba(232, 224, 213, 0.6);
+  overflow: hidden;
+}
+
+.gt-drawer-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 16px 20px;
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 28px;
+  font-weight: 300;
+  color: var(--text-primary, #1A1A1A);
+  text-decoration: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  letter-spacing: 0.01em;
+  transition: color 200ms ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.gt-drawer-link:active,
+.gt-drawer-link.is-active {
+  color: var(--accent-rose, #C4948A);
+}
+
+.gt-drawer-link--parent {
+  width: 100%;
+}
+
+.gt-drawer-arrow {
+  display: flex;
+  align-items: center;
+  color: var(--accent-rose, #C4948A);
+}
+
+/* Children submenu */
+.gt-drawer-children {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 8px 0;
+  background: var(--bg-secondary, #F0EBE3);
+  overflow: hidden;
+}
+
+.gt-drawer-child-link {
+  display: block;
+  padding: 11px 20px 11px 32px;
+  font-family: 'Jost', sans-serif;
+  font-weight: 300;
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-secondary, #7A7068);
+  text-decoration: none;
+  transition: color 150ms ease, padding-left 150ms ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.gt-drawer-child-link:active {
+  color: var(--text-primary, #1A1A1A);
+  padding-left: 36px;
+}
+
+/* Drawer Footer */
+.gt-drawer-footer {
+  padding: 20px;
+  border-top: 1px solid #E8E0D5;
+  flex-shrink: 0;
+}
+
+.gt-drawer-footer-label {
+  font-family: 'Jost', sans-serif;
+  font-weight: 300;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-secondary, #7A7068);
+  margin: 0 0 6px 0;
+}
+
+.gt-drawer-instagram {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 17px;
+  color: var(--accent-rose, #C4948A);
+  text-decoration: none;
+}

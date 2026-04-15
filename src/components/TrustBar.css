@@ -1,0 +1,57 @@
+.trust-bar-section {
+    background-color: var(--bg-card, #E8E0D5);
+    padding: 16px 24px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.trust-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    text-align: center;
+    padding: 8px; /* Extra breathing room */
+}
+
+.trust-item svg {
+    flex-shrink: 0;
+}
+
+.trust-text-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.trust-label {
+    font-family: 'Jost', sans-serif;
+    font-weight: 400; /* Regular */
+    font-size: 11px;
+    color: var(--text-primary, #1A1A1A);
+    letter-spacing: 0.06em;
+    margin: 0;
+}
+
+.trust-sublabel {
+    font-family: 'Jost', sans-serif;
+    font-weight: 300; /* Light */
+    font-size: 10px;
+    color: var(--text-secondary, #666666);
+    margin: 0;
+}
+
+@media (min-width: 768px) {
+    .trust-bar-section {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 24px; /* A bit more horizontal gap on desktop */
+    }
+    
+    .trust-item {
+        flex: 1; /* Space items evenly on desktop */
+    }
+}

@@ -1,0 +1,125 @@
+.our-story-section {
+    background-color: #F0EBE3;
+    overflow: hidden;
+    width: 100%;
+    border: none;
+    outline: none;
+}
+
+.our-story-container {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.our-story-image-wrapper {
+    width: 45%;
+    flex-shrink: 0;
+    display: flex;
+    position: relative;
+    overflow: hidden;
+    /* Ensures image spans full height of flexible row */
+}
+
+
+
+.our-story-image {
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+    object-position: center top;
+    display: block;
+}
+
+.our-story-content {
+    width: 55%;
+    padding: 20px 16px 20px 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.our-story-label {
+    font-family: 'Jost', sans-serif;
+    font-weight: 300;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent-rose, #C4948A);
+    margin: 0 0 10px 0;
+}
+
+.our-story-heading {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-weight: 300;
+    font-size: 26px;
+    color: var(--text-primary, #1A1A1A);
+    line-height: 1.2;
+    margin: 0 0 10px 0;
+}
+
+.our-story-text {
+    font-family: 'Jost', sans-serif;
+    font-weight: 300;
+    font-size: 12px;
+    color: var(--text-secondary, #666666);
+    line-height: 1.7;
+    margin: 0 0 16px 0;
+}
+
+.our-story-divider {
+    width: 32px;
+    height: 1px;
+    background-color: #B8965A;
+    margin-bottom: 16px;
+}
+
+.our-story-link {
+    font-family: 'Jost', sans-serif;
+    font-weight: 300;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-primary, #1A1A1A);
+    text-decoration: none;
+    border-bottom: 1px solid var(--text-primary, #1A1A1A);
+    padding-bottom: 2px;
+    display: inline-block;
+    align-self: flex-start;
+}
+
+/* DESKTOP LAYOUT OVERRIDES */
+@media (min-width: 768px) {
+    .our-story-section {
+        max-height: 420px;
+    }
+
+    .our-story-container {
+        max-height: 420px;
+    }
+
+    .our-story-image-wrapper {
+        width: 40%;
+    }
+
+    .our-story-content {
+        width: 60%;
+
+    }
+
+    .our-story-heading {
+        font-size: 32px;
+    }
+
+    .our-story-image {
+        width: 50%;
+        height: 500px;
+        object-fit: cover;
+        object-position: center top;
+    }
+}
+
+.gift-builder-section {
+    border-bottom: none;
+}

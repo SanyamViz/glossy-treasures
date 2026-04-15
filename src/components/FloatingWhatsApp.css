@@ -1,0 +1,103 @@
+.whatsapp-btn {
+    position: fixed;
+    bottom: 24px;
+    right: 20px;
+    z-index: 9998;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: #d5d5d5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.18);
+    text-decoration: none;
+    opacity: 0;
+    transform: scale(0);
+    transition: opacity 400ms ease, transform 400ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.whatsapp-btn--visible {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.whatsapp-btn--hidden {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 300ms ease;
+}
+
+.whatsapp-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    border-radius: 50%;
+    background: rgba(26, 26, 26, 0.25);
+    animation: wa-pulse 2.5s ease-out infinite;
+}
+
+.whatsapp-btn:hover::before {
+    animation-play-state: paused;
+}
+
+.whatsapp-btn:hover {
+    transform: scale(1.08);
+    box-shadow: 0 6px 28px rgba(0, 0, 0, 0.24);
+    transition: transform 200ms ease, box-shadow 200ms ease;
+}
+
+.whatsapp-btn:active {
+    transform: scale(0.95);
+    transition: transform 100ms ease;
+}
+
+@keyframes wa-pulse {
+    0% {
+        transform: scale(1);
+        opacity: 0.7;
+    }
+
+    70% {
+        transform: scale(1.5);
+        opacity: 0;
+    }
+
+    100% {
+        transform: scale(1.5);
+        opacity: 0;
+    }
+}
+
+.whatsapp-btn__tooltip {
+    position: absolute;
+    right: 60px;
+    background: #1A1A1A;
+    color: white;
+    font-family: 'Jost', sans-serif;
+    font-weight: 300;
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    padding: 6px 12px;
+    border-radius: 4px;
+    white-space: nowrap;
+    opacity: 0;
+    transform: translateX(6px);
+    transition: opacity 200ms ease, transform 200ms ease;
+    pointer-events: none;
+}
+
+.whatsapp-btn:hover .whatsapp-btn__tooltip {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+@media (max-width: 768px) {
+    .whatsapp-btn__tooltip {
+        display: none;
+    }
+}

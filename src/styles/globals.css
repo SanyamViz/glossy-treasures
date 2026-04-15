@@ -1,0 +1,162 @@
+:root {
+    --bg-primary: #FAF8F5;
+    --bg-secondary: #F0EBE3;
+    --bg-card: #E8E0D5;
+    --text-primary: #1A1A1A;
+    --text-secondary: #7A7068;
+    --accent-rose: #C4948A;
+    --accent-gold: #B8965A;
+    --font-heading: 'Cormorant Garamond', serif;
+    --font-body: 'Jost', sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: var(--font-body);
+}
+
+/* globals.css */
+.reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 600ms ease, transform 600ms ease;
+}
+
+.reveal.revealed {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Product cards */
+.product-card {
+    transition: transform 200ms ease, box-shadow 200ms ease;
+}
+
+.product-card:hover,
+.product-card:active {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.10);
+}
+
+/* All primary buttons */
+button,
+.btn,
+a[class*="btn"] {
+    transition: transform 150ms ease, opacity 150ms ease;
+}
+
+button:active,
+.btn:active {
+    transform: scale(0.97);
+    opacity: 0.9;
+}
+
+/* Category circles / icon cards */
+.category-item,
+.preserve-card {
+    transition: transform 200ms ease;
+}
+
+.category-item:active,
+.preserve-card:active {
+    transform: scale(1.04);
+}
+
+/* Product cards */
+.product-card {
+    transition: transform 200ms ease, box-shadow 200ms ease;
+}
+
+.product-card:hover,
+.product-card:active {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.10);
+}
+
+/* All primary buttons */
+button,
+.btn,
+a[class*="btn"] {
+    transition: transform 150ms ease, opacity 150ms ease;
+}
+
+button:active,
+.btn:active {
+    transform: scale(0.97);
+    opacity: 0.9;
+}
+
+/* Category circles / icon cards */
+.category-item,
+.preserve-card {
+    transition: transform 200ms ease;
+}
+
+.category-item:active,
+.preserve-card:active {
+    transform: scale(1.04);
+}
+
+body {
+    margin: 0;
+    background: linear-gradient(180deg,
+            #f8f5f2 0%,
+            #f5ebe0 50%,
+            #f8f5f2 100%);
+}
+
+.bg-blobs {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.bg-blobs::before,
+.bg-blobs::after {
+    content: "";
+    position: absolute;
+    width: 400px;
+    height: 400px;
+    background: #e8e0d5;
+    border-radius: 50%;
+    filter: blur(120px);
+    opacity: 0.4;
+    animation: floatBlob 20s infinite ease-in-out;
+}
+
+.bg-blobs::after {
+    left: 60%;
+    top: 50%;
+    animation-delay: 5s;
+}
+
+@keyframes floatBlob {
+    0% {
+        transform: translate(0, 0);
+    }
+
+    50% {
+        transform: translate(60px, -80px);
+    }
+
+    100% {
+        transform: translate(0, 0);
+    }
+}
+
+body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: url("https://www.transparenttextures.com/patterns/noise.png");
+    opacity: 0.03;
+    pointer-events: none;
+}
