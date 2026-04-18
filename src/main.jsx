@@ -3,12 +3,16 @@ import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import './styles/globals.css'
 import App from './App.jsx'
-<div className="bg-blobs"></div>
+
+import { CartProvider } from './context/CartContext'
 
 createRoot(document.getElementById('root')).render(
     <StrictMode>
-        <BrowserRouter>
-            <App />
-        </BrowserRouter>
+        <CartProvider>
+            <BrowserRouter>
+                <div className="bg-blobs"></div>
+                <App />
+            </BrowserRouter>
+        </CartProvider>
     </StrictMode>
 )

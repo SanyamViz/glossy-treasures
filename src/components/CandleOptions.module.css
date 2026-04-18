@@ -1,0 +1,84 @@
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.optionGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.label {
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--text-secondary);
+}
+
+.chipScroll {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.chipScroll::-webkit-scrollbar {
+  display: none;
+}
+
+.chip {
+  white-space: nowrap;
+  padding: 10px 20px;
+  border-radius: 999px;
+  font-size: 13px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--bg-card);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.chip.active {
+  background: var(--accent-rose);
+  color: white;
+  border-color: var(--accent-rose);
+}
+
+.fragranceDesc {
+  font-family: var(--font-heading);
+  font-style: italic;
+  font-size: 15px;
+  color: var(--text-secondary);
+  line-height: 1.4;
+  min-height: 42px;
+}
+
+.sizeGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.sizeBtn {
+  flex: 1;
+  min-width: 140px;
+  padding: 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--bg-card);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.sizeBtn.active {
+  background: var(--text-primary);
+  color: white;
+  border-color: var(--text-primary);
+}

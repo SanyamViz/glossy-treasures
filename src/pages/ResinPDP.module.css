@@ -1,0 +1,204 @@
+/* ResinPDP.module.css — mirrors CandlePDP layout exactly */
+.page {
+  position: relative;
+  background: var(--bg-primary);
+  min-height: 100vh;
+  padding-bottom: 100px;
+  overflow-x: hidden;
+}
+
+.backBtn {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 10;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(6px);
+  font-size: 20px;
+  color: var(--text-primary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.15s ease;
+}
+
+.backBtn:active {
+  transform: scale(0.92);
+}
+
+.section {
+  padding: 24px 20px 0;
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.55s ease, transform 0.55s ease;
+}
+
+.section.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.titleRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.productName {
+  font-family: var(--font-heading);
+  font-size: 30px;
+  line-height: 1.15;
+  color: var(--text-primary);
+  font-weight: 300;
+}
+
+.typeBadge {
+  white-space: nowrap;
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  padding: 5px 10px;
+  border-radius: 999px;
+  margin-top: 4px;
+}
+
+.priceRow {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.currentPrice {
+  font-size: 22px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.oldPrice {
+  font-size: 14px;
+  text-decoration: line-through;
+  color: var(--text-secondary);
+}
+
+.discountBadge {
+  background: var(--accent-rose);
+  color: white;
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.stockNudge {
+  font-size: 13px;
+  color: var(--accent-rose);
+}
+
+.tagline {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.ctaSection {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.ctaRow {
+  display: flex;
+  gap: 12px;
+}
+
+.stepper {
+  display: flex;
+  align-items: center;
+  background: var(--bg-card);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.stepper button {
+  width: 44px;
+  height: 52px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+.stepper span {
+  min-width: 32px;
+  text-align: center;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.atcBtn {
+  flex: 1;
+  background: var(--text-primary);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  height: 52px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.atcBtn:active {
+  transform: scale(0.96);
+}
+
+.atcBtn.success {
+  background: #4A7C59;
+}
+
+.altLinks {
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+}
+
+.wishBtn {
+  background: none;
+  border: none;
+  font-size: 12px;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.hamperLink {
+  background: none;
+  border: none;
+  font-size: 12px;
+  color: var(--accent-rose);
+  cursor: pointer;
+}
+
+
+@media (min-width: 768px) {
+  .page {
+    max-width: 900px;
+    margin: 0 auto;
+    padding-top: 20px;
+  }
+}

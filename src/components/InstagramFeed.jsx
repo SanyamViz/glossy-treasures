@@ -1,9 +1,18 @@
 import React from 'react';
 import './InstagramFeed.css';
-
+import reel1 from '../assets/reel1.mp4';
+import reel2 from '../assets/reel2.mp4';
+import reel3 from '../assets/reel3.mp4';
+import reel4 from '../assets/reel4.mp4';
+import reel5 from '../assets/reel5.mp4';
+import reel6 from '../assets/reel6.mp4';
 const INSTA_REELS = [
-    { id: 1 }, { id: 2 }, { id: 3 },
-    { id: 4 }, { id: 5 }, { id: 6 }
+    { id: 1, video: reel1, link: "https://www.instagram.com/reel/DLsLK7dv7D2/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" },
+    { id: 2, video: reel2, link: "https://www.instagram.com/reel/DWgM0URkpLt/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" },
+    { id: 3, video: reel3, link: "https://www.instagram.com/reel/DUdaHdlkexi/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" },
+    { id: 4, video: reel4, link: "https://www.instagram.com/reel/DUdaHdlkexi/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" },
+    { id: 5, video: reel5, link: "https://www.instagram.com/reel/DQ8xWRXkWg3/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" },
+    { id: 6, video: reel6, link: "https://www.instagram.com/reel/DPwHAQfEWrP/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" }
 ];
 
 export default function InstagramFeed() {
@@ -37,15 +46,18 @@ export default function InstagramFeed() {
                         {slide.map((reel) => (
                             <a
                                 key={reel.id}
-                                href="https://www.instagram.com/glossy_treasures"
+                                href="https://www.instagram.com/reel/DLsLK7dv7D2/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA=="
                                 target="_blank"
                                 rel="noreferrer"
                                 className="insta-reel-item"
                             >
-                                <img
-                                    src={`https://placehold.co/300x533/E8E0D5/7A7068?text=Reel+${reel.id}`}
-                                    alt={`Glossy Treasures Instagram reel ${reel.id}`}
-                                    loading="lazy"
+                                <video
+                                    src={reel.video}
+                                    autoPlay
+                                    muted
+                                    loop
+                                    playsInline
+                                    className="reel-video"
                                 />
                                 <div className="insta-hover-overlay">
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="white">

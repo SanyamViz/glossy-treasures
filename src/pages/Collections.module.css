@@ -1,0 +1,221 @@
+.page {
+  opacity: 0;
+  transition: opacity 0.4s ease-out;
+  padding-bottom: 90px;
+}
+
+.pageVisible {
+  opacity: 1;
+}
+
+.customCursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 9999;
+  background: var(--text-primary);
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-family: 'Jost', sans-serif;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition: transform 0.1s linear, opacity 0.2s ease-out;
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .customCursor {
+    display: block;
+  }
+}
+
+.hero {
+  width: 100%;
+  height: 280px;
+  background: var(--bg-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 24px;
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .hero {
+    height: 420px;
+  }
+}
+
+.heroContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.heroLabel {
+  display: block;
+  font-family: 'Jost', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--accent-rose);
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.heroTitle {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 38px;
+  font-weight: 300;
+  color: var(--text-primary);
+  margin: 12px 0;
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition-delay: 150ms;
+}
+
+@media (min-width: 768px) {
+  .heroTitle {
+    font-size: 56px;
+  }
+}
+
+.heroSubtext {
+  font-family: 'Jost', sans-serif;
+  font-size: 14px;
+  font-weight: 300;
+  color: var(--text-secondary);
+  margin-bottom: 24px;
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition-delay: 300ms;
+}
+
+.heroLine {
+  width: 40px;
+  height: 1px;
+  background: var(--accent-rose);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition-delay: 500ms;
+}
+
+.heroContent.visible .heroLabel,
+.heroContent.visible .heroTitle,
+.heroContent.visible .heroSubtext {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.heroContent.visible .heroLine {
+  transform: scaleX(1);
+}
+
+.gridSection {
+  padding: 40px 16px;
+}
+
+@media (min-width: 768px) {
+  .gridSection {
+    padding: 80px 40px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+
+@media (min-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 40px;
+  }
+  
+  /* Alternating layout as requested */
+  .cardWrapper:nth-child(4n+2),
+  .cardWrapper:nth-child(4n+3) {
+    transform: translateY(40px);
+  }
+}
+
+.cardWrapper {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.cardWrapper.showCard {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* For overlapping state on desktop, we need to adjust the translate for the alternating cards */
+@media (min-width: 768px) {
+  .cardWrapper.showCard:nth-child(4n+2),
+  .cardWrapper.showCard:nth-child(4n+3) {
+    transform: translateY(40px); /* Keeps the staggered look */
+  }
+}
+
+.brandStrip {
+  background: var(--bg-secondary);
+  padding: 48px 24px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.brandStrip::-webkit-scrollbar {
+  display: none;
+}
+
+.brandContent {
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+  min-width: max-content;
+  margin: 0 auto;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.brandContent.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.brandItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.diamond {
+  color: var(--accent-gold);
+  font-size: 16px;
+}
+
+.brandItem p {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 16px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}

@@ -41,7 +41,11 @@ export default function BestSellers() {
             <div className="products-grid-container">
                 <div className="products-grid">
                     {filteredProducts.map(product => (
-                        <Link to={`/shop/${product.slug}`} className="product-card" key={product.id}>
+                        <Link 
+                            to={`/shop/${product.category.toLowerCase() === 'candles' ? 'candles' : 'resin'}/${product.slug}`} 
+                            className="product-card" 
+                            key={product.id}
+                        >
                             <div className="product-image-container">
                                 <span className="best-seller-badge">BEST SELLER</span>
                                 <img src={product.image} alt={product.name} className="product-image" loading="lazy" />

@@ -17,7 +17,7 @@ import TrustBar from '../components/TrustBar'
 import InstagramFeed from '../components/InstagramFeed'
 import WholesaleTeaser from '../components/WholesaleTeaser'
 import PreFooter from '../components/PreFooter'
-import Footer from '../components/Footer'
+
 
 export default function Home() {
     const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -41,7 +41,6 @@ export default function Home() {
             <InstagramFeed />
             <WholesaleTeaser />
             <PreFooter />
-            <Footer />
         </>
     )
 }

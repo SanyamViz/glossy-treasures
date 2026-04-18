@@ -3,6 +3,9 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import './FeaturedProducts.css';
 import candleImg from '../assets/candlebest.png';
+import candleImg2 from '../assets/candle2.png';
+import resinimg from '../assets/resinframe.png';
+import resinimg2 from '../assets/resinframe2.png';
 
 const MotionLink = motion(Link);
 
@@ -20,7 +23,7 @@ const FEATURED_PRODUCTS = [
         name: 'Floral Resin Platter',
         price: '₹2,499',
         category: 'platters',
-        image: 'https://placehold.co/300x400/FAF8F5/7A7068',
+        image: candleImg2,
         slug: 'floral-resin-platter',
     },
     {
@@ -28,7 +31,7 @@ const FEATURED_PRODUCTS = [
         name: 'Pressed Flower Frame',
         price: '₹1,899',
         category: 'frames',
-        image: 'https://placehold.co/300x400/FAF8F5/7A7068',
+        image: resinimg,
         slug: 'pressed-flower-frame',
     },
     {
@@ -36,7 +39,7 @@ const FEATURED_PRODUCTS = [
         name: 'Rose Gold Hamper',
         price: '₹3,499',
         category: 'hampers',
-        image: 'https://placehold.co/300x400/FAF8F5/7A7068',
+        image: resinimg2,
         slug: 'rose-gold-hamper',
     },
 ];
@@ -71,7 +74,7 @@ export default function FeaturedProducts() {
 
     const ProductCard = ({ product }) => (
         <MotionLink
-            to={`/shop/${product.slug}`}
+            to={`/shop/${product.category === 'candles' ? 'candles' : 'resin'}/${product.slug}`}
             className="featured-card"
             variants={cardVariants}
             initial="hidden"

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useCart } from '../context/CartContext';
 import './Navbar.css';
 
 /* ─── Announcement bar messages ─────────────────────────── */
@@ -94,24 +95,24 @@ const NAV_LINKS = [
   {
     label: 'Collections', href: '/collections',
     children: [
-      { label: 'Soy Candles', href: '/collections/candles' },
-      { label: 'Resin Art', href: '/collections/resin' },
-      { label: 'Gift Hampers', href: '/collections/hampers' },
-      { label: 'Forever in Resin', href: '/collections/preservation' },
+      { label: 'All Collections', href: '/collections' },
+      { label: 'Gifting Edit', href: '/collections/gifting-edit' },
+      { label: 'Wedding Season', href: '/collections/wedding-season' },
+      { label: 'Self Care Rituals', href: '/collections/self-care-rituals' },
     ]
   },
-  { label: 'Shop', href: '/shop' },
+  { label: 'Shop', href: '/shop/candles' },
   { label: 'Our Story', href: '/our-story' },
   { label: 'Contact', href: '/contact' },
 ];
 
-/* ─── Hardcoded cart count ───────────────────────────────── */
-const CART_COUNT = 10;
+/* ─── Hardcoded cart count removed ───────────────────────── */
 
 /* ═══════════════════════════════════════════════════════════
    Navbar Component
    ═══════════════════════════════════════════════════════════ */
 export default function Navbar() {
+  const { totalItems } = useCart();
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -192,12 +193,12 @@ export default function Navbar() {
           <a
             href="/cart"
             className="gt-icon-btn gt-cart-btn"
-            aria-label={`Cart — ${CART_COUNT} item${CART_COUNT !== 1 ? 's' : ''}`}
+            aria-label={`Cart — ${totalItems} item${totalItems !== 1 ? 's' : ''}`}
           >
             <CartIcon />
-            {CART_COUNT > 0 && (
+            {totalItems > 0 && (
               <span className="gt-cart-badge" aria-hidden="true">
-                {CART_COUNT}
+                {totalItems}
               </span>
             )}
           </a>

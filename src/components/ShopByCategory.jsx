@@ -2,18 +2,14 @@ import { Link } from 'react-router-dom'
 import './ShopByCategory.css'
 
 const categories = [
-    { label: 'Soy Candles', slug: 'soy-candles' },
-    { label: 'Scented Candles', slug: 'scented-candles' },
-    { label: 'Jar Candles', slug: 'jar-candles' },
-    { label: 'Platters', slug: 'platters' },
-    { label: 'Frames', slug: 'frames' },
-    { label: 'Coasters', slug: 'coasters' },
-    { label: 'Bookmarks', slug: 'bookmarks' },
-    { label: 'Pendants', slug: 'pendants' },
-    { label: 'Wall Art', slug: 'wall-art' },
-    { label: 'Wedding Special', slug: 'wedding-special' },
-    { label: 'Hampers', slug: 'hampers' },
-    { label: 'Custom Orders', slug: 'custom-orders' },
+    { label: 'Gifting Edit', to: '/collections/gifting-edit' },
+    { label: 'Wedding Special', to: '/collections/wedding-season' },
+    { label: 'Self Care', to: '/collections/self-care-rituals' },
+    { label: 'Home Sanctuary', to: '/collections/home-sanctuary' },
+    { label: 'New Arrivals', to: '/collections/new-arrivals' },
+    { label: 'Bestsellers', to: '/collections/bestsellers' },
+    { label: 'Soy Candles', to: '/shop/candles' },
+    { label: 'Resin Art', to: '/shop/resin' },
 ]
 
 export default function ShopByCategory() {
@@ -26,7 +22,7 @@ export default function ShopByCategory() {
             </h2>
             <div className="shop-category-grid">
                 {categories.map((cat) => (
-                    <Link to={`/shop/${cat.slug}`} key={cat.slug} className="shop-category-item">
+                    <Link to={cat.to} key={cat.label} className="shop-category-item">
                         <div className="shop-category-circle">
                             <img src={`https://placehold.co/72x72/E8E0D5/7A7068`} alt={cat.label} />
                         </div>

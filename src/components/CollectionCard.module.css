@@ -1,0 +1,252 @@
+.card {
+  position: relative;
+  width: 100%;
+  height: 380px;
+  border-radius: 20px;
+  overflow: hidden;
+  background: var(--bg-secondary);
+  /* fallback */
+  background: var(--gradient);
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: box-shadow 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    transform 0.15s ease-out;
+  cursor: none;
+  /* Hide default cursor to use custom one from parent */
+}
+
+@media (min-width: 768px) {
+  .card {
+    height: 480px;
+  }
+}
+
+.card:hover {
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+}
+
+.card:active {
+  transform: scale(0.98);
+}
+
+.backgroundLayer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.orb {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
+  bottom: -40px;
+  right: -40px;
+  opacity: 0.4;
+  animation: float 6s ease-in-out infinite alternate;
+}
+
+@keyframes float {
+  from {
+    transform: translate(0, 0) scale(1);
+  }
+
+  to {
+    transform: translate(-20px, -15px) scale(1.1);
+  }
+}
+
+.thumbnailStrip {
+  position: absolute;
+  top: 24px;
+  left: 24px;
+  display: flex;
+  z-index: 2;
+}
+
+.thumbnail {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  overflow: hidden;
+  margin-left: -16px;
+  background: #fff;
+  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition-delay: calc(var(--i) * 50ms);
+}
+
+.thumbnail:first-child {
+  margin-left: 0;
+}
+
+.card:hover .thumbnail {
+  transform: translateX(4px);
+}
+
+.thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.moreThumbnail {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(4px);
+  margin-left: -16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 0;
+}
+
+.moreThumbnail span {
+  font-family: 'Jost', sans-serif;
+  font-size: 11px;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 24px;
+  background: linear-gradient(to top, rgba(250, 248, 245, 0.95) 60%, transparent);
+  z-index: 3;
+}
+
+.badge {
+  position: absolute;
+  top: -12px;
+  right: 24px;
+  background: #fff;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-family: 'Jost', sans-serif;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  animation: pop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  animation-delay: calc(var(--index) * 100ms + 500ms);
+  transform: scale(0);
+  opacity: 0;
+}
+
+@keyframes pop {
+  0% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+
+  70% {
+    transform: scale(1.05);
+    opacity: 1;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 26px;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+  line-height: 1.1;
+}
+
+.mood {
+  font-family: 'Jost', sans-serif;
+  font-size: 11px;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+}
+
+.count {
+  font-family: 'Jost', sans-serif;
+  font-size: 12px;
+  color: var(--accent-rose);
+  margin-bottom: 16px;
+}
+
+.bottomRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.tagline {
+  font-family: 'Jost', sans-serif;
+  font-size: 12px;
+  font-weight: 300;
+  color: var(--text-secondary);
+  max-width: 70%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.arrowCircle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.arrow {
+  color: #fff;
+  font-size: 18px;
+  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.card:hover .arrowCircle {
+  background: var(--accent-rose);
+  transform: translateX(4px);
+}
+
+.card:hover .arrow {
+  animation: arrowBounce 0.4s forwards;
+}
+
+@keyframes arrowBounce {
+  0% {
+    transform: translateX(0);
+  }
+
+  60% {
+    transform: translateX(6px);
+  }
+
+  100% {
+    transform: translateX(4px);
+  }
+}
+
+@media (pointer: coarse) {
+  .card {
+    cursor: pointer;
+  }
+}

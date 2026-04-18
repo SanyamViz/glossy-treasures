@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import candleImg from '../assets/candle.jpg';
-import hampersImg from '../assets/hampers.jpg';
-import resinImg from '../assets/resin.jpg';
-import weddingImg from '../assets/wedding.jpg';
+import candleImg from '../assets/candle.png';
+import hampersImg from '../assets/hampers.png';
+import resinImg from '../assets/resin.png';
+import weddingImg from '../assets/wedding.png';
 import './HeroSlider.css';
 
 const SLIDES = [

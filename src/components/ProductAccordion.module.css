@@ -1,0 +1,50 @@
+.accordion {
+  border-top: 1px solid var(--bg-card);
+}
+
+.item {
+  border-bottom: 1px solid var(--bg-card);
+}
+
+.header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 0;
+  background: none;
+  border: none;
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-primary);
+  letter-spacing: 0.04em;
+  cursor: pointer;
+}
+
+.chevron {
+  font-size: 14px;
+  color: var(--text-secondary);
+  transition: transform 0.3s ease;
+}
+
+.item.active .chevron {
+  transform: rotate(180deg);
+}
+
+.body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.item.active .body {
+  max-height: 200px;
+}
+
+.content {
+  padding-bottom: 20px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}

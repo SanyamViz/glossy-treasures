@@ -1,0 +1,518 @@
+/* ─── PAGE ──────────────────────────────────────────── */
+.page {
+    background: var(--bg-primary);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 60px 20px 100px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* ─── CONFETTI CANVAS ───────────────────────────────── */
+.canvas {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 10;
+}
+
+/* ─── RADIAL GLOW ───────────────────────────────────── */
+.glow {
+    position: fixed;
+    top: -200px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(196, 148, 138, 0.18) 0%, transparent 70%);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 1.2s ease;
+    z-index: 0;
+}
+
+.glowVisible {
+    opacity: 1;
+}
+
+/* ─── CONTAINER ─────────────────────────────────────── */
+.container {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 520px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 28px;
+}
+
+/* ─── HERO SECTION ──────────────────────────────────── */
+.hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    text-align: center;
+}
+
+/* ─── ANIMATED CHECKMARK ────────────────────────────── */
+.checkWrap {
+    width: 80px;
+    height: 80px;
+    color: var(--accent-rose);
+}
+
+.check {
+    width: 100%;
+    height: 100%;
+}
+
+/* Circle draws itself */
+.checkCircle {
+    stroke-dasharray: 157;
+    stroke-dashoffset: 157;
+    transition: stroke-dashoffset 0.6s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.checkVisible .checkCircle {
+    stroke-dashoffset: 0;
+}
+
+/* Tick draws after circle */
+.checkTick {
+    stroke-dasharray: 36;
+    stroke-dashoffset: 36;
+    transition: stroke-dashoffset 0.4s cubic-bezier(0.65, 0, 0.35, 1) 0.55s;
+}
+
+.checkVisible .checkTick {
+    stroke-dashoffset: 0;
+}
+
+/* ─── HERO TEXT ─────────────────────────────────────── */
+.heroText {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+        transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.heroTextIn {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.greeting {
+    font-family: var(--font-body, 'Jost', sans-serif);
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent-rose);
+    margin: 0;
+}
+
+.title {
+    font-family: var(--font-heading, 'Cormorant Garamond', serif);
+    font-size: clamp(2rem, 6vw, 2.8rem);
+    font-weight: 400;
+    color: var(--text-primary);
+    margin: 0;
+    line-height: 1.1;
+}
+
+.orderNum {
+    font-family: var(--font-body, 'Jost', sans-serif);
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+.subline {
+    font-family: var(--font-body, 'Jost', sans-serif);
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    text-align: center;
+    max-width: 320px;
+    opacity: 0;
+    transition: opacity 0.6s 0.1s ease;
+}
+
+.subline strong {
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+.sublineIn {
+    opacity: 1;
+}
+
+/* ─── DETAILS CARD ──────────────────────────────────── */
+.card {
+    width: 100%;
+    background: var(--bg-secondary);
+    border-radius: 20px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+        transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.cardIn {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.cardRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+}
+
+.cardLabel {
+    font-family: var(--font-body, 'Jost', sans-serif);
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    color: var(--text-secondary);
+}
+
+.cardValue {
+    font-family: var(--font-body, 'Jost', sans-serif);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-primary);
+    text-align: right;
+}
+
+.cardValueAccent {
+    color: var(--accent-rose);
+}
+
+.cardDivider {
+    height: 1px;
+    background: var(--card);
+}
+
+/* ─── TIMELINE ──────────────────────────────────────── */
+.timeline {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+        transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.timelineIn {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.timelineStep {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 0 0 24px 0;
+    position: relative;
+    opacity: 0;
+    transform: translateX(-12px);
+    transition: opacity 0.4s ease var(--delay, 0ms),
+        transform 0.4s ease var(--delay, 0ms);
+}
+
+/* Vertical line between steps */
+.timelineStep:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    left: 17px;
+    top: 36px;
+    bottom: 0;
+    width: 1px;
+    background: var(--card);
+}
+
+.timelineIn .timelineStep {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.timelineIconWrap {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--card);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+    z-index: 1;
+    transition: background 0.3s;
+}
+
+.timelineDone .timelineIconWrap {
+    background: var(--text-primary);
+}
+
+.timelineActive .timelineIconWrap {
+    background: var(--accent-rose);
+    box-shadow: 0 0 0 4px rgba(196, 148, 138, 0.2);
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        box-shadow: 0 0 0 4px rgba(196, 148, 138, 0.2);
+    }
+
+    50% {
+        box-shadow: 0 0 0 8px rgba(196, 148, 138, 0.08);
+    }
+}
+
+.timelineIcon {
+    font-size: 14px;
+    filter: var(--text-primary);
+}
+
+.timelineDone .timelineIcon {
+    filter: invert(1);
+}
+
+.timelineText {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    padding-top: 6px;
+}
+
+.timelineLabel {
+    font-family: var(--font-body, 'Jost', sans-serif);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-primary);
+    letter-spacing: 0.02em;
+}
+
+.timelineDone .timelineLabel,
+.timelineActive .timelineLabel {
+    color: var(--text-primary);
+}
+
+.timelineSub {
+    font-family: var(--font-body, 'Jost', sans-serif);
+    font-size: 11px;
+    color: var(--text-secondary);
+    letter-spacing: 0.02em;
+}
+
+.timelineActive .timelineSub {
+    color: var(--accent-rose);
+}
+
+/* ─── ANGEL NOTE ────────────────────────────────────── */
+.note {
+    width: 100%;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    background: var(--bg-secondary);
+    border-radius: 16px;
+    padding: 20px;
+    border-left: 3px solid var(--accent-rose);
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.5s 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+        transform 0.5s 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.noteIn {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.noteAvatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--accent-rose);
+    color: white;
+    font-family: var(--font-heading, 'Cormorant Garamond', serif);
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.noteBody {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.noteText {
+    font-family: var(--font-heading, 'Cormorant Garamond', serif);
+    font-style: italic;
+    font-size: 1.05rem;
+    color: var(--text-primary);
+    line-height: 1.7;
+    margin: 0;
+}
+
+.noteName {
+    font-family: var(--font-body, 'Jost', sans-serif);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: var(--text-secondary);
+}
+
+/* ─── CTA BUTTONS ───────────────────────────────────── */
+.actions {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+        transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.actionsIn {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.btnPrimary {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 52px;
+    background: var(--text-primary);
+    color: white;
+    border-radius: 12px;
+    font-family: var(--font-body, 'Jost', sans-serif);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-decoration: none;
+    transition: opacity 0.2s, transform 0.15s;
+}
+
+.btnPrimary:hover {
+    opacity: 0.88;
+}
+
+.btnPrimary:active {
+    transform: scale(0.98);
+}
+
+.btnOutline {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 52px;
+    background: transparent;
+    color: var(--text-primary);
+    border: 1px solid var(--card);
+    border-radius: 12px;
+    font-family: var(--font-body, 'Jost', sans-serif);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-decoration: none;
+    transition: background 0.2s, border-color 0.2s, transform 0.15s;
+}
+
+.btnOutline:hover {
+    background: var(--bg-secondary);
+    border-color: var(--text-secondary);
+}
+
+.btnOutline:active {
+    transform: scale(0.98);
+}
+
+/* ─── INSTAGRAM NUDGE ───────────────────────────────── */
+.instaNote {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    opacity: 0;
+    transition: opacity 0.5s 0.1s ease;
+}
+
+.instaNoteIn {
+    opacity: 1;
+}
+
+.instaNote>span {
+    font-family: var(--font-body, 'Jost', sans-serif);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: var(--text-secondary);
+}
+
+.instaHandle {
+    font-family: var(--font-body, 'Jost', sans-serif);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--accent-rose);
+    text-decoration: none;
+    letter-spacing: 0.04em;
+    transition: opacity 0.2s;
+}
+
+.instaHandle:hover {
+    opacity: 0.7;
+}
+
+/* ─── REDUCED MOTION ────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+
+    .heroText,
+    .subline,
+    .card,
+    .timeline,
+    .timelineStep,
+    .note,
+    .actions,
+    .instaNote,
+    .glow {
+        transition: none;
+        opacity: 1;
+        transform: none;
+    }
+
+    .checkCircle,
+    .checkTick {
+        transition: none;
+        stroke-dashoffset: 0;
+    }
+
+    .timelineActive .timelineIconWrap {
+        animation: none;
+    }
+}

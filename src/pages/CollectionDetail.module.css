@@ -1,0 +1,473 @@
+.page {
+  padding-bottom: 90px;
+}
+
+.hero {
+  position: relative;
+  width: 100%;
+  height: 480px; 
+  padding: 40px 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+  background-attachment: fixed; /* Fallback for older browsers */
+}
+
+@media (min-width: 768px) {
+  .hero {
+    height: 600px;
+    padding: 80px 10%;
+  }
+}
+
+.heroContent {
+  position: relative;
+  z-index: 2;
+  max-width: 600px;
+}
+
+.breadcrumbs {
+  font-family: 'Jost', sans-serif;
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin-bottom: 32px;
+  display: flex;
+  gap: 8px;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.6s ease-out;
+}
+
+.breadcrumbs a {
+  text-decoration: none;
+  color: inherit;
+  transition: color 0.2s;
+}
+
+.breadcrumbs a:hover {
+  color: var(--text-primary);
+}
+
+.label {
+  display: block;
+  font-family: 'Jost', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.25em;
+  color: var(--accent-rose);
+  margin-bottom: 12px;
+  opacity: 0;
+  transform: translateX(-20px);
+  transition: all 0.6s ease-out;
+  transition-delay: 100ms;
+}
+
+.title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 40px;
+  font-weight: 300;
+  color: var(--text-primary);
+  line-height: 1;
+  margin-bottom: 24px;
+}
+
+@media (min-width: 768px) {
+  .title {
+    font-size: 72px;
+  }
+}
+
+.title span {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeChar 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+@keyframes fadeChar {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.mood {
+  font-family: 'Jost', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-bottom: 24px;
+  opacity: 0;
+  transition: all 0.6s ease-out;
+  transition-delay: 300ms;
+}
+
+.description {
+  font-family: 'Jost', sans-serif;
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  max-width: 320px;
+  margin-bottom: 32px;
+  opacity: 0;
+  transition: all 0.6s ease-out;
+  transition-delay: 400ms;
+}
+
+@media (min-width: 768px) {
+  .description {
+    font-size: 16px;
+    max-width: 450px;
+  }
+}
+
+.countPill {
+  display: inline-block;
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(8px);
+  border-radius: 30px;
+  font-family: 'Jost', sans-serif;
+  font-size: 12px;
+  color: var(--text-primary);
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.6s ease-out;
+  transition-delay: 500ms;
+}
+
+.visibleContent .breadcrumbs,
+.visibleContent .label,
+.visibleContent .mood,
+.visibleContent .description,
+.visibleContent .countPill {
+  opacity: 1;
+  transform: translate(0);
+}
+
+/* Floating Stack Decoration */
+.decorationStack {
+  position: absolute;
+  top: 50%;
+  right: 20px;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 1;
+}
+
+@media (max-width: 767px) {
+  .decorationStack {
+    display: none;
+  }
+}
+
+.docCard {
+  width: 120px;
+  height: 150px;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
+  position: absolute;
+  opacity: 0;
+  transform: translateY(40px);
+  animation: floatIn 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.docCard img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.card1 {
+  transform: rotate(-6deg);
+  z-index: 1;
+  right: 40px;
+}
+
+.card2 {
+  transform: rotate(4deg) translateY(-20px);
+  z-index: 3;
+  right: 0;
+}
+
+.card3 {
+  transform: rotate(-2deg) translateY(10px);
+  z-index: 2;
+  right: 20px;
+}
+
+@keyframes floatIn {
+  to { opacity: 1; transform: translate(0) rotate(var(--rot)); }
+}
+
+/* Note: we'll apply rotations in JS or inline if needed, but here's CSS approach */
+.card1 { --rot: -6deg; }
+.card2 { --rot: 4deg; }
+.card3 { --rot: -2deg; }
+
+/* Grid Section */
+.gridSection {
+  padding: 60px 16px;
+}
+
+@media (min-width: 768px) {
+  .gridSection {
+    padding: 100px 10%;
+  }
+}
+
+.gridHeader {
+  margin-bottom: 40px;
+}
+
+.gridTitle {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 28px;
+  color: var(--text-primary);
+}
+
+.gridSubtext {
+  font-family: 'Jost', sans-serif;
+  font-size: 11px;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+@media (min-width: 768px) {
+  .grid {
+    gap: 40px;
+  }
+}
+
+.productWrapper {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.visibleGrid .productWrapper {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition-delay: var(--delay);
+}
+
+.skeleton {
+  width: 100%;
+  aspect-ratio: 1/1.3;
+  background: var(--card);
+  border-radius: 12px;
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent 25%, rgba(255, 255, 255, 0.4) 50%, transparent 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  from { background-position: 200% 0; }
+  to { background-position: -200% 0; }
+}
+
+/* Story Section */
+.storySection {
+  background: var(--bg-secondary);
+  padding: 80px 24px;
+}
+
+@media (min-width: 768px) {
+  .storySection {
+    padding: 120px 10%;
+  }
+}
+
+.storyContent {
+  display: flex;
+  gap: 32px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.storyLine {
+  width: 1px;
+  height: 0;
+  background: var(--accent-rose);
+  transition: height 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.visibleStory .storyLine {
+  height: 80px;
+}
+
+.storyText {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.8s ease-out;
+  transition-delay: 200ms;
+}
+
+.visibleStory .storyText {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.quote {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 20px;
+  line-height: 1.8;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+}
+
+.signature {
+  font-family: 'Jost', sans-serif;
+  font-size: 13px;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+/* Recommendations */
+.recommendations {
+  padding: 80px 0;
+}
+
+.recHeader {
+  padding: 0 24px;
+  margin-bottom: 32px;
+  text-align: center;
+}
+
+.recTitle {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 28px;
+}
+
+.recSubtext {
+  font-family: 'Jost', sans-serif;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.horizontalScroll {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  padding: 20px;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
+
+.horizontalScroll::-webkit-scrollbar {
+  display: none;
+}
+
+.miniCardWrapper {
+  min-width: 240px;
+  height: 280px;
+}
+
+/* Conditional heights for mini cards */
+.miniCardWrapper :global(.CollectionCard_card__Xyz12) {
+  height: 100% !important;
+}
+
+/* Back Section */
+.backSection {
+  padding: 60px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.backLink {
+  font-family: 'Jost', sans-serif;
+  font-size: 14px;
+  color: var(--text-primary);
+  text-decoration: none;
+  font-weight: 500;
+  position: relative;
+}
+
+.backLink::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--text-primary);
+  transition: width 0.3s;
+}
+
+.backLink:hover::after {
+  width: 100%;
+}
+
+.separatorRow {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 32px 0;
+  width: 100%;
+  max-width: 300px;
+}
+
+.line {
+  flex: 1;
+  height: 1px;
+  background: #eee;
+}
+
+.separatorRow span {
+  font-family: 'Jost', sans-serif;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.shopLinks {
+  display: flex;
+  gap: 16px;
+}
+
+.shopPill {
+  padding: 12px 24px;
+  border: 1px solid #ddd;
+  border-radius: 40px;
+  text-decoration: none;
+  font-family: 'Jost', sans-serif;
+  font-size: 13px;
+  color: var(--text-primary);
+  transition: all 0.3s;
+}
+
+.shopPill:hover {
+  background: var(--text-primary);
+  color: #fff;
+  border-color: var(--text-primary);
+}
+
+.notFound {
+  padding: 100px;
+  text-align: center;
+  font-family: 'Jost', sans-serif;
+}

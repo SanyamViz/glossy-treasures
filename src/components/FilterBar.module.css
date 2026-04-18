@@ -1,0 +1,107 @@
+.stickyContainer {
+  position: sticky;
+  top: 56px; /* Below Navbar */
+  background-color: var(--bg-primary);
+  border-bottom: 1px solid var(--card);
+  z-index: 100;
+  padding: 12px 0;
+}
+
+.bar {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.filterGroup {
+  margin-bottom: 12px;
+}
+
+.groupLabel {
+  display: block;
+  font-family: 'Jost', sans-serif;
+  font-size: 10px;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  letter-spacing: 0.1em;
+  margin-bottom: 8px;
+}
+
+.chipRow {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  scrollbar-width: none; /* Firefox */
+}
+
+.chipRow::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
+}
+
+.chip {
+  flex: 0 0 auto;
+  height: 36px;
+  padding: 0 16px;
+  border-radius: 20px;
+  border: 1px solid var(--card);
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  font-family: 'Jost', sans-serif;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chip:active {
+  transform: scale(0.97);
+}
+
+.activeChip {
+  background-color: var(--accent-rose);
+  color: white;
+  border-color: var(--accent-rose);
+}
+
+.bottomRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.count {
+  font-family: 'Jost', sans-serif;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.sortWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.sortSelect {
+  appearance: none;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--card);
+  font-family: 'Jost', sans-serif;
+  font-size: 12px;
+  padding: 6px 28px 6px 14px;
+  border-radius: 20px;
+  color: var(--text-primary);
+  cursor: pointer;
+  outline: none;
+}
+
+.sortArrow {
+  position: absolute;
+  right: 12px;
+  font-size: 10px;
+  pointer-events: none;
+  color: var(--text-secondary);
+}
