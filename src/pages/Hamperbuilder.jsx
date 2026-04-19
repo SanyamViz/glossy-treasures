@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
-import styles from './HamperBuilder.module.css';
+import styles from './Hamperbuilder.module.css';
 
 // ── Product data ──────────────────────────────────────
 const PRODUCTS = [
