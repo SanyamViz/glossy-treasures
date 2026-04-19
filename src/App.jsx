@@ -1,3 +1,4 @@
+import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Layout from './components/Layout';
 import Home from './pages/home';
@@ -15,8 +16,28 @@ import CandlePDP from './pages/CandlePDP';
 import Hamperbuilder from './pages/Hamperbuilder';
 import ResinPDP from './pages/ResinPDP';
 
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
+  static getDerivedStateFromError(error) {
+    return { hasError: true, error };
+  }
+  componentDidCatch(error, errorInfo) {
+    console.error("ErrorBoundary caught an error", error, errorInfo);
+  }
+  render() {
+    if (this.state.hasError) {
+      return <div style={{color: 'red', background: 'white', padding: '20px', zIndex: 9999, position: 'relative'}}><h1>Error: {this.state.error.message}</h1><pre>{this.state.error.stack}</pre></div>;
+    }
+    return this.props.children; 
+  }
+}
+
 function App() {
   return (
+    <ErrorBoundary>
     <Routes>
       <Route path="/" element={<Layout><Home /></Layout>} />
       <Route path="/hamper-builder" element={<Layout><Hamperbuilder /></Layout>} />
@@ -33,6 +54,7 @@ function App() {
       <Route path="/shop/candles/:slug" element={<Layout><CandlePDP /></Layout>} />
       <Route path="/shop/resin/:slug" element={<Layout><ResinPDP /></Layout>} />
     </Routes>
+    </ErrorBoundary>
   );
 }
 

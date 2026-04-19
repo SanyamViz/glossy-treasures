@@ -7,7 +7,7 @@ import hampersImg from '../assets/hampericon.jpg'
 const categories = [
     { label: 'Candles', link: '/shop/candles', img: candleImg },
     { label: 'Resin Art', link: '/shop/resin', img: resinImg },
-    { label: 'Hampers', link: '/build-hamper', img: hampersImg },
+    { label: 'Hampers', link: '/hamper-builder', img: hampersImg },
 ]
 
 

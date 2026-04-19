@@ -35,7 +35,7 @@ export default function GiftBuilder() {
                     </div>
                 </div>
 
-                <Link to="/pages/Hamperbuilder" className="gb-cta-btn">
+                <Link to="/hamper-builder" className="gb-cta-btn">
                     START CURATING
                 </Link>
             </div>
