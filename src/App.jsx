@@ -12,12 +12,14 @@ import CollectionDetail from './pages/CollectionDetail';
 import CandleShop from './pages/CandleShop';
 import ResinShop from './pages/ResinShop';
 import CandlePDP from './pages/CandlePDP';
+import HamperBuilder from './pages/Hamperbuilder';
 import ResinPDP from './pages/ResinPDP';
 
 function App() {
   return (
     <Routes>
       <Route path="/" element={<Layout><Home /></Layout>} />
+      <Route path="/hamper-builder" element={<Layout><HamperBuilder /></Layout>} />
       <Route path="/shop" element={<Layout><Shop /></Layout>} />
       <Route path="/our-story" element={<Layout><OurStory /></Layout>} />
       <Route path="/contact" element={<Layout><Contact /></Layout>} />
