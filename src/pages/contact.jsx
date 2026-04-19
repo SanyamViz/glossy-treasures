@@ -17,7 +17,7 @@ function useReveal(threshold = 0.15) {
   return [ref, visible];
 }
 
-const Contact = () => {
+const contact = () => {
   const [mounted, setMounted] = useState(false);
   const [form, setForm] = useState({ name: '', email: '', phone: '', message: '' });
   const [errors, setErrors] = useState({});
@@ -313,4 +313,4 @@ const Contact = () => {
   );
 };
 
-export default Contact;
+export default contact;
