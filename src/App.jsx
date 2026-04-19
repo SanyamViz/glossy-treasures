@@ -14,6 +14,7 @@ import ResinShop from './pages/ResinShop';
 import CandlePDP from './pages/CandlePDP';
 import Hamperbuilder from './pages/Hamperbuilder';
 import ResinPDP from './pages/ResinPDP';
+import Contact from './pages/contact';
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -42,7 +43,7 @@ function App() {
         <Route path="/hamper-builder" element={<Layout><Hamperbuilder /></Layout>} />
         <Route path="/shop" element={<Layout><Shop /></Layout>} />
         <Route path="/our-story" element={<Layout><OurStory /></Layout>} />
-
+        <Route path="/Contact" element={<Layout><Contact /></Layout>} />
         <Route path="/cart" element={<Layout><Cart /></Layout>} />
         <Route path="/checkout" element={<Layout><Checkout /></Layout>} />
         <Route path="/order-confirmed" element={<Layout><OrderConfirmed /></Layout>} />
