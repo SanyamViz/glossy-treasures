@@ -1,9 +1,9 @@
 {
     "buildCommand": "npm install && npm run build",
-    "routes": [
+    "rewrites": [
         {
-            "src": "/(.*)",
-            "dest": "/"
+            "source": "/(.*)",
+            "destination": "/"
         }
     ]
 }

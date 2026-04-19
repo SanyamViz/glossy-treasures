@@ -29,31 +29,31 @@ class ErrorBoundary extends React.Component {
   }
   render() {
     if (this.state.hasError) {
-      return <div style={{color: 'red', background: 'white', padding: '20px', zIndex: 9999, position: 'relative'}}><h1>Error: {this.state.error.message}</h1><pre>{this.state.error.stack}</pre></div>;
+      return <div style={{ color: 'red', background: 'white', padding: '20px', zIndex: 9999, position: 'relative' }}><h1>Error: {this.state.error.message}</h1><pre>{this.state.error.stack}</pre></div>;
     }
-    return this.props.children; 
+    return this.props.children;
   }
 }
 
 function App() {
   return (
     <ErrorBoundary>
-    <Routes>
-      <Route path="/" element={<Layout><Home /></Layout>} />
-      <Route path="/hamper-builder" element={<Layout><Hamperbuilder /></Layout>} />
-      <Route path="/shop" element={<Layout><Shop /></Layout>} />
-      <Route path="/our-story" element={<Layout><OurStory /></Layout>} />
-      <Route path="/contact" element={<Layout><Contact /></Layout>} />
-      <Route path="/cart" element={<Layout><Cart /></Layout>} />
-      <Route path="/checkout" element={<Layout><Checkout /></Layout>} />
-      <Route path="/order-confirmed" element={<Layout><OrderConfirmed /></Layout>} />
-      <Route path="/collections" element={<Layout><Collections /></Layout>} />
-      <Route path="/collections/:slug" element={<Layout><CollectionDetail /></Layout>} />
-      <Route path="/shop/candles" element={<Layout><CandleShop /></Layout>} />
-      <Route path="/shop/resin" element={<Layout><ResinShop /></Layout>} />
-      <Route path="/shop/candles/:slug" element={<Layout><CandlePDP /></Layout>} />
-      <Route path="/shop/resin/:slug" element={<Layout><ResinPDP /></Layout>} />
-    </Routes>
+      <Routes>
+        <Route path="/" element={<Layout><Home /></Layout>} />
+        <Route path="/hamper-builder" element={<Layout><Hamperbuilder /></Layout>} />
+        <Route path="/shop" element={<Layout><Shop /></Layout>} />
+        <Route path="/our-story" element={<Layout><OurStory /></Layout>} />
+        <Route path="/contact" element={<Layout><Contact /></Layout>} />
+        <Route path="/cart" element={<Layout><Cart /></Layout>} />
+        <Route path="/checkout" element={<Layout><Checkout /></Layout>} />
+        <Route path="/order-confirmed" element={<Layout><OrderConfirmed /></Layout>} />
+        <Route path="/collections" element={<Layout><Collections /></Layout>} />
+        <Route path="/collections/:slug" element={<Layout><CollectionDetail /></Layout>} />
+        <Route path="/shop/candles" element={<Layout><CandleShop /></Layout>} />
+        <Route path="/shop/resin" element={<Layout><ResinShop /></Layout>} />
+        <Route path="/shop/candles/:slug" element={<Layout><CandlePDP /></Layout>} />
+        <Route path="/shop/resin/:slug" element={<Layout><ResinPDP /></Layout>} />
+      </Routes>
     </ErrorBoundary>
   );
 }
