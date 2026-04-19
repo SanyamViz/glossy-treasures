@@ -170,7 +170,7 @@ const Checkout = () => {
         <label className={styles.label}>Full Name</label>
         <input
           className={`${styles.input} ${errors.name ? styles.inputError : ''}`}
-          type="text" placeholder="Angel Sharma"
+          type="text" placeholder="Your Name"
           value={form.name}
           onChange={e => setField('name', e.target.value)}
           autoComplete="name"
@@ -186,7 +186,7 @@ const Checkout = () => {
             <input
               ref={phoneRef}
               className={`${styles.input} ${styles.phoneInput} ${errors.phone ? styles.inputError : ''}`}
-              type="tel" placeholder="98765 43210"
+              type="tel" placeholder="Phone number"
               value={form.phone}
               onChange={e => handlePhone(e.target.value)}
               inputMode="numeric"
