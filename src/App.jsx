@@ -4,7 +4,6 @@ import Layout from './components/Layout';
 import Home from './pages/home';
 import Shop from './pages/shop';
 import OurStory from './pages/OurStory';
-import Contact from './pages/contact';
 import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
 import OrderConfirmed from './pages/Orderconfirmed';
@@ -43,7 +42,7 @@ function App() {
         <Route path="/hamper-builder" element={<Layout><Hamperbuilder /></Layout>} />
         <Route path="/shop" element={<Layout><Shop /></Layout>} />
         <Route path="/our-story" element={<Layout><OurStory /></Layout>} />
-        <Route path="/contact" element={<Layout><Contact /></Layout>} />
+
         <Route path="/cart" element={<Layout><Cart /></Layout>} />
         <Route path="/checkout" element={<Layout><Checkout /></Layout>} />
         <Route path="/order-confirmed" element={<Layout><OrderConfirmed /></Layout>} />
