@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
-import styles from './OrderConfirmed.module.css';
+import styles from './Orderconfirmed.module.css';
 
 // ── Confetti particle system ──────────────────────────
 const CONFETTI_COLORS = ['#C4948A', '#B8965A', '#E8E0D5', '#1A1A1A', '#F0EBE3', '#D4A55A'];
