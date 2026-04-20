@@ -216,10 +216,10 @@ const Contact = () => {
                                     For detailed inquiries or custom orders.
                                 </p>
                                 <a
-                                    href="mailto:glossytreasures@gmail.com"
+                                    href="mailto:glossytreasures7@gmail.com"
                                     className={styles.infoCardLink}
                                 >
-                                    glossytreasures@gmail.com →
+                                    glossytreasures7@gmail.com →
                                 </a>
                             </div>
                         </div>
