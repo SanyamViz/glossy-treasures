@@ -266,7 +266,7 @@ const Contact = () => {
                             <div className={styles.infoCardContent}>
                                 <h3 className={styles.infoCardTitle}>Studio Location</h3>
                                 <p className={styles.infoCardText}>
-                                    Based in Ludhiana, Punjab<br />
+                                    Based in Abohar, Punjab<br />
                                     <span className={styles.infoCardNote}>
                                         (Pick-up available by appointment only)
                                     </span>

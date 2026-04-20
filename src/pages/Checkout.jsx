@@ -226,7 +226,7 @@ const Checkout = () => {
         <label className={styles.label}>Pincode</label>
         <input
           className={`${styles.input} ${errors.pincode ? styles.inputError : ''}`}
-          type="text" placeholder="141001"
+          type="text" placeholder="Your Pincode"
           value={form.pincode}
           onChange={e => handlePincode(e.target.value)}
           inputMode="numeric"
@@ -241,7 +241,7 @@ const Checkout = () => {
           <label className={styles.label}>City</label>
           <input
             className={`${styles.input} ${errors.city ? styles.inputError : ''}`}
-            type="text" placeholder="Ludhiana"
+            type="text" placeholder="Your City"
             value={form.city}
             onChange={e => setField('city', e.target.value)}
             autoComplete="address-level2"
@@ -252,7 +252,7 @@ const Checkout = () => {
           <label className={styles.label}>State</label>
           <input
             className={`${styles.input} ${errors.state ? styles.inputError : ''}`}
-            type="text" placeholder="Punjab"
+            type="text" placeholder="State"
             value={form.state}
             onChange={e => setField('state', e.target.value)}
             autoComplete="address-level1"
