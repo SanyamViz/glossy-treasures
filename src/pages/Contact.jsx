@@ -95,7 +95,7 @@ const Contact = () => {
                                     <input
                                         className={`${styles.input} ${errors.name ? styles.inputError : ''}`}
                                         type="text"
-                                        placeholder="Priya Sharma"
+                                        placeholder=" Your Name "
                                         value={form.name}
                                         onChange={e => setField('name', e.target.value)}
                                         autoComplete="name"
@@ -123,7 +123,7 @@ const Contact = () => {
                                         <input
                                             className={`${styles.input} ${errors.phone ? styles.inputError : ''}`}
                                             type="tel"
-                                            placeholder="98765 43210"
+                                            placeholder="Your Phone Number"
                                             value={form.phone}
                                             onChange={e => setField('phone', e.target.value.replace(/\D/g, '').slice(0, 10))}
                                             inputMode="numeric"
