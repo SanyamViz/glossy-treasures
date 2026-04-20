@@ -14,7 +14,7 @@ import ResinShop from './pages/ResinShop';
 import CandlePDP from './pages/CandlePDP';
 import Hamperbuilder from './pages/Hamperbuilder';
 import ResinPDP from './pages/ResinPDP';
-//import Contact from './pages/contact';
+import Contact from './pages/contact';
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
