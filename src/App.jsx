@@ -51,7 +51,7 @@ function App() {
         <Route path="/our-story" element={<Layout><OurStory /></Layout>} />
         <Route path="/Contact" element={<Layout><Contact /></Layout>} />
         <Route path="/Cart" element={<Layout><Cart /></Layout>} />
-        <Route path="/wholesale" element={<Layout><Wholesale /></Layout>} />
+        <Route path="/Wholesale" element={<Layout><Wholesale /></Layout>} />
         <Route path="/checkout" element={<Layout><Checkout /></Layout>} />
         <Route path="/order-confirmed" element={<Layout><OrderConfirmed /></Layout>} />
         <Route path="/collections" element={<Layout><Collections /></Layout>} />
