@@ -54,7 +54,7 @@ function App() {
         <Route path="/shop/resin" element={<Layout><ResinShop /></Layout>} />
         <Route path="/shop/candles/:slug" element={<Layout><CandlePDP /></Layout>} />
         <Route path="/shop/resin/:slug" element={<Layout><ResinPDP /></Layout>} />
-        <Route path="*" element={<Layout><Notfound /></Layout>} />
+        <Route path="*" element={<Layout><NotFound /></Layout>} />
       </Routes>
     </ErrorBoundary>
   );

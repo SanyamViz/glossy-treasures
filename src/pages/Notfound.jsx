@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import styles from './NotFound.module.css';
+import styles from './Notfound.module.css';
 
-const NotFound = () => {
+const Notfound = () => {
     const navigate = useNavigate();
     const [mounted, setMounted] = useState(false);
     const [countdown, setCountdown] = useState(10);
@@ -94,4 +94,4 @@ const NotFound = () => {
     );
 };
 
-export default NotFound;
+export default Notfound;
