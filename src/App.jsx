@@ -12,10 +12,10 @@ import CollectionDetail from './pages/CollectionDetail';
 import CandleShop from './pages/CandleShop';
 import ResinShop from './pages/ResinShop';
 import CandlePDP from './pages/CandlePDP';
+import Shipping from './pages/Shipping';
 import Hamperbuilder from './pages/Hamperbuilder';
 import ResinPDP from './pages/ResinPDP';
 import Contact from './pages/Contact';
-import Shipping from './pages/Shipping';
 import NotFound from './pages/Notfound';
 
 class ErrorBoundary extends React.Component {
@@ -42,6 +42,7 @@ function App() {
     <ErrorBoundary>
       <Routes>
         <Route path="/" element={<Layout><Home /></Layout>} />
+        <Route path="/Shipping" element={<Layout><Shipping /></Layout>} />
         <Route path="/hamper-builder" element={<Layout><Hamperbuilder /></Layout>} />
         <Route path="/shop" element={<Layout><Shop /></Layout>} />
         <Route path="/our-story" element={<Layout><OurStory /></Layout>} />
@@ -51,7 +52,6 @@ function App() {
         <Route path="/order-confirmed" element={<Layout><OrderConfirmed /></Layout>} />
         <Route path="/collections" element={<Layout><Collections /></Layout>} />
         <Route path="/collections/:slug" element={<Layout><CollectionDetail /></Layout>} />
-        <Route path="/Shipping" element={<Layout><Shipping /></Layout>} />
         <Route path="/shop/candles" element={<Layout><CandleShop /></Layout>} />
         <Route path="/shop/resin" element={<Layout><ResinShop /></Layout>} />
         <Route path="/shop/candles/:slug" element={<Layout><CandlePDP /></Layout>} />

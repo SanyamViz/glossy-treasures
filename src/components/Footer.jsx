@@ -17,13 +17,13 @@ export default function Footer() {
                 <span className="footer-dot">&middot;</span>
                 <Link to="/our-story">Our Story</Link>
                 <span className="footer-dot">&middot;</span>
-                <Link to="/contact">Contact</Link>
+                <Link to="/Contact">Contact</Link>
             </nav>
 
             <div className="footer-policy">
-                <Link to="/shipping-and-returns">Shipping & Returns</Link>
+                <Link to="/shipping">Shipping & Returns</Link>
                 <span className="footer-dot">&middot;</span>
-                <Link to="/privacy-policy">Privacy Policy</Link>
+                <Link to="/privacy">Privacy Policy</Link>
             </div>
 
             <div className="footer-socials">
