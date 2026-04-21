@@ -1,0 +1,339 @@
+/* ─── PAGE ──────────────────────────────────────────── */
+.page {
+    background: var(--bg-primary);
+    min-height: 100vh;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.visible {
+    opacity: 1;
+}
+
+/* ─── HERO ──────────────────────────────────────────── */
+.hero {
+    padding: 80px 24px 60px;
+    text-align: center;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--card);
+}
+
+.heroContent {
+    max-width: 600px;
+    margin: 0 auto;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.heroContentIn {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.heroEyebrow {
+    font-family: var(--font-body, 'Jost', sans-serif);
+    font-size: 11px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--accent-rose);
+    margin: 0 0 16px;
+}
+
+.heroTitle {
+    font-family: var(--font-heading, 'Cormorant Garamond', serif);
+    font-size: clamp(2.2rem, 6vw, 3.4rem);
+    font-weight: 300;
+    color: var(--text-primary);
+    line-height: 1.2;
+    margin: 0 0 16px;
+}
+
+.heroSub {
+    font-family: var(--font-body, 'Jost', sans-serif);
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.8;
+    margin: 0;
+}
+
+/* ─── CONTAINER ─────────────────────────────────────── */
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 60px 24px 80px;
+}
+
+/* ─── OVERVIEW ──────────────────────────────────────── */
+.overview {
+    margin-bottom: 60px;
+}
+
+.overviewGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+}
+
+@media (min-width: 600px) {
+    .overviewGrid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+.overviewCard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 24px 16px;
+    background: var(--bg-secondary);
+    border-radius: 14px;
+    text-align: center;
+}
+
+.overviewIcon {
+    font-size: 32px;
+}
+
+.overviewLabel {
+    font-family: var(--font-heading, 'Cormorant Garamond', serif);
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    line-height: 1.2;
+}
+
+.overviewText {
+    font-family: var(--font-body, 'Jost', sans-serif);
+    font-size: 11px;
+    color: var(--text-secondary);
+    letter-spacing: 0.04em;
+}
+
+/* ─── SECTION ───────────────────────────────────────── */
+.section {
+    margin-bottom: 60px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.sectionTitle {
+    font-family: var(--font-heading, 'Cormorant Garamond', serif);
+    font-size: clamp(1.6rem, 4vw, 2.2rem);
+    font-weight: 400;
+    color: var(--text-primary);
+    margin: 0 0 12px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--card);
+}
+
+/* ─── INFO CARDS ────────────────────────────────────── */
+.card {
+    display: flex;
+    gap: 20px;
+    padding: 24px;
+    background: var(--bg-secondary);
+    border-radius: 16px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease var(--delay, 0ms),
+        transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) var(--delay, 0ms);
+}
+
+.cardVisible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.cardIcon {
+    font-size: 32px;
+    flex-shrink: 0;
+    line-height: 1;
+}
+
+.cardContent {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    flex: 1;
+}
+
+.cardTitle {
+    font-family: var(--font-heading, 'Cormorant Garamond', serif);
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin: 0;
+    line-height: 1.3;
+}
+
+.cardText {
+    font-family: var(--font-body, 'Jost', sans-serif);
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.8;
+}
+
+.cardText p {
+    margin: 0 0 12px;
+}
+
+.cardText p:last-child {
+    margin-bottom: 0;
+}
+
+.cardText strong {
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+.cardText a {
+    color: var(--accent-rose);
+    text-decoration: none;
+    transition: opacity 0.2s;
+}
+
+.cardText a:hover {
+    opacity: 0.7;
+}
+
+.note {
+    font-size: 12px;
+    font-style: italic;
+    color: var(--text-secondary);
+    opacity: 0.8;
+    margin-top: 8px;
+}
+
+/* ─── LISTS ─────────────────────────────────────────── */
+.list {
+    font-family: var(--font-body, 'Jost', sans-serif);
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.8;
+    margin: 0;
+    padding-left: 20px;
+}
+
+.list li {
+    margin-bottom: 8px;
+}
+
+.list li:last-child {
+    margin-bottom: 0;
+}
+
+/* ─── CTA ───────────────────────────────────────────── */
+.cta {
+    background: var(--bg-secondary);
+    border-radius: 20px;
+    padding: 48px 32px;
+    text-align: center;
+    margin-top: 40px;
+}
+
+.ctaContent {
+    max-width: 480px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.ctaTitle {
+    font-family: var(--font-heading, 'Cormorant Garamond', serif);
+    font-size: clamp(1.6rem, 4vw, 2.2rem);
+    font-weight: 400;
+    color: var(--text-primary);
+    margin: 0;
+    line-height: 1.2;
+}
+
+.ctaText {
+    font-family: var(--font-body, 'Jost', sans-serif);
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.8;
+    margin: 0;
+}
+
+.ctaButtons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    max-width: 320px;
+    margin-top: 8px;
+}
+
+@media (min-width: 480px) {
+    .ctaButtons {
+        flex-direction: row;
+    }
+}
+
+.ctaBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    height: 52px;
+    background: var(--text-primary);
+    color: white;
+    border-radius: 12px;
+    font-family: var(--font-body, 'Jost', sans-serif);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-decoration: none;
+    transition: opacity 0.2s, transform 0.15s;
+}
+
+.ctaBtn:hover {
+    opacity: 0.88;
+}
+
+.ctaBtn:active {
+    transform: scale(0.98);
+}
+
+.ctaBtnOutline {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    height: 52px;
+    background: transparent;
+    color: var(--text-primary);
+    border: 1px solid var(--card);
+    border-radius: 12px;
+    font-family: var(--font-body, 'Jost', sans-serif);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-decoration: none;
+    transition: background 0.2s, border-color 0.2s, transform 0.15s;
+}
+
+.ctaBtnOutline:hover {
+    background: var(--card);
+    border-color: var(--text-secondary);
+}
+
+.ctaBtnOutline:active {
+    transform: scale(0.98);
+}
+
+/* ─── REDUCED MOTION ────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+
+    .heroContent,
+    .card {
+        transition: none;
+        opacity: 1;
+        transform: none;
+    }
+}
