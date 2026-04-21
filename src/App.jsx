@@ -15,7 +15,7 @@ import CandlePDP from './pages/CandlePDP';
 import Hamperbuilder from './pages/Hamperbuilder';
 import ResinPDP from './pages/ResinPDP';
 import Contact from './pages/Contact';
-import Notfound from './pages/Notfound';
+import NotFound from './pages/Notfound';
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
