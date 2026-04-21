@@ -138,7 +138,7 @@ const OurStory = () => {
                 className={`${styles.stats} ${statsVisible ? styles.statsIn : ''}`}
             >
                 {[
-                    { value: 500, suffix: '+', label: 'Orders Delivered' },
+                    { value: 5000, suffix: '+', label: 'Orders Delivered' },
                     { value: 3, suffix: '+', label: 'Years of Craft' },
                     { value: 100, suffix: '%', label: 'Handmade' },
                     { value: 12, suffix: '+', label: 'Scents & Styles' },
