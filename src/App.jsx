@@ -17,7 +17,7 @@ import Hamperbuilder from './pages/Hamperbuilder';
 import ResinPDP from './pages/ResinPDP';
 import Contact from './pages/Contact';
 import NotFound from './pages/Notfound';
-import Wholesale from './pages/Wholesaletemp';
+import Wholesale from './pages/Wholesale';
 import PrivacyPolicy from './pages/Privacypolicy';
 
 
