@@ -3,14 +3,20 @@ import { Link } from 'react-router-dom';
 import './BestSellers.css';
 import candleImg from '../assets/candlebest.png'
 const TABS = ["See All", "Candles", "Platters", "Frames", "Keepsakes", "Hampers", "Jewellery"];
+import platterImg1 from '../assets/bestseller/platters/platter1.jpeg';
+import frame1 from '../assets/bestseller/frames/frame.jpeg';
+import candle from '../assets/bestseller/candle/candle2.jpeg';
+import keepsakes from '../assets/bestseller/keepsakes/keepsake.jpeg';
+import hamper from '../assets/bestseller/hampers/hamper.jpeg';
+import Jewellery from '../assets/bestseller/jwellery/jwellery.jpeg';
 
 const DUMMY_PRODUCTS = [
-    { id: 1, name: "Signature Rose Candle", description: "Soy blend, 50h burn", price: "₹1,249", category: "Candles", img: candleImg, slug: "signature-rose-candle" },
-    { id: 2, name: "Marble Swirl Platter", description: "Handcrafted resin", price: "₹45.00", category: "Platters", image: "https://placehold.co/300x300/E8E0D5/7A7068", slug: "marble-swirl-platter" },
-    { id: 3, name: "Vintage Brass Frame", description: "4x6 photo frame", price: "$32.00", category: "Frames", image: "https://placehold.co/300x300/E8E0D5/7A7068", slug: "vintage-brass-frame" },
-    { id: 4, name: "Cherished Keepsake Box", description: "Velvet lined interior", price: "$55.00", category: "Keepsakes", image: "https://placehold.co/300x300/E8E0D5/7A7068", slug: "cherished-keepsake-box" },
-    { id: 5, name: "Festive Joy Hamper", description: "Box of 4 items", price: "$120.00", category: "Hampers", image: "https://placehold.co/300x300/E8E0D5/7A7068", slug: "festive-joy-hamper" },
-    { id: 6, name: "Crystal Drop Necklace", description: "Sterling silver", price: "$85.00", category: "Jewellery", image: "https://placehold.co/300x300/E8E0D5/7A7068", slug: "crystal-drop-necklace" },
+    { id: 1, name: "Teddy Candle", description: "Soy blend, 70h burn", price: "₹350.00", category: "Candles", image: candle, slug: "Teddy Candle" },
+    { id: 2, name: "Haldi Platter", description: "Handcrafted resin", price: "₹1200.00", category: "Platters", image: platterImg1, slug: "Haldi platter" },
+    { id: 3, name: "Resin Frame ", description: "6-inch", price: "₹800.00", category: "Frames", image: frame1, slug: "vintage-brass-frame" },
+    { id: 4, name: "Cherished Keepsake Box", description: "Velvet lined interior", price: "₹1200.00", category: "Keepsakes", image: keepsakes, slug: "cherished-keepsake-box" },
+    { id: 5, name: "Festive Joy Hamper", description: "Box of 4 items", price: "₹2500.00", category: "Hampers", image: hamper, slug: "festive-joy-hamper" },
+    { id: 6, name: "Crystal Drop Necklace", description: "Sterling silver", price: "₹1200.00", category: "Jewellery", image: Jewellery, slug: "crystal-drop-necklace" },
 ];
 
 export default function BestSellers() {
@@ -41,9 +47,9 @@ export default function BestSellers() {
             <div className="products-grid-container">
                 <div className="products-grid">
                     {filteredProducts.map(product => (
-                        <Link 
-                            to={`/shop/${product.category.toLowerCase() === 'candles' ? 'candles' : 'resin'}/${product.slug}`} 
-                            className="product-card" 
+                        <Link
+                            to={`/shop/${product.category.toLowerCase() === 'candles' ? 'candles' : 'resin'}/${product.slug}`}
+                            className="product-card"
                             key={product.id}
                         >
                             <div className="product-image-container">
