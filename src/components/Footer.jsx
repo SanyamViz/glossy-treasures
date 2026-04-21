@@ -21,9 +21,9 @@ export default function Footer() {
             </nav>
 
             <div className="footer-policy">
-                <Link to="/shipping">Shipping & Returns</Link>
+                <Link to="/Shipping">Shipping & Returns</Link>
                 <span className="footer-dot">&middot;</span>
-                <Link to="/privacy">Privacy Policy</Link>
+                <Link to="/Privacypolicy">Privacy Policy</Link>
             </div>
 
             <div className="footer-socials">

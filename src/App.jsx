@@ -17,16 +17,10 @@ import Hamperbuilder from './pages/Hamperbuilder';
 import ResinPDP from './pages/ResinPDP';
 import Contact from './pages/Contact';
 import NotFound from './pages/Notfound';
+import Wholesale from './pages/Wholesale';
+import PrivacyPolicy from './pages/Privacypolicy';
 
-function ScrollToTop() {
-  const { pathname } = useLocation();
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [pathname]);
-
-  return null;
-}
 class ErrorBoundary extends React.Component {
   constructor(props) {
     super(props);
@@ -57,17 +51,17 @@ function App() {
         <Route path="/our-story" element={<Layout><OurStory /></Layout>} />
         <Route path="/Contact" element={<Layout><Contact /></Layout>} />
         <Route path="/Cart" element={<Layout><Cart /></Layout>} />
+        <Route path="/wholesale" element={<Layout><Wholesale /></Layout>} />
         <Route path="/checkout" element={<Layout><Checkout /></Layout>} />
         <Route path="/order-confirmed" element={<Layout><OrderConfirmed /></Layout>} />
         <Route path="/collections" element={<Layout><Collections /></Layout>} />
         <Route path="/collections/:slug" element={<Layout><CollectionDetail /></Layout>} />
         <Route path="/shop/candles" element={<Layout><CandleShop /></Layout>} />
+        <Route path="/Privacypolicy" element={<Layout><PrivacyPolicy /></Layout>} />
         <Route path="/shop/resin" element={<Layout><ResinShop /></Layout>} />
         <Route path="/shop/candles/:slug" element={<Layout><CandlePDP /></Layout>} />
         <Route path="/shop/resin/:slug" element={<Layout><ResinPDP /></Layout>} />
         <Route path="*" element={<Layout><NotFound /></Layout>} />
-        <Route path="/" element={<Layout><Home /></Layout>} />
-        <Route path="/shipping" element={<Layout><Shipping /></Layout>} />
       </Routes>
     </ErrorBoundary>
   );

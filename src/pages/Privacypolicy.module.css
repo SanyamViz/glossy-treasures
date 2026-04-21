@@ -1,0 +1,312 @@
+/* ─── PAGE ──────────────────────────────────────────── */
+.page {
+    background: var(--bg-primary);
+    min-height: 100vh;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.visible {
+    opacity: 1;
+}
+
+/* ─── HERO ──────────────────────────────────────────── */
+.hero {
+    padding: 80px 24px 60px;
+    text-align: center;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--card);
+}
+
+.heroContent {
+    max-width: 600px;
+    margin: 0 auto;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.heroContentIn {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.heroEyebrow {
+    font-family: var(--font-body, 'Jost', sans-serif);
+    font-size: 11px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--accent-rose);
+    margin: 0 0 16px;
+}
+
+.heroTitle {
+    font-family: var(--font-heading, 'Cormorant Garamond', serif);
+    font-size: clamp(2.2rem, 6vw, 3.4rem);
+    font-weight: 300;
+    color: var(--text-primary);
+    line-height: 1.2;
+    margin: 0 0 16px;
+}
+
+.heroSub {
+    font-family: var(--font-body, 'Jost', sans-serif);
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.8;
+    margin: 0 0 12px;
+}
+
+.lastUpdated {
+    font-family: var(--font-body, 'Jost', sans-serif);
+    font-size: 11px;
+    color: var(--text-secondary);
+    font-style: italic;
+    margin: 0;
+}
+
+/* ─── CONTAINER ─────────────────────────────────────── */
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 60px 24px 80px;
+}
+
+/* ─── TLDR ──────────────────────────────────────────── */
+.tldr {
+    background: var(--bg-secondary);
+    border-left: 4px solid var(--accent-rose);
+    border-radius: 12px;
+    padding: 24px 28px;
+    margin-bottom: 48px;
+}
+
+.tldrTitle {
+    font-family: var(--font-heading, 'Cormorant Garamond', serif);
+    font-size: 1.4rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin: 0 0 12px;
+}
+
+.tldrText {
+    font-family: var(--font-body, 'Jost', sans-serif);
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.8;
+    margin: 0;
+}
+
+.tldrText a {
+    color: var(--accent-rose);
+    text-decoration: none;
+    transition: opacity 0.2s;
+}
+
+.tldrText a:hover {
+    opacity: 0.7;
+}
+
+/* ─── CONTENT ───────────────────────────────────────── */
+.content {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+.section {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.sectionTitle {
+    font-family: var(--font-heading, 'Cormorant Garamond', serif);
+    font-size: 1.4rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin: 0;
+    line-height: 1.3;
+}
+
+.text {
+    font-family: var(--font-body, 'Jost', sans-serif);
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.9;
+    margin: 0;
+}
+
+.text strong {
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+.text a {
+    color: var(--accent-rose);
+    text-decoration: none;
+    transition: opacity 0.2s;
+}
+
+.text a:hover {
+    opacity: 0.7;
+}
+
+.list {
+    font-family: var(--font-body, 'Jost', sans-serif);
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.9;
+    margin: 0;
+    padding-left: 24px;
+}
+
+.list li {
+    margin-bottom: 10px;
+}
+
+.list li:last-child {
+    margin-bottom: 0;
+}
+
+.list strong {
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+.contactList {
+    list-style: none;
+    padding: 0;
+    margin: 12px 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.contactList li {
+    font-family: var(--font-body, 'Jost', sans-serif);
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+.contactList a {
+    color: var(--accent-rose);
+    text-decoration: none;
+    transition: opacity 0.2s;
+}
+
+.contactList a:hover {
+    opacity: 0.7;
+}
+
+/* ─── CTA ───────────────────────────────────────────── */
+.cta {
+    background: var(--bg-secondary);
+    border-radius: 20px;
+    padding: 48px 32px;
+    text-align: center;
+    margin-top: 60px;
+}
+
+.ctaContent {
+    max-width: 480px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.ctaTitle {
+    font-family: var(--font-heading, 'Cormorant Garamond', serif);
+    font-size: clamp(1.6rem, 4vw, 2.2rem);
+    font-weight: 400;
+    color: var(--text-primary);
+    margin: 0;
+    line-height: 1.2;
+}
+
+.ctaText {
+    font-family: var(--font-body, 'Jost', sans-serif);
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.8;
+    margin: 0;
+}
+
+.ctaButtons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    max-width: 320px;
+    margin-top: 8px;
+}
+
+@media (min-width: 480px) {
+    .ctaButtons {
+        flex-direction: row;
+    }
+}
+
+.ctaBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    height: 52px;
+    background: var(--text-primary);
+    color: white;
+    border-radius: 12px;
+    font-family: var(--font-body, 'Jost', sans-serif);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-decoration: none;
+    transition: opacity 0.2s, transform 0.15s;
+}
+
+.ctaBtn:hover {
+    opacity: 0.88;
+}
+
+.ctaBtn:active {
+    transform: scale(0.98);
+}
+
+.ctaBtnOutline {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    height: 52px;
+    background: transparent;
+    color: var(--text-primary);
+    border: 1px solid var(--card);
+    border-radius: 12px;
+    font-family: var(--font-body, 'Jost', sans-serif);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-decoration: none;
+    transition: background 0.2s, border-color 0.2s, transform 0.15s;
+}
+
+.ctaBtnOutline:hover {
+    background: var(--card);
+    border-color: var(--text-secondary);
+}
+
+.ctaBtnOutline:active {
+    transform: scale(0.98);
+}
+
+/* ─── REDUCED MOTION ────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+    .heroContent {
+        transition: none;
+        opacity: 1;
+        transform: none;
+    }
+}
