@@ -18,6 +18,15 @@ import ResinPDP from './pages/ResinPDP';
 import Contact from './pages/Contact';
 import NotFound from './pages/Notfound';
 
+function ScrollToTop() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+}
 class ErrorBoundary extends React.Component {
   constructor(props) {
     super(props);
@@ -57,6 +66,8 @@ function App() {
         <Route path="/shop/candles/:slug" element={<Layout><CandlePDP /></Layout>} />
         <Route path="/shop/resin/:slug" element={<Layout><ResinPDP /></Layout>} />
         <Route path="*" element={<Layout><NotFound /></Layout>} />
+        <Route path="/" element={<Layout><Home /></Layout>} />
+        <Route path="/shipping" element={<Layout><Shipping /></Layout>} />
       </Routes>
     </ErrorBoundary>
   );
