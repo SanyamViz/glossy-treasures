@@ -1,0 +1,340 @@
+/* ─── PAGE ──────────────────────────────────────────── */
+.page {
+    background: var(--bg-primary);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    position: relative;
+    overflow: hidden;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.visible {
+    opacity: 1;
+}
+
+/* ─── FLOATING BACKGROUND ───────────────────────────── */
+.floatingBg {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.floatItem {
+    position: absolute;
+    font-size: clamp(40px, 6vw, 80px);
+    opacity: 0.08;
+    animation: float 20s ease-in-out infinite;
+    animation-delay: calc(var(--i) * -4s);
+}
+
+.floatItem:nth-child(1) {
+    left: 10%;
+    top: 20%;
+}
+
+.floatItem:nth-child(2) {
+    left: 80%;
+    top: 15%;
+}
+
+.floatItem:nth-child(3) {
+    left: 15%;
+    top: 70%;
+}
+
+.floatItem:nth-child(4) {
+    left: 75%;
+    top: 65%;
+}
+
+.floatItem:nth-child(5) {
+    left: 50%;
+    top: 50%;
+}
+
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0) rotate(0deg);
+    }
+
+    25% {
+        transform: translateY(-30px) rotate(5deg);
+    }
+
+    50% {
+        transform: translateY(-60px) rotate(-5deg);
+    }
+
+    75% {
+        transform: translateY(-30px) rotate(3deg);
+    }
+}
+
+/* ─── CONTAINER ─────────────────────────────────────── */
+.container {
+    position: relative;
+    z-index: 1;
+    max-width: 600px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+}
+
+/* ─── 404 NUMBER ────────────────────────────────────── */
+.number {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    opacity: 0;
+    transform: scale(0.8);
+    transition: opacity 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
+        transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.numberIn {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.digit {
+    font-family: var(--font-heading, 'Cormorant Garamond', serif);
+    font-size: clamp(5rem, 15vw, 10rem);
+    font-weight: 300;
+    color: var(--text-primary);
+    line-height: 1;
+    animation: digitBounce 2s ease-in-out infinite;
+}
+
+.digitMiddle {
+    color: var(--accent-rose);
+    animation-delay: 0.2s;
+}
+
+.digit:last-child {
+    animation-delay: 0.4s;
+}
+
+@keyframes digitBounce {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+/* ─── CONTENT ───────────────────────────────────────── */
+.content {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s 0.3s ease,
+        transform 0.6s 0.3s ease;
+}
+
+.contentIn {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.title {
+    font-family: var(--font-heading, 'Cormorant Garamond', serif);
+    font-size: clamp(1.8rem, 5vw, 2.6rem);
+    font-weight: 400;
+    color: var(--text-primary);
+    margin: 0;
+    line-height: 1.2;
+}
+
+.description {
+    font-family: var(--font-body, 'Jost', sans-serif);
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.8;
+    max-width: 400px;
+    margin: 0;
+}
+
+/* ─── ACTIONS ───────────────────────────────────────── */
+.actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    max-width: 320px;
+    margin-top: 8px;
+}
+
+@media (min-width: 480px) {
+    .actions {
+        flex-direction: row;
+    }
+}
+
+.btnPrimary {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    height: 52px;
+    background: var(--text-primary);
+    color: white;
+    border-radius: 12px;
+    font-family: var(--font-body, 'Jost', sans-serif);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-decoration: none;
+    transition: opacity 0.2s, transform 0.15s;
+}
+
+.btnPrimary:hover {
+    opacity: 0.88;
+}
+
+.btnPrimary:active {
+    transform: scale(0.98);
+}
+
+.btnOutline {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    height: 52px;
+    background: transparent;
+    color: var(--text-primary);
+    border: 1px solid var(--card);
+    border-radius: 12px;
+    font-family: var(--font-body, 'Jost', sans-serif);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-decoration: none;
+    transition: background 0.2s, border-color 0.2s, transform 0.15s;
+}
+
+.btnOutline:hover {
+    background: var(--bg-secondary);
+    border-color: var(--text-secondary);
+}
+
+.btnOutline:active {
+    transform: scale(0.98);
+}
+
+/* ─── COUNTDOWN ─────────────────────────────────────── */
+.countdown {
+    font-family: var(--font-body, 'Jost', sans-serif);
+    font-size: 11px;
+    color: var(--text-secondary);
+    margin: 0;
+    letter-spacing: 0.04em;
+}
+
+.countdown strong {
+    color: var(--accent-rose);
+    font-weight: 600;
+}
+
+/* ─── LINKS ─────────────────────────────────────────── */
+.links {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s 0.5s ease,
+        transform 0.6s 0.5s ease;
+}
+
+.linksIn {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.linksLabel {
+    font-family: var(--font-body, 'Jost', sans-serif);
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    text-align: center;
+    display: block;
+}
+
+.linksGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+@media (min-width: 480px) {
+    .linksGrid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+.linkCard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 20px 16px;
+    background: var(--bg-secondary);
+    border: 1px solid transparent;
+    border-radius: 12px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.linkCard:hover {
+    border-color: var(--card);
+    transform: translateY(-4px);
+}
+
+.linkIcon {
+    font-size: 28px;
+}
+
+.linkLabel {
+    font-family: var(--font-body, 'Jost', sans-serif);
+    font-size: 12px;
+    color: var(--text-primary);
+    letter-spacing: 0.04em;
+}
+
+/* ─── REDUCED MOTION ────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+
+    .number,
+    .content,
+    .links {
+        transition: none;
+        opacity: 1;
+        transform: none;
+    }
+
+    .digit,
+    .floatItem {
+        animation: none;
+    }
+}

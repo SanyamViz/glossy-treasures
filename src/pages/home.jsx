@@ -17,7 +17,7 @@ import TrustBar from '../components/TrustBar'
 import InstagramFeed from '../components/InstagramFeed'
 import WholesaleTeaser from '../components/WholesaleTeaser'
 import PreFooter from '../components/PreFooter'
-
+import './home.css';
 
 export default function Home() {
     const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -41,6 +41,11 @@ export default function Home() {
             <InstagramFeed />
             <WholesaleTeaser />
             <PreFooter />
+            <div className="hero-petals">
+                {Array.from({ length: 12 }).map((_, i) => (
+                    <span key={i} className={`petal petal--${i + 1}`} />
+                ))}
+            </div>
 
         </>
     )

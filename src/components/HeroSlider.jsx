@@ -57,12 +57,6 @@ export default function HeroSlider() {
       onTouchEnd={handleTouchEnd}
       aria-roledescription="carousel"
     >
-      {/* Hero Petals Animation Layer */}
-      <div className="hero-petals">
-        {Array.from({ length: 12 }).map((_, i) => (
-          <span key={i} className={`petal petal--${i + 1}`} />
-        ))}
-      </div>
       <div
         className="gt-hero-track"
         style={{ transform: `translateX(-${currentSlide * 100}%)` }}
