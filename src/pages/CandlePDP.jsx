@@ -10,50 +10,21 @@ import ProductReviews from '../components/ProductReviews';
 import YouMayAlsoLike from '../components/YouMayAlsoLike';
 import MadeByAngel from '../components/MadeByAngel';
 import styles from './CandlePDP.module.css';
+import { getCandleProducts } from '../data/products';
 
-const CANDLE_PRODUCTS = {
-  'amber-oud-candle': {
-    slug: 'amber-oud-candle',
-    name: 'Amber & Oud Soy Candle',
-    badge: '45 HRS BURN TIME',
-    basePrice: 1299,
-    originalPrice: 1599,
-    discount: '19% OFF',
-    tagline: 'Hand-poured in small batches. A slow, meditative release of warmth.',
-    stock: 4,
-    images: [
-      'https://images.unsplash.com/photo-1602028915047-37269d1a73f7?w=800&q=80',
-      'https://images.unsplash.com/photo-1529651737248-dad5e287768e?w=800&q=80',
-      'https://images.unsplash.com/photo-1603207894673-6f0bf0efab0f?w=800&q=80'
-    ]
-  },
-  'lavender-haze-candle': {
-    slug: 'lavender-haze-candle',
-    name: 'Lavender Haze Candle',
-    badge: '45 HRS BURN TIME',
-    basePrice: 699,
-    originalPrice: 899,
-    discount: '22% OFF',
-    tagline: 'Fields at dusk. Quiet and unhurried, soft on the air.',
-    stock: 6,
-    images: [
-      'https://images.unsplash.com/photo-1549388604-817d15aa0110?w=800&q=80',
-      'https://images.unsplash.com/photo-1603207894673-6f0bf0efab0f?w=800&q=80',
-      'https://images.unsplash.com/photo-1529651737248-dad5e287768e?w=800&q=80'
-    ]
-  }
-};
 
-const DEFAULT_CANDLE = CANDLE_PRODUCTS['amber-oud-candle'];
 
 export default function CandlePDP() {
   const { slug } = useParams();
   const navigate = useNavigate();
-  const product = CANDLE_PRODUCTS[slug] || DEFAULT_CANDLE;
 
-  const [qty, setQty] = useState(1);
+  // 1. Fetch data FIRST (not a hook)
+  const product = getCandleProducts().find(p => p.slug === slug);
+
+  // 2. Call ALL hooks unconditionally
   const { addToCart } = useCart();
-  const [currentPrice, setCurrentPrice] = useState(product.basePrice);
+  const [qty, setQty] = useState(1);
+  const [currentPrice, setCurrentPrice] = useState(product?.price || 0);
   const [isSuccess, setIsSuccess] = useState(false);
   const [isMainCTAVisible, setIsMainCTAVisible] = useState(true);
 
@@ -61,9 +32,13 @@ export default function CandlePDP() {
   const hamperRef = useRef(null);
   const sectionRefs = useRef([]);
 
+  // 3. Effects that depend on data or URL
   useEffect(() => {
-    setCurrentPrice(product.basePrice);
     window.scrollTo(0, 0);
+    // Reset state if slug changes
+    setQty(1);
+    setCurrentPrice(product?.price || 0);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [slug]);
 
   // Sticky bar observer
@@ -78,6 +53,7 @@ export default function CandlePDP() {
 
   // Staggered fade-in
   useEffect(() => {
+    if (!product) return;
     const timers = sectionRefs.current.map((ref, i) => {
       return setTimeout(() => {
         if (ref) ref.classList.add(styles.visible);
@@ -87,10 +63,23 @@ export default function CandlePDP() {
   }, [product]);
 
   const handleAddToCart = () => {
+    if (!product) return;
     setIsSuccess(true);
-    addToCart({ ...product, basePrice: currentPrice }, qty);
+    addToCart({ ...product, price: currentPrice }, qty);
     setTimeout(() => setIsSuccess(false), 1000);
   };
+
+  // 4. Safe guard: Return fallback UI if product not found AFTER all hooks
+  if (!product) {
+    return (
+      <div className={styles.page} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '50vh', flexDirection: 'column' }}>
+        <h2>Product not found</h2>
+        <button onClick={() => navigate('/shop/candles')} className={styles.atcBtn} style={{ marginTop: '20px', maxWidth: '200px' }}>
+          Back to Shop
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.page}>
@@ -110,12 +99,12 @@ export default function CandlePDP() {
       <header className={`${styles.section} ${styles.header}`} ref={el => sectionRefs.current[0] = el}>
         <div className={styles.titleRow}>
           <h1 className={styles.productName}>{product.name}</h1>
-          <span className={styles.typeBadge}>{product.badge}</span>
+          {product.badge && <span className={styles.typeBadge}>{product.badge}</span>}
         </div>
         <div className={styles.priceRow}>
           <span className={styles.currentPrice}>₹{currentPrice.toLocaleString('en-IN')}</span>
-          <span className={styles.oldPrice}>₹{product.originalPrice.toLocaleString('en-IN')}</span>
-          <span className={styles.discountBadge}>{product.discount}</span>
+          {product.originalPrice && <span className={styles.oldPrice}>₹{product.originalPrice.toLocaleString('en-IN')}</span>}
+          {product.discount && <span className={styles.discountBadge}>{product.discount}</span>}
         </div>
         <p className={styles.stockNudge}>🔥 Only {product.stock} left</p>
         <p className={styles.tagline}>{product.tagline}</p>
@@ -123,7 +112,7 @@ export default function CandlePDP() {
 
       {/* 3. Candle Options */}
       <div className={styles.section} ref={el => sectionRefs.current[1] = el}>
-        <CandleOptions onPriceChange={setCurrentPrice} basePrice={product.basePrice} />
+        <CandleOptions onPriceChange={setCurrentPrice} basePrice={product.price} />
       </div>
 
       {/* 4. Qty + ATC */}

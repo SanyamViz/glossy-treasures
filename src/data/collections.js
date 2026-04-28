@@ -1,4 +1,4 @@
-import { CANDLES, RESIN } from './products.js';
+import { CANDLES, RESIN_PRODUCTS } from './products.js';
 
 export const COLLECTIONS = [
   {
@@ -88,6 +88,6 @@ export const COLLECTIONS = [
 ];
 
 export function getCollectionProducts(productSlugs) {
-  const all = [...CANDLES, ...RESIN];
+  const all = [...CANDLES, ...RESIN_PRODUCTS];
   return productSlugs.map(slug => all.find(p => p.slug === slug)).filter(Boolean);
 }

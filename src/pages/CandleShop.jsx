@@ -23,7 +23,6 @@ const FILTER_CONFIGS = [
     options: [
       { label: 'All Sizes', value: 'all' },
       { label: '100g', value: '100g' },
-      { label: '200g', value: '200g' },
       { label: '300g', value: '300g' },
     ]
   },
@@ -61,11 +60,11 @@ const CandleShop = () => {
     setActiveFilters(prev => {
       const current = prev[key];
       if (value === 'all') return { ...prev, [key]: [] };
-      
+
       const next = current.includes(value)
         ? current.filter(v => v !== value)
         : [...current, value];
-      
+
       return { ...prev, [key]: next };
     });
     setVisibleCount(6);
@@ -121,8 +120,8 @@ const CandleShop = () => {
         {visibleProducts.length > 0 ? (
           <div className={styles.grid}>
             {visibleProducts.map((product, index) => (
-              <div 
-                key={product.id} 
+              <div
+                key={product.id}
                 className={styles.cardWrapper}
                 style={{ animationDelay: `${index * 60}ms` }}
               >
@@ -135,7 +134,7 @@ const CandleShop = () => {
             <span className={styles.emoji}>🕯️</span>
             <h2>No candles match your filters.</h2>
             <p>Try adjusting or clearing your filters.</p>
-            <button 
+            <button
               className={styles.clearBtn}
               onClick={() => setActiveFilters({ scentFamily: [], size: [], occasion: [] })}
             >
@@ -147,7 +146,7 @@ const CandleShop = () => {
 
       {visibleCount < filteredProducts.length && (
         <div className={styles.loadMoreContainer}>
-          <button 
+          <button
             className={styles.loadMoreBtn}
             onClick={() => setVisibleCount(prev => prev + 6)}
           >

@@ -13,14 +13,15 @@ export default function HamperBuilder({ currentProduct }) {
   const [items, setItems] = useState([]);
   const [showNote, setShowNote] = useState(false);
   const [usePremiumPkg, setUsePremiumPkg] = useState(false);
-  const [total, setTotal] = useState(currentProduct.basePrice);
+  const baseProductPrice = currentProduct?.price || currentProduct?.basePrice || 0;
+  const [total, setTotal] = useState(baseProductPrice);
 
   useEffect(() => {
-    let newTotal = currentProduct.basePrice;
+    let newTotal = baseProductPrice;
     items.forEach(item => newTotal += item.price);
     if (usePremiumPkg) newTotal += 99;
     setTotal(newTotal);
-  }, [items, usePremiumPkg, currentProduct.basePrice]);
+  }, [items, usePremiumPkg, baseProductPrice]);
 
   const addItem = (e, product) => {
     e.preventDefault();
@@ -64,8 +65,8 @@ export default function HamperBuilder({ currentProduct }) {
         
         <div className={styles.summaryList}>
           <div className={styles.summaryRow}>
-            <span>🔒 {currentProduct.name}</span>
-            <span>₹{currentProduct.basePrice.toLocaleString('en-IN')}</span>
+            <span>🔒 {currentProduct?.name}</span>
+            <span>₹{(currentProduct?.price || currentProduct?.basePrice || 0).toLocaleString('en-IN')}</span>
           </div>
           
           {items.map(item => (

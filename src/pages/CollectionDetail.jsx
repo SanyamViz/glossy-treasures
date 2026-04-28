@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { COLLECTIONS, getCollectionProducts } from '../data/collections';
-import { CANDLES, RESIN } from '../data/products';
+import { CANDLES, RESIN_PRODUCTS } from '../data/products';
 import ProductCard from '../components/ProductCard';
 import CollectionCard from '../components/CollectionCard';
 import useScrollReveal from '../hooks/useScrollReveal';
@@ -56,10 +56,10 @@ const CollectionDetail = () => {
   return (
     <div className={styles.page}>
       {/* Hero Section */}
-      <section 
-        className={styles.hero} 
+      <section
+        className={styles.hero}
         ref={heroRef}
-        style={{ 
+        style={{
           background: collection.heroGradient,
           backgroundPositionY: `${scrollY * 0.4}px`
         }}
@@ -70,9 +70,9 @@ const CollectionDetail = () => {
             <span className={styles.separator}>/</span>
             <span>{collection.name}</span>
           </nav>
-          
+
           <span className={styles.label}>Collection</span>
-          
+
           <h1 className={styles.title}>
             {collection.name.split('').map((char, i) => (
               <span key={i} style={{ animationDelay: `${i * 30}ms` }}>
@@ -80,10 +80,10 @@ const CollectionDetail = () => {
               </span>
             ))}
           </h1>
-          
+
           <p className={styles.mood}>{collection.mood}</p>
           <p className={styles.description}>{collection.description}</p>
-          
+
           <div className={styles.countPill}>
             {collection.productCount} pieces in this collection
           </div>
@@ -92,8 +92,8 @@ const CollectionDetail = () => {
         {/* Floating Decoration Stack */}
         <div className={styles.decorationStack}>
           {[1, 2, 3].map((num) => (
-            <div 
-              key={num} 
+            <div
+              key={num}
               className={`${styles.docCard} ${styles[`card${num}`]}`}
               style={{ animationDelay: `${num * 200}ms` }}
             >
@@ -122,14 +122,14 @@ const CollectionDetail = () => {
             products.map((product, index) => {
               const isCandle = CANDLES.some(c => c.slug === product.slug);
               return (
-                <div 
-                  key={product.id} 
+                <div
+                  key={product.id}
                   className={styles.productWrapper}
                   style={{ '--delay': `${index * 80}ms` }}
                 >
-                  <ProductCard 
-                    product={product} 
-                    category={isCandle ? 'candle' : 'resin'} 
+                  <ProductCard
+                    product={product}
+                    category={isCandle ? 'candle' : 'resin'}
                   />
                 </div>
               );
@@ -155,9 +155,9 @@ const CollectionDetail = () => {
           <h2 className={styles.recTitle}>You Might Also Love</h2>
           <p className={styles.recSubtext}>From other collections.</p>
         </div>
-        
-        <div 
-          className={styles.horizontalScroll} 
+
+        <div
+          className={styles.horizontalScroll}
           ref={scrollRef}
           onWheel={handleWheel}
         >

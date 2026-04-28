@@ -10,49 +10,22 @@ import ProductReviews from '../components/ProductReviews';
 import YouMayAlsoLike from '../components/YouMayAlsoLike';
 import MadeByAngel from '../components/MadeByAngel';
 import styles from './ResinPDP.module.css';
+import { getResinProducts } from '../data/products';
 
-const RESIN_PRODUCTS = {
-  'blush-decorative-plate': {
-    slug: 'blush-decorative-plate',
-    name: 'Handmade Resin Decorative Plate',
-    badge: 'HANDMADE TO ORDER',
-    basePrice: 1299,
-    originalPrice: 1599,
-    discount: '19% OFF',
-    tagline: 'Each piece is one-of-a-kind. Cast by hand, finished with intention.',
-    stock: 4,
-    images: [
-      'https://images.unsplash.com/photo-1615796153287-98eacf0abb13?w=800&q=80',
-      'https://images.unsplash.com/photo-1582281298055-e25b84a30b0b?w=800&q=80',
-      'https://images.unsplash.com/photo-1580893246395-52aead8960dc?w=800&q=80'
-    ]
-  },
-  'ivory-jewellery-dish': {
-    slug: 'ivory-jewellery-dish',
-    name: 'Ivory Gold Jewellery Dish',
-    badge: 'HANDMADE TO ORDER',
-    basePrice: 1199,
-    originalPrice: 1499,
-    discount: '20% OFF',
-    tagline: 'A soft place to rest the things you treasure most.',
-    stock: 3,
-    images: [
-      'https://images.unsplash.com/photo-1580893246395-52aead8960dc?w=800&q=80',
-      'https://images.unsplash.com/photo-1615796153287-98eacf0abb13?w=800&q=80',
-      'https://images.unsplash.com/photo-1582281298055-e25b84a30b0b?w=800&q=80'
-    ]
-  }
-};
 
-const DEFAULT_RESIN = RESIN_PRODUCTS['blush-decorative-plate'];
+
+
 
 export default function ResinPDP() {
   const { slug } = useParams();
   const navigate = useNavigate();
-  const product = RESIN_PRODUCTS[slug] || DEFAULT_RESIN;
 
-  const [qty, setQty] = useState(1);
+  // 1. Fetch data FIRST (not a hook)
+  const product = getResinProducts().find(p => p.slug === slug);
+
+  // 2. Call ALL hooks unconditionally
   const { addToCart } = useCart();
+  const [qty, setQty] = useState(1);
   const [isSuccess, setIsSuccess] = useState(false);
   const [isMainCTAVisible, setIsMainCTAVisible] = useState(true);
 
@@ -60,6 +33,7 @@ export default function ResinPDP() {
   const hamperRef = useRef(null);
   const sectionRefs = useRef([]);
 
+  // 3. Effects
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [slug]);
@@ -74,6 +48,7 @@ export default function ResinPDP() {
   }, []);
 
   useEffect(() => {
+    if (!product) return;
     const timers = sectionRefs.current.map((ref, i) =>
       setTimeout(() => { if (ref) ref.classList.add(styles.visible); }, i * 80)
     );
@@ -81,10 +56,23 @@ export default function ResinPDP() {
   }, [product]);
 
   const handleAddToCart = () => {
+    if (!product) return;
     setIsSuccess(true);
     addToCart(product, qty);
     setTimeout(() => setIsSuccess(false), 1000);
   };
+
+  // 4. Fallback guard after all hooks
+  if (!product) {
+    return (
+      <div className={styles.page} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '50vh', flexDirection: 'column' }}>
+        <h2>Product not found</h2>
+        <button onClick={() => navigate('/shop/resin')} className={styles.atcBtn} style={{ marginTop: '20px', maxWidth: '200px' }}>
+          Back to Shop
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.page}>
@@ -104,12 +92,12 @@ export default function ResinPDP() {
       <header className={`${styles.section} ${styles.header}`} ref={el => sectionRefs.current[0] = el}>
         <div className={styles.titleRow}>
           <h1 className={styles.productName}>{product.name}</h1>
-          <span className={styles.typeBadge}>{product.badge}</span>
+          {product.badge && <span className={styles.typeBadge}>{product.badge}</span>}
         </div>
         <div className={styles.priceRow}>
-          <span className={styles.currentPrice}>₹{product.basePrice.toLocaleString('en-IN')}</span>
-          <span className={styles.oldPrice}>₹{product.originalPrice.toLocaleString('en-IN')}</span>
-          <span className={styles.discountBadge}>{product.discount}</span>
+          <span className={styles.currentPrice}>₹{(product.price || 0).toLocaleString('en-IN')}</span>
+          {product.originalPrice && <span className={styles.oldPrice}>₹{product.originalPrice.toLocaleString('en-IN')}</span>}
+          {product.discount && <span className={styles.discountBadge}>{product.discount}</span>}
         </div>
         <p className={styles.stockNudge}>🔥 Only {product.stock} left</p>
         <p className={styles.tagline}>{product.tagline}</p>
@@ -169,7 +157,7 @@ export default function ResinPDP() {
         <MadeByAngel />
       </div>
 
-      <StickyCartBar price={product.basePrice} onAddToCart={handleAddToCart} isVisible={!isMainCTAVisible} />
+      <StickyCartBar price={product.price || 0} onAddToCart={handleAddToCart} isVisible={!isMainCTAVisible} />
     </div>
   );
 }

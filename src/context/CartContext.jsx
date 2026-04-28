@@ -5,7 +5,18 @@ const CartContext = createContext();
 export const useCart = () => {
   const context = useContext(CartContext);
   if (!context) {
-    throw new Error('useCart must be used within a CartProvider');
+    // Return a safe fallback rather than throwing, to prevent crash entirely if provider is missing.
+    // However, App.jsx has it, but it doesn't hurt.
+    console.error('useCart must be used within a CartProvider');
+    return {
+      cartItems: [],
+      addToCart: () => {},
+      removeFromCart: () => {},
+      updateQuantity: () => {},
+      clearCart: () => {},
+      totalItems: 0,
+      cartTotal: 0
+    };
   }
   return context;
 };
@@ -58,7 +69,7 @@ export const CartProvider = ({ children }) => {
   const totalItems = cartItems.reduce((acc, item) => acc + item.quantity, 0);
   
   const cartTotal = cartItems.reduce(
-    (acc, item) => acc + item.basePrice * item.quantity,
+    (acc, item) => acc + (item.price || item.basePrice || 0) * item.quantity,
     0
   );
 

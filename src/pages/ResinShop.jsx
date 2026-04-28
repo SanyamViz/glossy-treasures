@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import ProductCard from '../components/ProductCard';
 import FilterBar from '../components/FilterBar';
-import { RESIN } from '../data/products';
+import { RESIN_PRODUCTS } from '../data/products';
 import styles from './ResinShop.module.css';
 
 const FILTER_CONFIGS = [
@@ -64,11 +64,11 @@ const ResinShop = () => {
     setActiveFilters(prev => {
       const current = prev[key];
       if (value === 'all') return { ...prev, [key]: [] };
-      
+
       const next = current.includes(value)
         ? current.filter(v => v !== value)
         : [...current, value];
-      
+
       return { ...prev, [key]: next };
     });
     setVisibleCount(6);
@@ -76,7 +76,7 @@ const ResinShop = () => {
   };
 
   const filteredProducts = useMemo(() => {
-    let result = [...RESIN];
+    let result = [...RESIN_PRODUCTS];
 
     if (activeFilters.type.length > 0) {
       result = result.filter(p => activeFilters.type.includes(p.type));
@@ -124,8 +124,8 @@ const ResinShop = () => {
         {visibleProducts.length > 0 ? (
           <div className={styles.grid}>
             {visibleProducts.map((product, index) => (
-              <div 
-                key={product.id} 
+              <div
+                key={product.id}
                 className={styles.cardWrapper}
                 style={{ animationDelay: `${index * 60}ms` }}
               >
@@ -138,7 +138,7 @@ const ResinShop = () => {
             <span className={styles.emoji}>🪨</span>
             <h2>No pieces match your filters.</h2>
             <p>Try adjusting or clearing your filters.</p>
-            <button 
+            <button
               className={styles.clearBtn}
               onClick={() => setActiveFilters({ type: [], color: [], occasion: [] })}
             >
@@ -150,7 +150,7 @@ const ResinShop = () => {
 
       {visibleCount < filteredProducts.length && (
         <div className={styles.loadMoreContainer}>
-          <button 
+          <button
             className={styles.loadMoreBtn}
             onClick={() => setVisibleCount(prev => prev + 6)}
           >
