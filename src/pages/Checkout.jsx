@@ -48,12 +48,17 @@ const Checkout = () => {
   const [upiId, setUpiId] = useState('');
   const [card, setCard] = useState({ number: '', expiry: '', cvv: '', name: '' });
   const [cardFocus, setCardFocus] = useState(null);
+  
+  // ── Discounts ──
+  const [discountCode, setDiscountCode] = useState('');
+  const [discountAmount, setDiscountAmount] = useState(0);
+  const [discountApplied, setDiscountApplied] = useState(false);
 
   const { user, isLoaded, isSignedIn } = useUser();
   const phoneRef = useRef(null);
   const freeShipping = cartTotal >= 999;
   const shipping = freeShipping ? 0 : 99;
-  const grandTotal = cartTotal + shipping;
+  const grandTotal = cartTotal + shipping - discountAmount;
 
   // ── Auto-fill from Clerk ──
   useEffect(() => {
@@ -158,6 +163,32 @@ const Checkout = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const handleApplyDiscount = async () => {
+    if (!discountCode.trim()) return;
+    try {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/discounts/validate`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code: discountCode, orderTotal: cartTotal + shipping })
+      });
+      const data = await res.json();
+      if (data.valid) {
+        setDiscountAmount(data.discount);
+        setDiscountApplied(true);
+      } else {
+        alert(data.message);
+      }
+    } catch (err) {
+      alert('Error applying discount');
+    }
+  };
+
+  const removeDiscount = () => {
+    setDiscountApplied(false);
+    setDiscountAmount(0);
+    setDiscountCode('');
+  };
+
   const handlePlaceOrder = async () => {
     setPlacing(true);
     try {
@@ -177,6 +208,8 @@ const Checkout = () => {
           giftNote: form.giftNote,
           paymentMethod: payMethod,
           total: grandTotal,
+          discountCode: discountApplied ? discountCode : null,
+          discountAmount: discountAmount,
           items: cartItems.map(item => ({
             productSlug: item.slug,
             productName: item.name,
@@ -685,6 +718,26 @@ const Checkout = () => {
               </div>
 
               <div className={styles.sidebarDivider} />
+
+              {!discountApplied ? (
+                <div className={styles.discountRow}>
+                  <input
+                    className={styles.discountInput}
+                    type="text"
+                    placeholder="Discount code (e.g. BLOOM10)"
+                    value={discountCode}
+                    onChange={e => setDiscountCode(e.target.value.toUpperCase())}
+                  />
+                  <button className={styles.applyBtn} onClick={handleApplyDiscount}>
+                    Apply
+                  </button>
+                </div>
+              ) : (
+                <div className={styles.discountApplied}>
+                  <span>✓ {discountCode} applied — saving ₹{discountAmount}</span>
+                  <button className={styles.removeDiscountBtn} onClick={removeDiscount}>×</button>
+                </div>
+              )}
 
               <div className={styles.sidebarTotal}>
                 <span>Total</span>
