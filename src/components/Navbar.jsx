@@ -3,7 +3,7 @@ import { motion, AnimatePresence, useScroll, useTransform, useSpring } from 'fra
 import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { CANDLES, RESIN_PRODUCTS } from '../data/products';
-import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton } from "@clerk/react";
+import { Show, SignInButton, SignUpButton, UserButton } from "@clerk/react";
 import CartDrawer from './CartDrawer';
 import './Navbar.css';
 
@@ -369,7 +369,7 @@ export default function Navbar() {
               {/* Drawer Footer */}
               <div className="gt-drawer-footer">
                 <div className="drawerAuth">
-                  <SignedOut>
+                  <Show when="signed-out">
                     <div className="drawerAuthButtons">
                       <SignInButton mode="modal">
                         <button className="drawerSignIn">Sign In</button>
@@ -378,8 +378,8 @@ export default function Navbar() {
                         <button className="drawerJoinBtn">Join Now</button>
                       </SignUpButton>
                     </div>
-                  </SignedOut>
-                  <SignedIn>
+                  </Show>
+                  <Show when="signed-in">
                     <Link to="/account" onClick={() => setMenuOpen(false)} style={{ textDecoration: 'none' }}>
                       <div className="drawerUserRow">
                         <UserButton afterSignOutUrl="/" />
@@ -389,7 +389,7 @@ export default function Navbar() {
                         </div>
                       </div>
                     </Link>
-                  </SignedIn>
+                  </Show>
                 </div>
 
                 <p className="gt-drawer-footer-label">Follow Along</p>

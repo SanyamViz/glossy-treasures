@@ -22,6 +22,8 @@ import Contact from './pages/Contact';
 import NotFound from './pages/Notfound';
 import Wholesale from './pages/Wholesale';
 import PrivacyPolicy from './pages/Privacypolicy';
+import Admin from './pages/Admin';
+
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -42,7 +44,7 @@ class ErrorBoundary extends React.Component {
   }
 }
 
-import Admin from './pages/Admin';
+
 
 function App() {
   const location = useLocation();
