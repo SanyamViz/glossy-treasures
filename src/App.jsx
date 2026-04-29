@@ -1,6 +1,8 @@
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
+import { AnimatePresence } from 'framer-motion';
 import Layout from './components/Layout';
+import PageTransition from './components/PageTransition';
 import Home from './pages/home';
 import Shop from './pages/shop';
 import OurStory from './pages/OurStory';
@@ -19,7 +21,6 @@ import Contact from './pages/Contact';
 import NotFound from './pages/Notfound';
 import Wholesale from './pages/Wholesale';
 import PrivacyPolicy from './pages/Privacypolicy';
-
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -41,28 +42,34 @@ class ErrorBoundary extends React.Component {
 }
 
 function App() {
+  const location = useLocation();
+  
   return (
     <ErrorBoundary>
-      <Routes>
-        <Route path="/" element={<Layout><Home /></Layout>} />
-        <Route path="/Shipping" element={<Layout><Shipping /></Layout>} />
-        <Route path="/hamper-builder" element={<Layout><Hamperbuilder /></Layout>} />
-        <Route path="/shop" element={<Layout><Shop /></Layout>} />
-        <Route path="/our-story" element={<Layout><OurStory /></Layout>} />
-        <Route path="/Contact" element={<Layout><Contact /></Layout>} />
-        <Route path="/Cart" element={<Layout><Cart /></Layout>} />
-        <Route path="/Wholesale" element={<Layout><Wholesale /></Layout>} />
-        <Route path="/checkout" element={<Layout><Checkout /></Layout>} />
-        <Route path="/order-confirmed" element={<Layout><OrderConfirmed /></Layout>} />
-        <Route path="/collections" element={<Layout><Collections /></Layout>} />
-        <Route path="/collections/:slug" element={<Layout><CollectionDetail /></Layout>} />
-        <Route path="/shop/candles" element={<Layout><CandleShop /></Layout>} />
-        <Route path="/Privacypolicy" element={<Layout><PrivacyPolicy /></Layout>} />
-        <Route path="/shop/resin" element={<Layout><ResinShop /></Layout>} />
-        <Route path="/shop/candles/:slug" element={<Layout><CandlePDP /></Layout>} />
-        <Route path="/shop/resin/:slug" element={<Layout><ResinPDP /></Layout>} />
-        <Route path="*" element={<Layout><NotFound /></Layout>} />
-      </Routes>
+      <Layout>
+        <AnimatePresence mode="wait">
+          <Routes location={location} key={location.pathname}>
+            <Route path="/" element={<PageTransition><Home /></PageTransition>} />
+            <Route path="/Shipping" element={<PageTransition><Shipping /></PageTransition>} />
+            <Route path="/hamper-builder" element={<PageTransition><Hamperbuilder /></PageTransition>} />
+            <Route path="/shop" element={<PageTransition><Shop /></PageTransition>} />
+            <Route path="/our-story" element={<PageTransition><OurStory /></PageTransition>} />
+            <Route path="/Contact" element={<PageTransition><Contact /></PageTransition>} />
+            <Route path="/Cart" element={<PageTransition><Cart /></PageTransition>} />
+            <Route path="/Wholesale" element={<PageTransition><Wholesale /></PageTransition>} />
+            <Route path="/checkout" element={<PageTransition><Checkout /></PageTransition>} />
+            <Route path="/order-confirmed" element={<PageTransition><OrderConfirmed /></PageTransition>} />
+            <Route path="/collections" element={<PageTransition><Collections /></PageTransition>} />
+            <Route path="/collections/:slug" element={<PageTransition><CollectionDetail /></PageTransition>} />
+            <Route path="/shop/candles" element={<CandleShop />} />
+            <Route path="/Privacypolicy" element={<PageTransition><PrivacyPolicy /></PageTransition>} />
+            <Route path="/shop/resin" element={<ResinShop />} />
+            <Route path="/shop/candles/:slug" element={<PageTransition><CandlePDP /></PageTransition>} />
+            <Route path="/shop/resin/:slug" element={<PageTransition><ResinPDP /></PageTransition>} />
+            <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />
+          </Routes>
+        </AnimatePresence>
+      </Layout>
     </ErrorBoundary>
   );
 }

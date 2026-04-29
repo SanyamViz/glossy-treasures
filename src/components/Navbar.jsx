@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useScroll, useTransform, useSpring } from 'framer-motion';
 import { useCart } from '../context/CartContext';
+import { CANDLES, RESIN_PRODUCTS } from '../data/products';
+import CartDrawer from './CartDrawer';
 import './Navbar.css';
 
 /* ─── Announcement bar messages ─────────────────────────── */
@@ -115,14 +117,34 @@ export default function Navbar() {
   const { totalItems } = useCart();
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
   const [expandedItem, setExpandedItem] = useState(null);
-  /* ── Scroll detection ── */
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 50);
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
+
+  /* ── Framer Motion Scroll Effects ── */
+  const { scrollY, scrollYProgress } = useScroll();
+  const rawHeight = useTransform(scrollY, [0, 60], [72, 60]);
+  const navHeight = useSpring(rawHeight, { stiffness: 400, damping: 40 });
+  const navBlur = useTransform(scrollY, [0, 60], ["blur(0px)", "blur(20px)"]);
+  const navBg = useTransform(scrollY, [0, 60], ["rgba(250, 248, 245, 1)", "rgba(250, 248, 245, 0.75)"]);
+  const navBorder = useTransform(scrollY, [0, 60], ["rgba(232, 224, 213, 0)", "rgba(232, 224, 213, 1)"]);
+
+  /* ── Search filter logic ── */
+  let searchResults = [];
+  if (searchTerm.length >= 2) {
+    const query = searchTerm.toLowerCase();
+    const allProducts = [
+      ...CANDLES.map(p => ({ ...p, productType: 'candles' })),
+      ...RESIN_PRODUCTS.map(p => ({ ...p, productType: 'resin' }))
+    ];
+    searchResults = allProducts.filter(p => {
+      return (
+        (p.name && p.name.toLowerCase().includes(query)) ||
+        (p.scentFamily && p.scentFamily.toLowerCase().includes(query)) ||
+        (p.category && p.category.toLowerCase().includes(query))
+      );
+    });
+  }
 
   /* ── Lock body scroll when menu or search is open ── */
   useEffect(() => {
@@ -132,6 +154,21 @@ export default function Navbar() {
 
   return (
     <header className="gt-header" role="banner">
+
+      {/* ── Scroll Progress Bar ── */}
+      <motion.div
+        style={{
+          scaleX: scrollYProgress,
+          transformOrigin: "left",
+          height: "2px",
+          backgroundColor: "var(--accent-rose, #C4948A)",
+          position: "fixed",
+          top: 0,
+          left: 0,
+          right: 0,
+          zIndex: 1001,
+        }}
+      />
 
       {/* ── Announcement Bar — pure CSS infinite ticker ── */}
       <div className="gt-announcement-bar" aria-label="Announcements">
@@ -156,9 +193,16 @@ export default function Navbar() {
       </div>
 
       {/* ── Main Navbar ── */}
-      <nav
-        className={`gt-navbar${scrolled ? ' gt-navbar--scrolled' : ''}`}
+      <motion.nav
+        className="gt-navbar"
         aria-label="Main navigation"
+        style={{
+          height: navHeight,
+          backgroundColor: navBg,
+          backdropFilter: navBlur,
+          WebkitBackdropFilter: navBlur,
+          borderBottomColor: navBorder,
+        }}
       >
         {/* Left — Hamburger */}
         <div className="gt-nav-left">
@@ -190,10 +234,10 @@ export default function Navbar() {
             <SearchIcon />
           </button>
 
-          <a
-            href="/cart"
+          <button
             className="gt-icon-btn gt-cart-btn"
             aria-label={`Cart — ${totalItems} item${totalItems !== 1 ? 's' : ''}`}
+            onClick={() => setIsCartOpen(true)}
           >
             <CartIcon />
             {totalItems > 0 && (
@@ -201,9 +245,9 @@ export default function Navbar() {
                 {totalItems}
               </span>
             )}
-          </a>
+          </button>
         </div>
-      </nav>
+      </motion.nav>
 
       {/* ── Mobile Drawer Menu ── */}
       <AnimatePresence>
@@ -356,38 +400,73 @@ export default function Navbar() {
             type="text"
             className="gt-search-input"
             placeholder="Search for a scent, a piece..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
-        <div className="gt-quick-links">
-          <p className="gt-quick-links-label">POPULAR SEARCHES</p>
-          <ul className="gt-quick-links-list">
-            {['Scented Candles', 'Resin Platters', 'Wedding Gifts', 'Custom Hampers', 'Bookmarks'].map((link) => (
-              <li key={link}>
-                <a href={`/search?q=${encodeURIComponent(link)}`} className="gt-quick-link-item">
-                  {link} <span>&rarr;</span>
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div className="gt-search-featured">
-          <p className="gt-search-featured-label">FEATURED</p>
-          <div className="gt-search-featured-row">
-            <a href="/shop" className="gt-search-featured-card">
-              <img src="https://placehold.co/140x140/E8E0D5/7A7068" alt="New Arrivals" loading="lazy" />
-              <p>New Arrivals</p>
-            </a>
-            <a href="/shop/wedding-special" className="gt-search-featured-card">
-              <img src="https://placehold.co/140x140/F0EBE3/7A7068" alt="Wedding Special" loading="lazy" />
-              <p>Wedding Special</p>
-            </a>
-            <a href="/build-hamper" className="gt-search-featured-card">
-              <img src="https://placehold.co/140x140/E8E0D5/C4948A" alt="Gift Hampers" loading="lazy" />
-              <p>Gift Hampers</p>
-            </a>
+        {searchTerm.length >= 2 ? (
+          <div className="gt-search-results-container">
+            {searchResults.length > 0 ? (
+              <div className="gt-search-results-grid">
+                {searchResults.map(product => (
+                  <a 
+                    key={`${product.productType}-${product.slug}`} 
+                    href={`/shop/${product.productType}/${product.slug}`} 
+                    className="gt-search-result-item"
+                    onClick={() => {
+                      setSearchOpen(false);
+                      setSearchTerm('');
+                    }}
+                  >
+                    <img src={product.image} alt={product.name} className="gt-search-result-image" loading="lazy" />
+                    <div className="gt-search-result-info">
+                      <p className="gt-search-result-name">{product.name}</p>
+                      <p className="gt-search-result-price">₹{product.price}</p>
+                      <span className="gt-search-result-badge">{product.category}</span>
+                    </div>
+                  </a>
+                ))}
+              </div>
+            ) : (
+              <p className="gt-search-no-results">No products found for "{searchTerm}"</p>
+            )}
           </div>
-        </div>
+        ) : (
+          <>
+            <div className="gt-quick-links">
+              <p className="gt-quick-links-label">POPULAR SEARCHES</p>
+              <ul className="gt-quick-links-list">
+                {['Scented Candles', 'Resin Platters', 'Wedding Gifts', 'Custom Hampers', 'Bookmarks'].map((link) => (
+                  <li key={link}>
+                    <a href={`/search?q=${encodeURIComponent(link)}`} className="gt-quick-link-item">
+                      {link} <span>&rarr;</span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="gt-search-featured">
+              <p className="gt-search-featured-label">FEATURED</p>
+              <div className="gt-search-featured-row">
+                <a href="/shop" className="gt-search-featured-card">
+                  <img src="https://placehold.co/140x140/E8E0D5/7A7068" alt="New Arrivals" loading="lazy" />
+                  <p>New Arrivals</p>
+                </a>
+                <a href="/shop/wedding-special" className="gt-search-featured-card">
+                  <img src="https://placehold.co/140x140/F0EBE3/7A7068" alt="Wedding Special" loading="lazy" />
+                  <p>Wedding Special</p>
+                </a>
+                <a href="/build-hamper" className="gt-search-featured-card">
+                  <img src="https://placehold.co/140x140/E8E0D5/C4948A" alt="Gift Hampers" loading="lazy" />
+                  <p>Gift Hampers</p>
+                </a>
+              </div>
+            </div>
+          </>
+        )}
       </div>
+
+      <CartDrawer isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
     </header>
   );
 }

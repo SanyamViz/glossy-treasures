@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { motion } from 'framer-motion';
 import styles from './ProductGallery.module.css';
 
-export default function ProductGallery({ images, productType }) {
+export default function ProductGallery({ images, productType, slug }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showHint, setShowHint] = useState(true);
   const touchStart = useRef(null);
@@ -54,9 +55,19 @@ export default function ProductGallery({ images, productType }) {
         style={{ transform: `translateX(-${currentIndex * 100}%)` }}
       >
         {images.map((img, idx) => (
-          <div key={idx} className={styles.slide}>
-            <img src={img} alt={`${productType} view ${idx + 1}`} />
-          </div>
+          <motion.div 
+            key={idx} 
+            className={styles.slide} 
+            layout={idx === 0} 
+            transition={{ duration: 0.5, type: "spring", stiffness: 300, damping: 30 }}
+          >
+            <motion.img 
+              src={img} 
+              alt={`${productType} view ${idx + 1}`} 
+              layoutId={idx === 0 && slug ? slug : undefined}
+              transition={{ duration: 0.5, type: "spring", stiffness: 300, damping: 30 }}
+            />
+          </motion.div>
         ))}
       </div>
 

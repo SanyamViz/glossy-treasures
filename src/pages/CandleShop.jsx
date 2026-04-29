@@ -26,6 +26,7 @@ const FILTER_CONFIGS = [
       { label: '300g', value: '300g' },
     ]
   },
+
   {
     key: 'occasion',
     label: 'Occasion',

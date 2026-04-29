@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
+import { motion } from 'framer-motion';
 import styles from './ProductCard.module.css';
 
 const ProductCard = ({ product, category }) => {
@@ -26,8 +27,18 @@ const ProductCard = ({ product, category }) => {
 
   return (
     <div className={styles.card} onClick={handleNavigate}>
-      <div className={styles.imageContainer}>
-        <img src={product.image} alt={product.name} className={styles.image} />
+      <motion.div 
+        className={styles.imageContainer} 
+        layout 
+        transition={{ duration: 0.5, type: "spring", stiffness: 300, damping: 30 }}
+      >
+        <motion.img 
+          src={product.image} 
+          alt={product.name} 
+          className={styles.image} 
+          layoutId={product.slug}
+          transition={{ duration: 0.5, type: "spring", stiffness: 300, damping: 30 }}
+        />
         
         {product.badge && (
           <span className={`${styles.badge} ${styles[product.badge.toLowerCase()]}`}>
@@ -42,7 +53,7 @@ const ProductCard = ({ product, category }) => {
         >
           {isAdded ? '✓' : '+'}
         </button>
-      </div>
+      </motion.div>
 
       <div className={styles.content}>
         <h3 className={styles.name}>{product.name}</h3>

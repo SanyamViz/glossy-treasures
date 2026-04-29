@@ -85,20 +85,12 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 70px;
+  height: 72px;
   background-color: var(--bg-primary);
-  border-bottom: 1px solid var(--border-light);
+  border-bottom: 1px solid transparent;
   padding: 0 16px;
   box-shadow: var(--shadow-navbar);
-  transition: background-color 300ms ease, backdrop-filter 300ms ease;
   position: relative;
-}
-
-/* Scrolled state — subtle blur */
-.gt-navbar--scrolled {
-  background-color: var(--bg-overlay);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
 }
 
 /* ── Three-zone layout ── */
@@ -682,4 +674,87 @@
   font-size: 17px;
   color: var(--accent-rose, #C4948A);
   text-decoration: none;
+}
+
+/* ── Search Results ──────────────────────────────────────── */
+.gt-search-results-container {
+  margin-top: 24px;
+}
+
+.gt-search-results-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 16px;
+  max-height: 60vh;
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.gt-search-results-grid::-webkit-scrollbar {
+  display: none;
+}
+
+.gt-search-result-item {
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  cursor: pointer;
+  transition: opacity 200ms ease;
+}
+
+.gt-search-result-item:hover {
+  opacity: 0.8;
+}
+
+.gt-search-result-image {
+  width: 100%;
+  aspect-ratio: 1/1;
+  object-fit: cover;
+  margin-bottom: 8px;
+}
+
+.gt-search-result-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.gt-search-result-name {
+  font-family: 'Jost', sans-serif;
+  font-weight: 400;
+  font-size: 13px;
+  color: var(--text-primary, #1A1A1A);
+  margin: 0;
+}
+
+.gt-search-result-price {
+  font-family: 'Jost', sans-serif;
+  font-weight: 300;
+  font-size: 12px;
+  color: var(--text-secondary, #7A7068);
+  margin: 0;
+}
+
+.gt-search-result-badge {
+  font-family: 'Jost', sans-serif;
+  font-weight: 300;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent-rose, #C4948A);
+  border: 1px solid var(--accent-rose, #C4948A);
+  padding: 2px 6px;
+  border-radius: 4px;
+  width: fit-content;
+  margin-top: 2px;
+}
+
+.gt-search-no-results {
+  font-family: 'Jost', sans-serif;
+  font-weight: 300;
+  font-size: 14px;
+  color: var(--text-secondary, #7A7068);
+  text-align: center;
+  margin-top: 40px;
 }

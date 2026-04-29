@@ -93,7 +93,7 @@ export default function CandlePDP() {
       </button>
 
       {/* 1. Gallery */}
-      <ProductGallery images={product.images} productType="candle" />
+      <ProductGallery images={product.images} productType="candle" slug={product.slug} />
 
       {/* 2. Product Header */}
       <header className={`${styles.section} ${styles.header}`} ref={el => sectionRefs.current[0] = el}>
