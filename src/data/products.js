@@ -715,11 +715,8 @@ export const CANDLES = [
       { id: 'vanilla', label: 'Vanilla', available: true },
       { id: 'sandalwood', label: 'Sandalwood', available: true },
       { id: 'oceanbreeze', label: 'Ocean Breeze', available: true },
-
-
       { id: 'berrybliss', label: 'Berry Bliss', available: true },
       { id: 'redwine', label: 'Red Wine', available: true },
-
       { id: 'lemongrass', label: 'Lemongrass', available: true },
       { id: 'lemon&levender', label: 'Lemon & Levender', available: true },
       { id: 'cranberry', label: 'Cranberry', available: true },
