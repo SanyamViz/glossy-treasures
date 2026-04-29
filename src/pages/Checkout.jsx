@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
+import { api } from '../utils/api';
 import styles from './Checkout.module.css';
 
 // ── Pincode → City/State lookup (expand as needed) ──
@@ -146,19 +147,60 @@ const Checkout = () => {
 
   const handlePlaceOrder = async () => {
     setPlacing(true);
-    // Simulate order placement (replace with real API in Phase 2)
-    await new Promise(r => setTimeout(r, 1800));
-    orderPlaced.current = true;  // must be set BEFORE clearCart
-    clearCart();
-    navigate('/order-confirmed', {
-      state: {
-        orderNumber: 'GT' + Date.now().toString().slice(-6),
-        name: form.name,
-        payMethod,
-        total: grandTotal,
-        email: form.email,
+    try {
+      const response = await fetch('http://localhost:5000/api/orders', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: form.name,
+          email: form.email,
+          phone: form.phone,
+          address: form.address,
+          city: form.city,
+          state: form.state,
+          pincode: form.pincode,
+          giftNote: form.giftNote,
+          paymentMethod: payMethod,
+          total: grandTotal,
+          items: cartItems.map(item => ({
+            productSlug: item.slug,
+            productName: item.name,
+            category: item.category || 'hamper',
+            price: item.basePrice || item.price,
+            quantity: item.quantity,
+            selectedSize: item.selectedSize || null,
+            selectedFragrance: item.selectedFragrance || null
+          }))
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error('Order error:', errorData);
+        throw new Error(errorData.message || 'Order failed');
       }
-    });
+
+      const data = await response.json();
+
+      orderPlaced.current = true;  // must be set BEFORE clearCart
+      clearCart();
+      navigate('/order-confirmed', {
+        state: {
+          orderNumber: data.orderNumber,
+          name: form.name,
+          payMethod,
+          total: grandTotal,
+          email: form.email,
+        }
+      });
+    } catch (err) {
+      console.error('Order placement error:', err);
+      alert("Something went wrong. Please try again.");
+    } finally {
+      setPlacing(false);
+    }
   };
 
   const stepContent = [
