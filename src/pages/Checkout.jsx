@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
+import { useUser } from "@clerk/react";
 import { api } from '../utils/api';
 import styles from './Checkout.module.css';
 
@@ -48,10 +49,22 @@ const Checkout = () => {
   const [card, setCard] = useState({ number: '', expiry: '', cvv: '', name: '' });
   const [cardFocus, setCardFocus] = useState(null);
 
+  const { user, isLoaded, isSignedIn } = useUser();
   const phoneRef = useRef(null);
   const freeShipping = cartTotal >= 999;
   const shipping = freeShipping ? 0 : 99;
   const grandTotal = cartTotal + shipping;
+
+  // ── Auto-fill from Clerk ──
+  useEffect(() => {
+    if (isLoaded && isSignedIn && user) {
+      setForm(f => ({
+        ...f,
+        name: f.name || user.fullName || '',
+        email: f.email || user.primaryEmailAddress?.emailAddress || ''
+      }));
+    }
+  }, [isLoaded, isSignedIn, user]);
 
   useEffect(() => {
     const t = setTimeout(() => setMounted(true), 50);

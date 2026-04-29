@@ -1,0 +1,179 @@
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 40px 20px 100px;
+  min-height: 80vh;
+}
+
+.header {
+  margin-bottom: 48px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.greeting {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.title {
+  font-family: var(--font-display, 'Cormorant Garamond', serif);
+  font-style: italic;
+  font-size: 42px;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.email {
+  font-family: var(--font-body, 'Jost', sans-serif);
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.signOutBtn {
+  padding: 10px 20px;
+  background: transparent;
+  border: 1px solid var(--card);
+  border-radius: 8px;
+  font-family: var(--font-body, 'Jost', sans-serif);
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.signOutBtn:hover {
+  background: var(--card);
+  border-color: var(--text-primary);
+}
+
+.sectionTitle {
+  font-family: var(--font-body, 'Jost', sans-serif);
+  font-size: 18px;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 24px;
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--card);
+  padding-bottom: 12px;
+}
+
+.orderGrid {
+  display: grid;
+  gap: 20px;
+}
+
+.orderCard {
+  background: white;
+  border: 1px solid var(--card);
+  border-radius: 16px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.orderCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+
+.orderHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.orderNum {
+  font-family: var(--font-body, 'Jost', sans-serif);
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--text-primary);
+}
+
+.orderDate {
+  font-family: var(--font-body, 'Jost', sans-serif);
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.statusBadge {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.statusPENDING { background: #FFF9E6; color: #B28B00; }
+.statusCONFIRMED { background: #E6F3FF; color: #0066CC; }
+.statusPROCESSING { background: #F0E6FF; color: #6600CC; }
+.statusSHIPPED { background: #E6FFF3; color: #00CC66; }
+.statusDELIVERED { background: #E6FFF3; color: #00CC66; }
+.statusCANCELLED { background: #FFE6E6; color: #CC0000; }
+
+.orderItems {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.itemRow {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-body, 'Jost', sans-serif);
+  font-size: 14px;
+  color: var(--text-primary);
+}
+
+.itemQty {
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+
+.orderFooter {
+  border-top: 1px solid #F0EBE3;
+  padding-top: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.totalLabel {
+  font-family: var(--font-body, 'Jost', sans-serif);
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.totalAmount {
+  font-family: var(--font-body, 'Jost', sans-serif);
+  font-weight: 600;
+  font-size: 16px;
+  color: var(--text-primary);
+}
+
+.loading, .empty {
+  text-align: center;
+  padding: 100px 20px;
+  font-family: var(--font-body, 'Jost', sans-serif);
+  color: var(--text-secondary);
+}
+
+@media (max-width: 600px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+  }
+  .title {
+    font-size: 32px;
+  }
+}

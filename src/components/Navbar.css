@@ -758,3 +758,68 @@
   text-align: center;
   margin-top: 40px;
 }
+
+/* ── Drawer Auth (Clerk) ────────────────────────────────── */
+.drawerAuth {
+  padding: 20px 24px 24px;
+  border-top: 1px solid var(--card);
+  margin-top: 8px;
+}
+.drawerAuthButtons {
+  display: flex;
+  gap: 10px;
+}
+.drawerSignIn {
+  flex: 1;
+  height: 48px;
+  background: transparent;
+  border: 1.5px solid var(--card);
+  border-radius: 12px;
+  font-family: var(--font-body, 'Jost', sans-serif);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+.drawerSignIn:hover { border-color: var(--text-primary); }
+.drawerJoinBtn {
+  flex: 1;
+  height: 48px;
+  background: var(--accent-rose);
+  border: none;
+  border-radius: 12px;
+  font-family: var(--font-body, 'Jost', sans-serif);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  color: white;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.drawerJoinBtn:hover { opacity: 0.88; }
+.drawerUserRow {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 4px 0;
+  cursor: pointer;
+}
+.drawerUserInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.drawerUserLabel {
+  font-family: var(--font-body, 'Jost', sans-serif);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+.drawerUserSub {
+  font-family: var(--font-body, 'Jost', sans-serif);
+  font-size: 11px;
+  color: var(--text-secondary);
+  letter-spacing: 0.04em;
+}

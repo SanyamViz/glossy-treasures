@@ -9,6 +9,7 @@ import OurStory from './pages/OurStory';
 import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
 import OrderConfirmed from './pages/Orderconfirmed';
+import Account from './pages/Account';
 import Collections from './pages/Collections';
 import CollectionDetail from './pages/CollectionDetail';
 import CandleShop from './pages/CandleShop';
@@ -60,6 +61,7 @@ function App() {
         <Route path="/Wholesale" element={<PageTransition><Wholesale /></PageTransition>} />
         <Route path="/checkout" element={<PageTransition><Checkout /></PageTransition>} />
         <Route path="/order-confirmed" element={<PageTransition><OrderConfirmed /></PageTransition>} />
+        <Route path="/account" element={<PageTransition><Account /></PageTransition>} />
         <Route path="/collections" element={<PageTransition><Collections /></PageTransition>} />
         <Route path="/collections/:slug" element={<PageTransition><CollectionDetail /></PageTransition>} />
         <Route path="/shop/candles" element={<CandleShop />} />

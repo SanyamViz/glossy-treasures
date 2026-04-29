@@ -5,16 +5,19 @@ import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import './styles/globals.css'
 import App from './App.jsx'
+import { ClerkProvider } from "@clerk/react";
 
 import { CartProvider } from './context/CartContext'
 
 createRoot(document.getElementById('root')).render(
     <StrictMode>
-        <CartProvider>
-            <BrowserRouter>
-                <div className="bg-blobs"></div>
-                <App />
-            </BrowserRouter>
-        </CartProvider>
+        <ClerkProvider afterSignOutUrl="/">
+            <CartProvider>
+                <BrowserRouter>
+                    <div className="bg-blobs"></div>
+                    <App />
+                </BrowserRouter>
+            </CartProvider>
+        </ClerkProvider>
     </StrictMode>
-)
+)

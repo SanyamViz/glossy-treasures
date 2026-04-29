@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform, useSpring } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { CANDLES, RESIN_PRODUCTS } from '../data/products';
+import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton } from "@clerk/react";
 import CartDrawer from './CartDrawer';
 import './Navbar.css';
 
@@ -366,6 +368,30 @@ export default function Navbar() {
 
               {/* Drawer Footer */}
               <div className="gt-drawer-footer">
+                <div className="drawerAuth">
+                  <SignedOut>
+                    <div className="drawerAuthButtons">
+                      <SignInButton mode="modal">
+                        <button className="drawerSignIn">Sign In</button>
+                      </SignInButton>
+                      <SignUpButton mode="modal">
+                        <button className="drawerJoinBtn">Join Now</button>
+                      </SignUpButton>
+                    </div>
+                  </SignedOut>
+                  <SignedIn>
+                    <Link to="/account" onClick={() => setMenuOpen(false)} style={{ textDecoration: 'none' }}>
+                      <div className="drawerUserRow">
+                        <UserButton afterSignOutUrl="/" />
+                        <div className="drawerUserInfo">
+                          <span className="drawerUserLabel">My Account</span>
+                          <span className="drawerUserSub">Orders & Profile</span>
+                        </div>
+                      </div>
+                    </Link>
+                  </SignedIn>
+                </div>
+
                 <p className="gt-drawer-footer-label">Follow Along</p>
                 <a
                   href="https://instagram.com/glossy_treasures"
