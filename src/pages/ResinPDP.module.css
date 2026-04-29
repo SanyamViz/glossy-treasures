@@ -79,8 +79,9 @@
 
 .priceRow {
   display: flex;
-  align-items: baseline;
-  gap: 10px;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
 }
 
 .currentPrice {
@@ -103,9 +104,24 @@
   border-radius: 4px;
 }
 
-.stockNudge {
-  font-size: 13px;
-  color: var(--accent-rose);
+.detailsRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.detailItem {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--bg-secondary);
+  padding: 6px 12px;
+  border-radius: 20px;
 }
 
 .tagline {

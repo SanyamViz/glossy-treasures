@@ -25,6 +25,7 @@ export default function CandlePDP() {
   const { addToCart } = useCart();
   const [qty, setQty] = useState(1);
   const [currentPrice, setCurrentPrice] = useState(product?.price || 0);
+  const [selectedOptions, setSelectedOptions] = useState({});
   const [isSuccess, setIsSuccess] = useState(false);
   const [isMainCTAVisible, setIsMainCTAVisible] = useState(true);
 
@@ -38,6 +39,7 @@ export default function CandlePDP() {
     // Reset state if slug changes
     setQty(1);
     setCurrentPrice(product?.price || 0);
+    setSelectedOptions({});
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [slug]);
 
@@ -65,7 +67,11 @@ export default function CandlePDP() {
   const handleAddToCart = () => {
     if (!product) return;
     setIsSuccess(true);
-    addToCart({ ...product, price: currentPrice }, qty);
+    addToCart({ 
+      ...product, 
+      price: currentPrice,
+      selectedOptions 
+    }, qty);
     setTimeout(() => setIsSuccess(false), 1000);
   };
 
@@ -106,13 +112,23 @@ export default function CandlePDP() {
           {product.originalPrice && <span className={styles.oldPrice}>₹{product.originalPrice.toLocaleString('en-IN')}</span>}
           {product.discount && <span className={styles.discountBadge}>{product.discount}</span>}
         </div>
-        <p className={styles.stockNudge}>🔥 Only {product.stock} left</p>
+        <div className={styles.detailsRow}>
+          {product.weight && <span className={styles.detailItem}>⚖️ {product.weight}</span>}
+          {product.burnTime && <span className={styles.detailItem}>🔥 {product.burnTime} Burn</span>}
+          <span className={styles.detailItem}>📍 Only {product.stock} left</span>
+        </div>
         <p className={styles.tagline}>{product.tagline}</p>
       </header>
 
       {/* 3. Candle Options */}
       <div className={styles.section} ref={el => sectionRefs.current[1] = el}>
-        <CandleOptions onPriceChange={setCurrentPrice} basePrice={product.price} />
+        <CandleOptions 
+          onPriceChange={setCurrentPrice} 
+          basePrice={product.price} 
+          fragrances={product.fragrances}
+          sizes={product.sizes}
+          onOptionsChange={setSelectedOptions}
+        />
       </div>
 
       {/* 4. Qty + ATC */}
@@ -141,7 +157,7 @@ export default function CandlePDP() {
 
       {/* 5. Accordion */}
       <div className={styles.section} ref={el => sectionRefs.current[3] = el}>
-        <ProductAccordion type="candle" />
+        <ProductAccordion type="candle" product={product} />
       </div>
 
       {/* 6. Hamper Builder */}

@@ -119,14 +119,33 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+  gap: 8px;
 }
 
-.itemHeader h3 {
+.itemName {
   font-family: 'Cormorant Garamond', serif;
   font-size: 18px;
   font-weight: 500;
   margin: 0;
   color: var(--text-primary, #1A1A1A);
+}
+
+.itemOptions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.optionTag {
+  font-family: 'Jost', sans-serif;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: var(--bg-secondary, #F3EFE9);
+  color: var(--text-secondary, #7A7068);
+  padding: 2px 6px;
+  border-radius: 4px;
 }
 
 .removeBtn {
@@ -138,13 +157,14 @@
   text-decoration: underline;
   cursor: pointer;
   padding: 0;
+  white-space: nowrap;
 }
 
 .itemPrice {
   font-family: 'Jost', sans-serif;
   font-size: 14px;
   color: var(--text-primary, #1A1A1A);
-  margin: 4px 0 12px 0;
+  margin: 8px 0 12px 0;
 }
 
 .quantityControls {

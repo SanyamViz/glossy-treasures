@@ -26,6 +26,8 @@ export default function ResinPDP() {
   // 2. Call ALL hooks unconditionally
   const { addToCart } = useCart();
   const [qty, setQty] = useState(1);
+  const [currentPrice, setCurrentPrice] = useState(product?.price || 0);
+  const [selectedOptions, setSelectedOptions] = useState({});
   const [isSuccess, setIsSuccess] = useState(false);
   const [isMainCTAVisible, setIsMainCTAVisible] = useState(true);
 
@@ -36,7 +38,11 @@ export default function ResinPDP() {
   // 3. Effects
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, [slug]);
+    // Reset state if slug changes
+    setQty(1);
+    setCurrentPrice(product?.price || 0);
+    setSelectedOptions({});
+  }, [slug, product?.price]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -58,7 +64,11 @@ export default function ResinPDP() {
   const handleAddToCart = () => {
     if (!product) return;
     setIsSuccess(true);
-    addToCart(product, qty);
+    addToCart({ 
+      ...product, 
+      price: currentPrice,
+      selectedOptions
+    }, qty);
     setTimeout(() => setIsSuccess(false), 1000);
   };
 
@@ -95,17 +105,28 @@ export default function ResinPDP() {
           {product.badge && <span className={styles.typeBadge}>{product.badge}</span>}
         </div>
         <div className={styles.priceRow}>
-          <span className={styles.currentPrice}>₹{(product.price || 0).toLocaleString('en-IN')}</span>
+          <span className={styles.currentPrice}>₹{currentPrice.toLocaleString('en-IN')}</span>
           {product.originalPrice && <span className={styles.oldPrice}>₹{product.originalPrice.toLocaleString('en-IN')}</span>}
           {product.discount && <span className={styles.discountBadge}>{product.discount}</span>}
         </div>
-        <p className={styles.stockNudge}>🔥 Only {product.stock} left</p>
+        <div className={styles.detailsRow}>
+          {product.type && <span className={styles.detailItem}>✨ {product.type}</span>}
+          {product.size && <span className={styles.detailItem}>📏 {product.size}</span>}
+          <span className={styles.detailItem}>📍 Only {product.stock} left</span>
+        </div>
         <p className={styles.tagline}>{product.tagline}</p>
       </header>
 
       {/* 3. Resin Options */}
       <div className={styles.section} ref={el => sectionRefs.current[1] = el}>
-        <ResinOptions />
+        <ResinOptions 
+          onPriceChange={setCurrentPrice}
+          basePrice={product.price}
+          colors={product.colors}
+          frameSizes={product.frameSizes}
+          standMaterials={product.standMaterials}
+          onOptionsChange={setSelectedOptions}
+        />
       </div>
 
       {/* 4. Qty + ATC */}
@@ -134,7 +155,7 @@ export default function ResinPDP() {
 
       {/* 5. Accordion */}
       <div className={styles.section} ref={el => sectionRefs.current[3] = el}>
-        <ProductAccordion type="resin" />
+        <ProductAccordion type="resin" product={product} />
       </div>
 
       {/* 6. Hamper Builder */}

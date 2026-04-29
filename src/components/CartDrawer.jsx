@@ -63,21 +63,30 @@ const CartDrawer = ({ isOpen, onClose }) => {
                 </div>
               ) : (
                 <div className={styles.itemsList}>
-                  {cartItems.map((item) => (
-                    <div key={`${item.slug}-${item.size || ''}`} className={styles.cartItem}>
+                   {cartItems.map((item) => (
+                    <div key={item.cartId} className={styles.cartItem}>
                       <img src={item.image} alt={item.name} className={styles.itemImage} />
                       <div className={styles.itemDetails}>
                         <div className={styles.itemHeader}>
-                          <h3>{item.name}</h3>
-                          <button onClick={() => removeFromCart(item.slug)} className={styles.removeBtn}>
+                          <div>
+                            <h3 className={styles.itemName}>{item.name}</h3>
+                            {item.selectedOptions && (
+                              <div className={styles.itemOptions}>
+                                {Object.entries(item.selectedOptions).map(([key, value]) => (
+                                  value && <span key={key} className={styles.optionTag}>{value}</span>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                          <button onClick={() => removeFromCart(item.cartId)} className={styles.removeBtn}>
                             Remove
                           </button>
                         </div>
-                        <p className={styles.itemPrice}>₹{(item.price || item.basePrice || 0).toLocaleString('en-IN')}</p>
+                        <p className={styles.itemPrice}>₹{(item.price || 0).toLocaleString('en-IN')}</p>
                         <div className={styles.quantityControls}>
-                          <button onClick={() => updateQuantity(item.slug, item.quantity - 1)}>−</button>
+                          <button onClick={() => updateQuantity(item.cartId, item.quantity - 1)}>−</button>
                           <span>{item.quantity}</span>
-                          <button onClick={() => updateQuantity(item.slug, item.quantity + 1)}>+</button>
+                          <button onClick={() => updateQuantity(item.cartId, item.quantity + 1)}>+</button>
                         </div>
                       </div>
                     </div>

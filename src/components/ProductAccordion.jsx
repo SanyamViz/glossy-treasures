@@ -36,9 +36,19 @@ const CONTENT = {
   ]
 };
 
-export default function ProductAccordion({ type }) {
+export default function ProductAccordion({ type, product }) {
   const [openIndex, setOpenIndex] = useState(0);
-  const items = CONTENT[type] || CONTENT.candle;
+  
+  let items = [...(CONTENT[type] || CONTENT.candle)];
+
+  // Inject product-specific data if available
+  if (product) {
+    if (type === 'candle' && product.ingredients) {
+      items[0] = { ...items[0], content: product.ingredients };
+    } else if (type === 'resin' && product.materials) {
+      items[0] = { ...items[0], content: product.materials };
+    }
+  }
 
   const toggle = (idx) => {
     setOpenIndex(openIndex === idx ? null : idx);

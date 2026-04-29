@@ -32,32 +32,40 @@ export const CartProvider = ({ children }) => {
     localStorage.setItem('gt_cart', JSON.stringify(cartItems));
   }, [cartItems]);
 
+  // Helper to generate a unique key for items with different options
+  const getItemKey = (slug, options) => {
+    if (!options || Object.keys(options).length === 0) return slug;
+    return `${slug}-${JSON.stringify(options)}`;
+  };
+
   const addToCart = (product, quantity = 1) => {
     setCartItems((prev) => {
-      const existingItem = prev.find((item) => item.slug === product.slug);
+      const productKey = getItemKey(product.slug, product.selectedOptions);
+      const existingItem = prev.find((item) => item.cartId === productKey);
+      
       if (existingItem) {
         return prev.map((item) =>
-          item.slug === product.slug
+          item.cartId === productKey
             ? { ...item, quantity: item.quantity + quantity }
             : item
         );
       }
-      return [...prev, { ...product, quantity }];
+      return [...prev, { ...product, quantity, cartId: productKey }];
     });
   };
 
-  const removeFromCart = (slug) => {
-    setCartItems((prev) => prev.filter((item) => item.slug !== slug));
+  const removeFromCart = (cartId) => {
+    setCartItems((prev) => prev.filter((item) => item.cartId !== cartId));
   };
 
-  const updateQuantity = (slug, quantity) => {
+  const updateQuantity = (cartId, quantity) => {
     if (quantity < 1) {
-      removeFromCart(slug);
+      removeFromCart(cartId);
       return;
     }
     setCartItems((prev) =>
       prev.map((item) =>
-        item.slug === slug ? { ...item, quantity } : item
+        item.cartId === cartId ? { ...item, quantity } : item
       )
     );
   };
