@@ -87,6 +87,7 @@ export const CANDLES = [
     inStock: true,
     stock: 4,
     bestseller: true,
+    featured: true,
 
     fragrances: [
       { id: 'rose', label: 'Rose', available: true },
@@ -115,7 +116,8 @@ export const CANDLES = [
     ingredients: 'Soy wax, lavender essential oil, cotton wick',
     inStock: true,
     stock: 6,
-    bestseller: false,
+    bestseller: true,
+    featured: true,
 
     sizes: [
       { id: '150g', label: '150g', price: 150, burnTime: '15 hrs' },
@@ -974,6 +976,7 @@ export const RESIN_PRODUCTS = [
     size: '12" x 8"',
     inStock: true,
     bestseller: true,
+    featured: true,
     colors: [
       { id: 'white-gold', label: 'White Gold', hex: '#F5F5F5' },
       { id: 'black-gold', label: 'Black Gold', hex: '#2A2A2A' },
@@ -992,6 +995,7 @@ export const RESIN_PRODUCTS = [
     description: 'Beautiful resin frame with embedded gold leaf.',
     inStock: true,
     bestseller: true,
+    featured: true,
 
     colors: [
       { id: 'rose-gold', label: 'Rose Gold', hex: '#C4948A' },
@@ -1028,6 +1032,45 @@ export const RESIN_PRODUCTS = [
       { id: 'purple', label: 'Purple Agate', hex: '#8B4789' },
       { id: 'green', label: 'Green Agate', hex: '#50C878' },
     ],
+  },
+  {
+    id: 'r4',
+    slug: 'cherished-keepsake-box',
+    name: 'Cherished Keepsake Box',
+    category: 'resin',
+    type: 'box',
+    price: 1200,
+    image: 'https://images.unsplash.com/photo-1582281298055-e25b84a30b0b?w=400',
+    images: ['https://images.unsplash.com/photo-1582281298055-e25b84a30b0b?w=400'],
+    description: 'Velvet lined resin box for your most precious treasures.',
+    inStock: true,
+    bestseller: true,
+  },
+  {
+    id: 'r5',
+    slug: 'crystal-drop-necklace-dish',
+    name: 'Crystal Drop Dish',
+    category: 'resin',
+    type: 'dish',
+    price: 1200,
+    image: 'https://images.unsplash.com/photo-1549388604-817d15aa0110?w=400',
+    images: ['https://images.unsplash.com/photo-1549388604-817d15aa0110?w=400'],
+    description: 'Elegant resin dish for your daily jewellery.',
+    inStock: true,
+    bestseller: true,
+  },
+  {
+    id: 'h1',
+    slug: 'festive-joy-hamper',
+    name: 'Festive Joy Hamper',
+    category: 'hamper',
+    type: 'hamper',
+    price: 2500,
+    image: 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=400',
+    images: ['https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=400'],
+    description: 'A curated selection of our best candles and resin art.',
+    inStock: true,
+    bestseller: true,
   },
 ];
 

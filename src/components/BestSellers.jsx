@@ -2,29 +2,30 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import './BestSellers.css';
 import candleImg from '../assets/candlebest.png'
-const TABS = ["See All", "Candles", "Platters", "Frames", "Keepsakes", "Hampers", "Jewellery"];
-import platterImg1 from '../assets/bestseller/platters/platter1.jpeg';
-import frame1 from '../assets/bestseller/frames/frame.jpeg';
-import candle from '../assets/bestseller/candle/candle2.jpeg';
-import keepsakes from '../assets/bestseller/keepsakes/keepsake.jpeg';
-import hamper from '../assets/bestseller/hampers/hamper.jpeg';
-import Jewellery from '../assets/bestseller/jwellery/jwellery.jpeg';
+import { getBestsellers } from '../data/products';
 
-const DUMMY_PRODUCTS = [
-    { id: 1, name: "Teddy Candle", description: "Soy blend, 70h burn", price: "₹350.00", category: "Candles", image: candle, slug: "Teddy Candle" },
-    { id: 2, name: "Haldi Platter", description: "Handcrafted resin", price: "₹1200.00", category: "Platters", image: platterImg1, slug: "Haldi platter" },
-    { id: 3, name: "Resin Frame ", description: "6-inch", price: "₹800.00", category: "Frames", image: frame1, slug: "vintage-brass-frame" },
-    { id: 4, name: "Cherished Keepsake Box", description: "Velvet lined interior", price: "₹1200.00", category: "Keepsakes", image: keepsakes, slug: "cherished-keepsake-box" },
-    { id: 5, name: "Festive Joy Hamper", description: "Box of 4 items", price: "₹2500.00", category: "Hampers", image: hamper, slug: "festive-joy-hamper" },
-    { id: 6, name: "Crystal Drop Necklace", description: "Sterling silver", price: "₹1200.00", category: "Jewellery", image: Jewellery, slug: "crystal-drop-necklace" },
-];
+const TABS = ["See All", "Candles", "Platters", "Frames", "Keepsakes", "Hampers", "Jewellery"];
 
 export default function BestSellers() {
     const [activeTab, setActiveTab] = useState("See All");
+    const bestSellers = getBestsellers();
 
     const filteredProducts = activeTab === "See All"
-        ? DUMMY_PRODUCTS
-        : DUMMY_PRODUCTS.filter(product => product.category === activeTab);
+        ? bestSellers
+        : bestSellers.filter(product => {
+            const cat = product.category.toLowerCase();
+            const type = product.type?.toLowerCase();
+            const tab = activeTab.toLowerCase();
+
+            if (tab === 'candles') return cat === 'candle';
+            if (tab === 'platters') return type === 'platter';
+            if (tab === 'frames') return type === 'frame';
+            if (tab === 'keepsakes') return type === 'box' || type === 'keepsake';
+            if (tab === 'hampers') return cat === 'hamper';
+            if (tab === 'jewellery') return type === 'dish' || type === 'jewellery';
+            
+            return cat === tab || type === tab;
+        });
 
     return (
         <section className="best-sellers-section">
@@ -48,7 +49,7 @@ export default function BestSellers() {
                 <div className="products-grid">
                     {filteredProducts.map(product => (
                         <Link
-                            to={`/shop/${product.category.toLowerCase() === 'candles' ? 'candles' : 'resin'}/${product.slug}`}
+                            to={`/shop/${product.category === 'candle' ? 'candles' : 'resin'}/${product.slug}`}
                             className="product-card"
                             key={product.id}
                         >
@@ -58,8 +59,8 @@ export default function BestSellers() {
                             </div>
                             <div className="product-info">
                                 <h3 className="product-name">{product.name}</h3>
-                                <p className="product-description">{product.description}</p>
-                                <p className="product-price">{product.price}</p>
+                                <p className="product-description">{product.tagline || product.description}</p>
+                                <p className="product-price">₹{product.price.toLocaleString('en-IN')}</p>
                             </div>
                         </Link>
                     ))}

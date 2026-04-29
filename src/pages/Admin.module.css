@@ -1,0 +1,265 @@
+.adminPage {
+  min-height: 100vh;
+  background-color: #FAF8F5;
+  color: #1A1A1A;
+  font-family: 'Jost', sans-serif;
+  padding-bottom: 50px;
+}
+
+.loginContainer {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.loginCard {
+  background: white;
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+
+.loginCard h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 32px;
+  margin-bottom: 24px;
+}
+
+.loginCard input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #E8E0D5;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  font-family: 'Jost', sans-serif;
+}
+
+.loginBtn {
+  width: 100%;
+  padding: 12px;
+  background: #C4948A;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: opacity 0.2s;
+}
+
+.loginBtn:hover {
+  opacity: 0.9;
+}
+
+/* Header */
+.header {
+  background: white;
+  padding: 20px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #E8E0D5;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 28px;
+  margin: 0;
+}
+
+.logoutBtn {
+  padding: 8px 16px;
+  background: transparent;
+  border: 1px solid #E8E0D5;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+/* Stats */
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  padding: 40px;
+}
+
+.statCard {
+  background: white;
+  padding: 24px;
+  border-radius: 12px;
+  border: 1px solid #E8E0D5;
+}
+
+.statLabel {
+  font-size: 12px;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+
+.statValue {
+  font-size: 28px;
+  font-weight: 600;
+  color: #C4948A;
+}
+
+/* Table Container */
+.content {
+  padding: 0 40px;
+}
+
+.tableContainer {
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #E8E0D5;
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+th {
+  background: #FAF8F5;
+  padding: 16px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #666;
+  border-bottom: 1px solid #E8E0D5;
+}
+
+td {
+  padding: 16px;
+  border-bottom: 1px solid #FAF8F5;
+  vertical-align: top;
+  font-size: 14px;
+}
+
+.customerInfo div:last-child {
+  font-size: 12px;
+  color: #888;
+  margin-top: 4px;
+}
+
+.itemsList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.itemsList li {
+  font-size: 13px;
+  margin-bottom: 4px;
+}
+
+.amount {
+  font-weight: 600;
+  color: #1A1A1A;
+}
+
+.paymentBadge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 500;
+  background: #f0f0f0;
+}
+
+.paymentUPI { background: #E3F2FD; color: #1976D2; }
+.paymentCOD { background: #FFF3E0; color: #E65100; }
+
+.statusSelect {
+  padding: 6px 10px;
+  border-radius: 4px;
+  border: 1px solid #E8E0D5;
+  background: #FAF8F5;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+}
+
+.actionBtn {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  border: 1px solid #E8E0D5;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.actionBtn:hover {
+  background: #FAF8F5;
+  border-color: #C4948A;
+}
+
+.whatsappBtn:hover {
+  background: #25D366;
+  border-color: #25D366;
+  color: white;
+}
+
+.emptyState {
+  padding: 60px;
+  text-align: center;
+  color: #888;
+}
+
+.loading {
+  padding: 60px;
+  text-align: center;
+  color: #C4948A;
+}
+
+@media (max-width: 768px) {
+  .header { padding: 15px 20px; }
+  .statsGrid { padding: 20px; }
+  .content { padding: 0 20px; }
+  
+  /* Stack table on mobile */
+  .tableContainer table, .tableContainer thead, .tableContainer tbody, .tableContainer th, .tableContainer td, .tableContainer tr {
+    display: block;
+  }
+  
+  .tableContainer thead { display: none; }
+  .tableContainer td {
+    border: none;
+    position: relative;
+    padding-left: 50%;
+    padding-bottom: 10px;
+  }
+  
+  .tableContainer td:before {
+    content: attr(data-label);
+    position: absolute;
+    left: 15px;
+    font-weight: 600;
+    color: #888;
+    font-size: 11px;
+    text-transform: uppercase;
+  }
+  
+  .tableContainer tr {
+    border-bottom: 1px solid #E8E0D5;
+    padding: 15px 0;
+  }
+}

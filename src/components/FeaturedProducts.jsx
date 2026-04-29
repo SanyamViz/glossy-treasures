@@ -7,42 +7,11 @@ import candleImg2 from '../assets/candle2.png';
 import resinimg from '../assets/resinframe.png';
 import resinimg2 from '../assets/resinframe2.png';
 
-const MotionLink = motion(Link);
+import { ALL_PRODUCTS } from '../data/products';
 
-const FEATURED_PRODUCTS = [
-    {
-        id: 1,
-        name: 'Amber & Oud Candle',
-        price: '₹1,299',
-        category: 'candles',
-        image: candleImg,
-        slug: 'amber-oud-candle',
-    },
-    {
-        id: 2,
-        name: 'Floral Resin Platter',
-        price: '₹2,499',
-        category: 'platters',
-        image: candleImg2,
-        slug: 'floral-resin-platter',
-    },
-    {
-        id: 3,
-        name: 'Pressed Flower Frame',
-        price: '₹1,899',
-        category: 'frames',
-        image: resinimg,
-        slug: 'pressed-flower-frame',
-    },
-    {
-        id: 4,
-        name: 'Rose Gold Hamper',
-        price: '₹3,499',
-        category: 'hampers',
-        image: resinimg2,
-        slug: 'rose-gold-hamper',
-    },
-];
+const FEATURED_PRODUCTS = ALL_PRODUCTS.filter(p => p.featured);
+
+const MotionLink = motion(Link);
 
 const cardVariants = {
     hidden: { opacity: 0, y: 70, scale: 0.96 },
@@ -69,12 +38,13 @@ const imageVariants = {
 };
 
 export default function FeaturedProducts() {
-    const leftColumnProducts = [FEATURED_PRODUCTS[0], FEATURED_PRODUCTS[2]];
-    const rightColumnProducts = [FEATURED_PRODUCTS[1], FEATURED_PRODUCTS[3]];
+    // Distribute products into columns dynamically
+    const leftColumnProducts = FEATURED_PRODUCTS.filter((_, idx) => idx % 2 === 0);
+    const rightColumnProducts = FEATURED_PRODUCTS.filter((_, idx) => idx % 2 !== 0);
 
     const ProductCard = ({ product }) => (
         <MotionLink
-            to={`/shop/${product.category === 'candles' ? 'candles' : 'resin'}/${product.slug}`}
+            to={`/shop/${product.category === 'candle' ? 'candles' : 'resin'}/${product.slug}`}
             className="featured-card"
             variants={cardVariants}
             initial="hidden"
@@ -93,7 +63,7 @@ export default function FeaturedProducts() {
 
             <div className="featured-card-body">
                 <h3 className="fp-name">{product.name}</h3>
-                <p className="fp-price">{product.price}</p>
+                <p className="fp-price">₹{product.price.toLocaleString('en-IN')}</p>
             </div>
         </MotionLink>
     );

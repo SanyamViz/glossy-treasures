@@ -41,35 +41,41 @@ class ErrorBoundary extends React.Component {
   }
 }
 
+import Admin from './pages/Admin';
+
 function App() {
   const location = useLocation();
+  const isAdmin = location.pathname === '/admin';
   
+  const content = (
+    <AnimatePresence mode="wait">
+      <Routes location={location} key={location.pathname}>
+        <Route path="/" element={<PageTransition><Home /></PageTransition>} />
+        <Route path="/Shipping" element={<PageTransition><Shipping /></PageTransition>} />
+        <Route path="/hamper-builder" element={<PageTransition><Hamperbuilder /></PageTransition>} />
+        <Route path="/shop" element={<PageTransition><Shop /></PageTransition>} />
+        <Route path="/our-story" element={<PageTransition><OurStory /></PageTransition>} />
+        <Route path="/Contact" element={<PageTransition><Contact /></PageTransition>} />
+        <Route path="/Cart" element={<PageTransition><Cart /></PageTransition>} />
+        <Route path="/Wholesale" element={<PageTransition><Wholesale /></PageTransition>} />
+        <Route path="/checkout" element={<PageTransition><Checkout /></PageTransition>} />
+        <Route path="/order-confirmed" element={<PageTransition><OrderConfirmed /></PageTransition>} />
+        <Route path="/collections" element={<PageTransition><Collections /></PageTransition>} />
+        <Route path="/collections/:slug" element={<PageTransition><CollectionDetail /></PageTransition>} />
+        <Route path="/shop/candles" element={<CandleShop />} />
+        <Route path="/Privacypolicy" element={<PageTransition><PrivacyPolicy /></PageTransition>} />
+        <Route path="/shop/resin" element={<ResinShop />} />
+        <Route path="/shop/candles/:slug" element={<PageTransition><CandlePDP /></PageTransition>} />
+        <Route path="/shop/resin/:slug" element={<PageTransition><ResinPDP /></PageTransition>} />
+        <Route path="/admin" element={<Admin />} />
+        <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />
+      </Routes>
+    </AnimatePresence>
+  );
+
   return (
     <ErrorBoundary>
-      <Layout>
-        <AnimatePresence mode="wait">
-          <Routes location={location} key={location.pathname}>
-            <Route path="/" element={<PageTransition><Home /></PageTransition>} />
-            <Route path="/Shipping" element={<PageTransition><Shipping /></PageTransition>} />
-            <Route path="/hamper-builder" element={<PageTransition><Hamperbuilder /></PageTransition>} />
-            <Route path="/shop" element={<PageTransition><Shop /></PageTransition>} />
-            <Route path="/our-story" element={<PageTransition><OurStory /></PageTransition>} />
-            <Route path="/Contact" element={<PageTransition><Contact /></PageTransition>} />
-            <Route path="/Cart" element={<PageTransition><Cart /></PageTransition>} />
-            <Route path="/Wholesale" element={<PageTransition><Wholesale /></PageTransition>} />
-            <Route path="/checkout" element={<PageTransition><Checkout /></PageTransition>} />
-            <Route path="/order-confirmed" element={<PageTransition><OrderConfirmed /></PageTransition>} />
-            <Route path="/collections" element={<PageTransition><Collections /></PageTransition>} />
-            <Route path="/collections/:slug" element={<PageTransition><CollectionDetail /></PageTransition>} />
-            <Route path="/shop/candles" element={<CandleShop />} />
-            <Route path="/Privacypolicy" element={<PageTransition><PrivacyPolicy /></PageTransition>} />
-            <Route path="/shop/resin" element={<ResinShop />} />
-            <Route path="/shop/candles/:slug" element={<PageTransition><CandlePDP /></PageTransition>} />
-            <Route path="/shop/resin/:slug" element={<PageTransition><ResinPDP /></PageTransition>} />
-            <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />
-          </Routes>
-        </AnimatePresence>
-      </Layout>
+      {isAdmin ? content : <Layout>{content}</Layout>}
     </ErrorBoundary>
   );
 }
