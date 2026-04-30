@@ -1035,11 +1035,18 @@
         transition: none;
     }
 }
+
+.discountSectionMobile {
+    margin: 24px 0 8px;
+}
+
 .discountRow {
     display: flex;
     gap: 8px;
     margin: 12px 0;
+    width: 100%;
 }
+
 .discountInput {
     flex: 1;
     height: 44px;
@@ -1053,8 +1060,13 @@
     outline: none;
     text-transform: uppercase;
     letter-spacing: 0.08em;
+    -webkit-appearance: none;
 }
-.discountInput:focus { border-color: var(--accent-rose); }
+
+.discountInput:focus {
+    border-color: var(--accent-rose);
+}
+
 .applyBtn {
     height: 44px;
     padding: 0 16px;
@@ -1069,7 +1081,11 @@
     cursor: pointer;
     transition: opacity 0.2s;
 }
-.applyBtn:hover { opacity: 0.88; }
+
+.applyBtn:hover {
+    opacity: 0.88;
+}
+
 .discountApplied {
     display: flex;
     align-items: center;
@@ -1081,7 +1097,10 @@
     font-size: 12px;
     color: #155724;
     margin-bottom: 8px;
+    width: 100%;
+    box-sizing: border-box;
 }
+
 .removeDiscountBtn {
     background: none;
     border: none;

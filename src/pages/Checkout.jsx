@@ -644,6 +644,29 @@ const Checkout = () => {
               {stepContent[step]}
             </div>
 
+            {/* Discount section (visible on all, key for mobile) */}
+            <div className={styles.discountSectionMobile}>
+              {!discountApplied ? (
+                <div className={styles.discountRow}>
+                  <input
+                    className={styles.discountInput}
+                    type="text"
+                    placeholder="Discount code"
+                    value={discountCode}
+                    onChange={e => setDiscountCode(e.target.value.toUpperCase())}
+                  />
+                  <button className={styles.applyBtn} onClick={handleApplyDiscount}>
+                    Apply
+                  </button>
+                </div>
+              ) : (
+                <div className={styles.discountApplied}>
+                  <span>✓ {discountCode} — saving ₹{discountAmount}</span>
+                  <button className={styles.removeDiscountBtn} onClick={removeDiscount}>×</button>
+                </div>
+              )}
+            </div>
+
             {/* Navigation buttons */}
             <div className={styles.navBtns}>
               {step > 0 && (
@@ -724,7 +747,7 @@ const Checkout = () => {
                   <input
                     className={styles.discountInput}
                     type="text"
-                    placeholder="Discount code (e.g. BLOOM10)"
+                    placeholder="Discount code"
                     value={discountCode}
                     onChange={e => setDiscountCode(e.target.value.toUpperCase())}
                   />
@@ -734,7 +757,7 @@ const Checkout = () => {
                 </div>
               ) : (
                 <div className={styles.discountApplied}>
-                  <span>✓ {discountCode} applied — saving ₹{discountAmount}</span>
+                  <span>✓ {discountCode} — saving ₹{discountAmount}</span>
                   <button className={styles.removeDiscountBtn} onClick={removeDiscount}>×</button>
                 </div>
               )}
