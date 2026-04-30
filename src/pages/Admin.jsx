@@ -534,13 +534,13 @@ function ProductForm({ onClose, refresh, initialData }) {
         body: data
       });
 
-      const data = await res.json();
+      const result = await res.json();
       if (res.ok) {
         alert('Product saved!');
         refresh();
         onClose();
       } else {
-        alert(`Failed to save product: ${data.details || data.error}`);
+        alert(`Failed to save product: ${result.details || result.error}`);
       }
     } catch (err) {
       console.error(err);
