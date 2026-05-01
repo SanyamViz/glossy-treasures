@@ -21,33 +21,33 @@ const ProductCard = ({ product, category }) => {
     navigate(`${basePath}/${product.slug}`);
   };
 
-  const discount = product.originalPrice 
+  const discount = product.originalPrice
     ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)
     : null;
 
   return (
     <div className={styles.card} onClick={handleNavigate}>
-      <motion.div 
-        className={styles.imageContainer} 
-        layout 
+      <motion.div
+        className={styles.imageContainer}
+        layout
         transition={{ duration: 0.5, type: "spring", stiffness: 300, damping: 30 }}
       >
-        <motion.img 
-          src={product.image} 
-          alt={product.name} 
-          className={styles.image} 
+        <motion.img
+          src={product.image}
+          alt={product.name}
+          className={styles.image}
           layoutId={product.slug}
           transition={{ duration: 0.5, type: "spring", stiffness: 300, damping: 30 }}
         />
-        
+
         {product.badge && (
           <span className={`${styles.badge} ${styles[product.badge.toLowerCase()]}`}>
             {product.badge}
           </span>
         )}
 
-        <button 
-          className={`${styles.quickAdd} ${isAdded ? styles.added : ''}`} 
+        <button
+          className={`${styles.quickAdd} ${isAdded ? styles.added : ''}`}
           onClick={handleQuickAdd}
           aria-label="Quick add to cart"
         >
@@ -59,9 +59,9 @@ const ProductCard = ({ product, category }) => {
         <h3 className={styles.name}>{product.name}</h3>
         <div className={styles.priceRow}>
           <div className={styles.prices}>
-            <span className={styles.price}>₹{product.price.toLocaleString('en-IN')}</span>
+            <span className={styles.price}>₹{(product.basePrice || product.price || 0).toLocaleString('en-IN')}</span>
             {product.originalPrice && (
-              <span className={styles.originalPrice}>₹{product.originalPrice.toLocaleString('en-IN')}</span>
+              <span className={styles.originalPrice}>₹{(product.originalPrice || 0).toLocaleString('en-IN')}</span>
             )}
           </div>
           {discount && <span className={styles.discountPill}>{discount}% OFF</span>}

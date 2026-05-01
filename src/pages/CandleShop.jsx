@@ -55,8 +55,16 @@ const CandleShop = () => {
   const [visibleCount, setVisibleCount] = useState(6);
   const [isLoading, setIsLoading] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
-
-
+  useEffect(() => {
+    console.log('API URL:', import.meta.env.VITE_API_URL);
+    fetch(`${import.meta.env.VITE_API_URL}/api/products?category=candle`)
+      .then(r => r.json())
+      .then(data => {
+        console.log('Products:', data);
+        setProducts(data);
+      })
+      .catch(err => console.error(err));
+  }, []);
   useEffect(() => {
     fetch(`${import.meta.env.VITE_API_URL}/api/products?category=candle`)
       .then(r => r.json())

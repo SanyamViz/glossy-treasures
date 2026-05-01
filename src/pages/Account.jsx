@@ -75,7 +75,7 @@ const Account = () => {
                   {order.items.map((item, idx) => (
                     <div key={idx} className={styles.itemRow}>
                       <span>{item.productName} <span className={styles.itemQty}>x{item.quantity}</span></span>
-                      <span>₹{item.price.toLocaleString('en-IN')}</span>
+                      <span>₹{(item.price || 0).toLocaleString('en-IN')}</span>
                     </div>
                   ))}
                 </div>

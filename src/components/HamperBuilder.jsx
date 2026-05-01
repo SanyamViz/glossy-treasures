@@ -27,7 +27,7 @@ export default function HamperBuilder({ currentProduct }) {
     e.preventDefault();
     if (items.find(i => i.id === product.id)) return;
     setItems(prev => [...prev, product]);
-    
+
     // Bounce animation on the button/card could be added via ref or state class
   };
 
@@ -45,7 +45,7 @@ export default function HamperBuilder({ currentProduct }) {
           <div key={product.id} className={styles.productCard}>
             <div className={styles.imgWrapper}>
               <img src={product.image} alt={product.name} />
-              <button 
+              <button
                 className={`${styles.addBtn} ${items.find(i => i.id === product.id) ? styles.added : ''}`}
                 onClick={(e) => addItem(e, product)}
               >
@@ -54,7 +54,7 @@ export default function HamperBuilder({ currentProduct }) {
             </div>
             <div className={styles.cardInfo}>
               <p className={styles.cardName}>{product.name}</p>
-              <p className={styles.cardPrice}>₹{product.price.toLocaleString('en-IN')}</p>
+              <p className={styles.cardPrice}>₹{(product.basePrice || product.price || 0).toLocaleString('en-IN')}</p>
             </div>
           </div>
         ))}
@@ -62,13 +62,13 @@ export default function HamperBuilder({ currentProduct }) {
 
       <div className={styles.summaryBox}>
         <p className={styles.summaryTitle}>Hamper Summary</p>
-        
+
         <div className={styles.summaryList}>
           <div className={styles.summaryRow}>
             <span>🔒 {currentProduct?.name}</span>
             <span>₹{(currentProduct?.price || currentProduct?.basePrice || 0).toLocaleString('en-IN')}</span>
           </div>
-          
+
           {items.map(item => (
             <div key={item.id} className={`${styles.summaryRow} ${styles.slideDown}`}>
               <span>{item.name}</span>
@@ -83,11 +83,11 @@ export default function HamperBuilder({ currentProduct }) {
         <div className={styles.options}>
           <div className={styles.toggleRow}>
             <span className={styles.optionLabel}>
-               Premium Gift Packaging
+              Premium Gift Packaging
             </span>
             <div className={styles.toggleSection}>
               <span className={styles.plusPrice}>+₹99</span>
-              <button 
+              <button
                 className={`${styles.toggleSwitch} ${usePremiumPkg ? styles.on : ''}`}
                 onClick={() => setUsePremiumPkg(!usePremiumPkg)}
               />
@@ -97,11 +97,11 @@ export default function HamperBuilder({ currentProduct }) {
           <button className={styles.noteBtn} onClick={() => setShowNote(!showNote)}>
             {showNote ? '− Hide Gift Note' : '＋ Add Gift Note'}
           </button>
-          
+
           {showNote && (
-            <textarea 
-              className={styles.noteInput} 
-              placeholder="Write a heart-felt message..." 
+            <textarea
+              className={styles.noteInput}
+              placeholder="Write a heart-felt message..."
               rows="2"
             />
           )}

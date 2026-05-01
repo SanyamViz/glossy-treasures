@@ -23,7 +23,7 @@ export default function BestSellers() {
             if (tab === 'keepsakes') return type === 'box' || type === 'keepsake';
             if (tab === 'hampers') return cat === 'hamper';
             if (tab === 'jewellery') return type === 'dish' || type === 'jewellery';
-            
+
             return cat === tab || type === tab;
         });
 
@@ -60,7 +60,7 @@ export default function BestSellers() {
                             <div className="product-info">
                                 <h3 className="product-name">{product.name}</h3>
                                 <p className="product-description">{product.tagline || product.description}</p>
-                                <p className="product-price">₹{product.price.toLocaleString('en-IN')}</p>
+                                <p className="product-price">₹{(product.basePrice || product.price || 0).toLocaleString('en-IN')}</p>
                             </div>
                         </Link>
                     ))}

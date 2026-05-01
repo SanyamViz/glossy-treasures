@@ -19,7 +19,7 @@ export default function YouMayAlsoLike() {
             </div>
             <div className={styles.info}>
               <p className={styles.name}>{product.name}</p>
-              <p className={styles.price}>₹{product.price.toLocaleString('en-IN')}</p>
+              <p className={styles.price}>₹{(product.basePrice || product.price || 0).toLocaleString('en-IN')}</p>
             </div>
           </Link>
         ))}

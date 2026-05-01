@@ -56,7 +56,7 @@ export default function CandleOptions({ onPriceChange, basePrice, fragrances = [
                 className={`${styles.sizeBtn} ${selectedSize.id === s.id ? styles.active : ''}`}
                 onClick={() => handleSizeChange(s)}
               >
-                {s.label} — ₹{s.price.toLocaleString('en-IN')}
+                {s.label} — ₹{(s.price || 0).toLocaleString('en-IN')}
               </button>
             ))}
           </div>

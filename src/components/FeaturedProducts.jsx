@@ -63,7 +63,7 @@ export default function FeaturedProducts() {
 
             <div className="featured-card-body">
                 <h3 className="fp-name">{product.name}</h3>
-                <p className="fp-price">₹{product.price.toLocaleString('en-IN')}</p>
+                <p className="fp-price">₹{(product.basePrice || product.price || 0).toLocaleString('en-IN')}</p>
             </div>
         </MotionLink>
     );
