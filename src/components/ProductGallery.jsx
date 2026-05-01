@@ -8,12 +8,17 @@ export default function ProductGallery({ images, productType, slug }) {
   const touchStart = useRef(null);
   const touchEnd = useRef(null);
 
-  // Reset index when product changes
+  // Normalize images — always work with an array of strings
+  const imageList = Array.isArray(images)
+    ? images.filter(Boolean)
+    : images && typeof images === 'string'
+      ? [images]
+      : [];
+
   useEffect(() => {
     setCurrentIndex(0);
-  }, [images]);
+  }, [slug]);
 
-  // Handle zoom hint
   useEffect(() => {
     const timer = setTimeout(() => setShowHint(false), 2000);
     return () => clearTimeout(timer);
@@ -30,59 +35,67 @@ export default function ProductGallery({ images, productType, slug }) {
   const handleTouchEnd = () => {
     if (!touchStart.current || !touchEnd.current) return;
     const distance = touchStart.current - touchEnd.current;
-    const isLeftSwipe = distance > 50;
-    const isRightSwipe = distance < -50;
-
-    if (isLeftSwipe && currentIndex < images.length - 1) {
-      setCurrentIndex(prev => prev + 1);
-    }
-    if (isRightSwipe && currentIndex > 0) {
-      setCurrentIndex(prev => prev - 1);
-    }
-
+    if (distance > 50 && currentIndex < imageList.length - 1) setCurrentIndex(p => p + 1);
+    if (distance < -50 && currentIndex > 0) setCurrentIndex(p => p - 1);
     touchStart.current = null;
     touchEnd.current = null;
   };
 
+  // No images fallback
+  if (imageList.length === 0) {
+    return (
+      <div className={styles.gallery}>
+        <div className={styles.slide}>
+          <img src="/placeholder.jpg" alt="Product" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className={styles.gallery} 
-         onTouchStart={handleTouchStart}
-         onTouchMove={handleTouchMove}
-         onTouchEnd={handleTouchEnd}>
-      
-      <div 
+    <div
+      className={styles.gallery}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+    >
+      <div
         className={styles.track}
         style={{ transform: `translateX(-${currentIndex * 100}%)` }}
       >
-        {images.map((img, idx) => (
-          <motion.div 
-            key={idx} 
-            className={styles.slide} 
-            layout={idx === 0} 
-            transition={{ duration: 0.5, type: "spring", stiffness: 300, damping: 30 }}
+        {imageList.map((img, idx) => (
+          <motion.div
+            key={idx}
+            className={styles.slide}
+            layout={idx === 0}
+            transition={{ duration: 0.5, type: 'spring', stiffness: 300, damping: 30 }}
           >
-            <motion.img 
-              src={img} 
-              alt={`${productType} view ${idx + 1}`} 
+            <motion.img
+              src={img}
+              alt={`${productType || 'product'} view ${idx + 1}`}
               layoutId={idx === 0 && slug ? slug : undefined}
-              transition={{ duration: 0.5, type: "spring", stiffness: 300, damping: 30 }}
+              transition={{ duration: 0.5, type: 'spring', stiffness: 300, damping: 30 }}
             />
           </motion.div>
         ))}
       </div>
 
-      {showHint && <div className={styles.zoomHint}>TAP TO ZOOM</div>}
+      {showHint && imageList.length > 0 && (
+        <div className={styles.zoomHint}>TAP TO ZOOM</div>
+      )}
 
-      <div className={styles.dots}>
-        {images.map((_, idx) => (
-          <button
-            key={idx}
-            className={`${styles.dot} ${currentIndex === idx ? styles.active : ''}`}
-            onClick={() => setCurrentIndex(idx)}
-            aria-label={`Go to slide ${idx + 1}`}
-          />
-        ))}
-      </div>
+      {imageList.length > 1 && (
+        <div className={styles.dots}>
+          {imageList.map((_, idx) => (
+            <button
+              key={idx}
+              className={`${styles.dot} ${currentIndex === idx ? styles.active : ''}`}
+              onClick={() => setCurrentIndex(idx)}
+              aria-label={`Go to slide ${idx + 1}`}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
