@@ -42,14 +42,6 @@ const FILTER_CONFIGS = [
   }
 ];
 
-const [products, setProducts] = useState([]);
-
-useEffect(() => {
-  fetch(`${import.meta.env.VITE_API_URL}/api/products?category=resin`)
-    .then(r => r.json())
-    .then(data => setProducts(data))
-    .catch(err => console.error(err));
-}, []);
 
 const ResinShop = () => {
   const [activeFilters, setActiveFilters] = useState({
@@ -61,6 +53,14 @@ const ResinShop = () => {
   const [visibleCount, setVisibleCount] = useState(6);
   const [isLoading, setIsLoading] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    fetch(`${import.meta.env.VITE_API_URL}/api/products?category=resin`)
+      .then(r => r.json())
+      .then(data => setProducts(data))
+      .catch(err => console.error(err));
+  }, []);
 
   useEffect(() => {
     setIsMounted(true);

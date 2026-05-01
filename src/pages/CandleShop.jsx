@@ -41,14 +41,8 @@ const FILTER_CONFIGS = [
   }
 ];
 
-const [products, setProducts] = useState([]);
 
-useEffect(() => {
-  fetch(`${import.meta.env.VITE_API_URL}/api/products?category=candle`)
-    .then(r => r.json())
-    .then(data => setProducts(data))
-    .catch(err => console.error(err));
-}, []);
+
 
 const CandleShop = () => {
   const [activeFilters, setActiveFilters] = useState({
@@ -56,10 +50,19 @@ const CandleShop = () => {
     size: [],
     occasion: []
   });
+  const [products, setProducts] = useState([]);
   const [sortBy, setSortBy] = useState('newest');
   const [visibleCount, setVisibleCount] = useState(6);
   const [isLoading, setIsLoading] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
+
+
+  useEffect(() => {
+    fetch(`${import.meta.env.VITE_API_URL}/api/products?category=candle`)
+      .then(r => r.json())
+      .then(data => setProducts(data))
+      .catch(err => console.error(err));
+  }, []);
 
   useEffect(() => {
     setIsMounted(true);
