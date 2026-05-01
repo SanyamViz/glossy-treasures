@@ -2,7 +2,6 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import ProductCard from '../components/ProductCard';
 import FilterBar from '../components/FilterBar';
-import { RESIN_PRODUCTS } from '../data/products';
 import styles from './ResinShop.module.css';
 
 const FILTER_CONFIGS = [
@@ -43,6 +42,15 @@ const FILTER_CONFIGS = [
   }
 ];
 
+const [products, setProducts] = useState([]);
+
+useEffect(() => {
+  fetch(`${import.meta.env.VITE_API_URL}/api/products?category=resin`)
+    .then(r => r.json())
+    .then(data => setProducts(data))
+    .catch(err => console.error(err));
+}, []);
+
 const ResinShop = () => {
   const [activeFilters, setActiveFilters] = useState({
     type: [],
@@ -76,7 +84,7 @@ const ResinShop = () => {
   };
 
   const filteredProducts = useMemo(() => {
-    let result = [...RESIN_PRODUCTS];
+    let result = [...products];
 
     if (activeFilters.type.length > 0) {
       result = result.filter(p => activeFilters.type.includes(p.type));
@@ -96,7 +104,7 @@ const ResinShop = () => {
     }
 
     return result;
-  }, [activeFilters, sortBy]);
+  }, [activeFilters, sortBy, products]);
 
   const visibleProducts = filteredProducts.slice(0, visibleCount);
 

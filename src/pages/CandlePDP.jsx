@@ -10,7 +10,6 @@ import ProductReviews from '../components/ProductReviews';
 import YouMayAlsoLike from '../components/YouMayAlsoLike';
 import MadeByAngel from '../components/MadeByAngel';
 import styles from './CandlePDP.module.css';
-import { getCandleProducts } from '../data/products';
 
 
 
@@ -18,10 +17,9 @@ export default function CandlePDP() {
   const { slug } = useParams();
   const navigate = useNavigate();
 
-  // 1. Fetch data FIRST (not a hook)
-  const product = getCandleProducts().find(p => p.slug === slug);
+  const [product, setProduct] = useState(null);
+  const [pdpLoading, setPdpLoading] = useState(true);
 
-  // 2. Call ALL hooks unconditionally
   const { addToCart } = useCart();
   const [qty, setQty] = useState(1);
   const [currentPrice, setCurrentPrice] = useState(product?.price || 0);
@@ -33,14 +31,19 @@ export default function CandlePDP() {
   const hamperRef = useRef(null);
   const sectionRefs = useRef([]);
 
-  // 3. Effects that depend on data or URL
+  useEffect(() => {
+    setPdpLoading(true);
+    fetch(`${import.meta.env.VITE_API_URL}/api/products/${slug}`)
+      .then(r => r.json())
+      .then(data => { setProduct(data); setPdpLoading(false); })
+      .catch(() => setPdpLoading(false));
+  }, [slug]);
+
   useEffect(() => {
     window.scrollTo(0, 0);
-    // Reset state if slug changes
     setQty(1);
-    setCurrentPrice(product?.price || 0);
+    setCurrentPrice(product?.basePrice || product?.price || 0);
     setSelectedOptions({});
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [slug]);
 
   // Sticky bar observer
@@ -67,15 +70,21 @@ export default function CandlePDP() {
   const handleAddToCart = () => {
     if (!product) return;
     setIsSuccess(true);
-    addToCart({ 
-      ...product, 
+    addToCart({
+      ...product,
       price: currentPrice,
-      selectedOptions 
+      selectedOptions
     }, qty);
     setTimeout(() => setIsSuccess(false), 1000);
   };
 
-  // 4. Safe guard: Return fallback UI if product not found AFTER all hooks
+
+  if (pdpLoading) return (
+    <div className={styles.page} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '50vh' }}>
+      <p>Loading...</p>
+    </div>
+  );
+
   if (!product) {
     return (
       <div className={styles.page} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '50vh', flexDirection: 'column' }}>
@@ -99,7 +108,7 @@ export default function CandlePDP() {
       </button>
 
       {/* 1. Gallery */}
-      <ProductGallery images={product.images} productType="candle" slug={product.slug} />
+      <ProductGallery images={product.images?.[0] || product.images} productType="candle" slug={product.slug} />
 
       {/* 2. Product Header */}
       <header className={`${styles.section} ${styles.header}`} ref={el => sectionRefs.current[0] = el}>
@@ -122,9 +131,9 @@ export default function CandlePDP() {
 
       {/* 3. Candle Options */}
       <div className={styles.section} ref={el => sectionRefs.current[1] = el}>
-        <CandleOptions 
-          onPriceChange={setCurrentPrice} 
-          basePrice={product.price} 
+        <CandleOptions
+          onPriceChange={setCurrentPrice}
+          basePrice={product.price}
           fragrances={product.fragrances}
           sizes={product.sizes}
           onOptionsChange={setSelectedOptions}

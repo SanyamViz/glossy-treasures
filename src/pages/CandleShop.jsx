@@ -2,7 +2,6 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import ProductCard from '../components/ProductCard';
 import FilterBar from '../components/FilterBar';
-import { CANDLES } from '../data/products';
 import styles from './CandleShop.module.css';
 
 const FILTER_CONFIGS = [
@@ -10,20 +9,21 @@ const FILTER_CONFIGS = [
     key: 'scentFamily',
     label: 'Scent',
     options: [
-      { label: 'All', value: 'all' },
       { label: 'Floral', value: 'Floral' },
       { label: 'Woody', value: 'Woody' },
       { label: 'Fresh', value: 'Fresh' },
       { label: 'Warm', value: 'Warm' },
+      { label: 'Citrus', value: 'Citrus' },
+      { label: 'Gourmand', value: 'Gourmand' },
     ]
   },
   {
     key: 'size',
     label: 'Size',
     options: [
-      { label: 'All Sizes', value: 'all' },
-      { label: '100g', value: '100g' },
-      { label: '300g', value: '300g' },
+      { label: '150g', value: '150g' },
+      { label: '250g', value: '250g' },
+      { label: '400g', value: '400g' },
     ]
   },
 
@@ -31,14 +31,24 @@ const FILTER_CONFIGS = [
     key: 'occasion',
     label: 'Occasion',
     options: [
-      { label: 'All', value: 'all' },
+      { label: 'Bestseller', value: 'Bestseller' },
       { label: 'Self Care', value: 'Self Care' },
       { label: 'Gifting', value: 'Gifting' },
-      { label: 'Home', value: 'Home' },
-      { label: 'Romance', value: 'Romance' },
+      { label: 'Home decor', value: 'Home decor' },
+      { label: 'Wedding', value: 'Wedding' },
+      { label: 'New arrival', value: 'New arrival' },
     ]
   }
 ];
+
+const [products, setProducts] = useState([]);
+
+useEffect(() => {
+  fetch(`${import.meta.env.VITE_API_URL}/api/products?category=candle`)
+    .then(r => r.json())
+    .then(data => setProducts(data))
+    .catch(err => console.error(err));
+}, []);
 
 const CandleShop = () => {
   const [activeFilters, setActiveFilters] = useState({
@@ -73,7 +83,7 @@ const CandleShop = () => {
   };
 
   const filteredProducts = useMemo(() => {
-    let result = [...CANDLES];
+    let result = [...products];
 
     if (activeFilters.scentFamily.length > 0) {
       result = result.filter(p => activeFilters.scentFamily.includes(p.scentFamily));
@@ -93,7 +103,7 @@ const CandleShop = () => {
     }
 
     return result;
-  }, [activeFilters, sortBy]);
+  }, [activeFilters, sortBy, products]);
 
   const visibleProducts = filteredProducts.slice(0, visibleCount);
 

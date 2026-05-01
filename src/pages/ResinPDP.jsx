@@ -10,7 +10,6 @@ import ProductReviews from '../components/ProductReviews';
 import YouMayAlsoLike from '../components/YouMayAlsoLike';
 import MadeByAngel from '../components/MadeByAngel';
 import styles from './ResinPDP.module.css';
-import { getResinProducts } from '../data/products';
 
 
 
@@ -20,10 +19,9 @@ export default function ResinPDP() {
   const { slug } = useParams();
   const navigate = useNavigate();
 
-  // 1. Fetch data FIRST (not a hook)
-  const product = getResinProducts().find(p => p.slug === slug);
+  const [product, setProduct] = useState(null);
+  const [pdpLoading, setPdpLoading] = useState(true);
 
-  // 2. Call ALL hooks unconditionally
   const { addToCart } = useCart();
   const [qty, setQty] = useState(1);
   const [currentPrice, setCurrentPrice] = useState(product?.price || 0);
@@ -35,10 +33,16 @@ export default function ResinPDP() {
   const hamperRef = useRef(null);
   const sectionRefs = useRef([]);
 
-  // 3. Effects
+  useEffect(() => {
+    setPdpLoading(true);
+    fetch(`${import.meta.env.VITE_API_URL}/api/products/${slug}`)
+      .then(r => r.json())
+      .then(data => { setProduct(data); setPdpLoading(false); })
+      .catch(() => setPdpLoading(false));
+  }, [slug]);
+
   useEffect(() => {
     window.scrollTo(0, 0);
-    // Reset state if slug changes
     setQty(1);
     setCurrentPrice(product?.price || 0);
     setSelectedOptions({});
@@ -64,8 +68,8 @@ export default function ResinPDP() {
   const handleAddToCart = () => {
     if (!product) return;
     setIsSuccess(true);
-    addToCart({ 
-      ...product, 
+    addToCart({
+      ...product,
       price: currentPrice,
       selectedOptions
     }, qty);
@@ -96,7 +100,7 @@ export default function ResinPDP() {
       </button>
 
       {/* 1. Gallery */}
-      <ProductGallery images={product.images} productType="resin" slug={product.slug} />
+      <ProductGallery images={product.images?.[0] || product.images} productType="resin" slug={product.slug} />
 
       {/* 2. Product Header */}
       <header className={`${styles.section} ${styles.header}`} ref={el => sectionRefs.current[0] = el}>
@@ -119,7 +123,7 @@ export default function ResinPDP() {
 
       {/* 3. Resin Options */}
       <div className={styles.section} ref={el => sectionRefs.current[1] = el}>
-        <ResinOptions 
+        <ResinOptions
           onPriceChange={setCurrentPrice}
           basePrice={product.price}
           colors={product.colors}
