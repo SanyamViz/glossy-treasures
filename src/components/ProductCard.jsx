@@ -29,14 +29,13 @@ const ProductCard = ({ product, category }) => {
     <div className={styles.card} onClick={handleNavigate}>
       <motion.div
         className={styles.imageContainer}
-        layout
         transition={{ duration: 0.5, type: "spring", stiffness: 300, damping: 30 }}
       >
         <motion.img
           src={product.images?.[0] || product.image || '/placeholder.jpg'}
           alt={product.name}
           className={styles.image}
-          layoutId={product.slug}
+          layoutId={product?.slug || undefined}
           transition={{ duration: 0.5, type: "spring", stiffness: 300, damping: 30 }}
         />
 
