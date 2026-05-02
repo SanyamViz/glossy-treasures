@@ -12,6 +12,23 @@ const STATUS_COLORS = {
   CANCELLED: { bg: '#F8D7DA', text: '#721c24' },
 };
 
+const ALL_FRAGRANCES = [
+  { id: 'lavender', label: 'Lavender' },
+  { id: 'loctus', label: 'Loctus' },
+  { id: 'jasmine', label: 'Jasmine' },
+  { id: 'rose', label: 'Rose' },
+  { id: 'vanilla', label: 'Vanilla' },
+  { id: 'sandalwood', label: 'Sandalwood' },
+  { id: 'oceanbreeze', label: 'Ocean Breeze' },
+  { id: 'chocolate', label: 'Chocolate' },
+  { id: 'strawberry', label: 'Strawberry' },
+  { id: 'berrybliss', label: 'Berry Bliss' },
+  { id: 'redwine', label: 'Red Wine' },
+  { id: 'coffee', label: 'Coffee' },
+  { id: 'lemongrass', label: 'Lemongrass' },
+  { id: 'lemon&levender', label: 'Lemon & Lavender' },
+  { id: 'cranberry', label: 'Cranberry' },
+];
 export default function Admin() {
   const [isAuthenticated, setIsAuthenticated] = useState(localStorage.getItem('admin_auth') === 'true');
   const [password, setPassword] = useState('');
@@ -506,6 +523,9 @@ function ProductForm({ onClose, refresh, initialData }) {
   });
   const [images, setImages] = useState([]);
   const [existingImages, setExistingImages] = useState(initialData?.images || []);
+  const [selectedFragrances, setSelectedFragrances] = useState(
+    initialData?.fragrances?.map(f => f.id) || []
+  );
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
@@ -520,6 +540,14 @@ function ProductForm({ onClose, refresh, initialData }) {
           data.append(key, formData[key]);
         }
       });
+      // Save fragrances separately
+      data.append('fragrances', JSON.stringify(
+        selectedFragrances.map(id => ({
+          id,
+          label: ALL_FRAGRANCES.find(f => f.id === id)?.label || id,
+          available: true
+        }))
+      ));
 
       images.forEach(img => data.append('images', img));
       data.append('existingImages', JSON.stringify(existingImages));
@@ -718,6 +746,86 @@ function ProductForm({ onClose, refresh, initialData }) {
             </div>
           </section>
         )}
+        <div className={styles.formGroupFull}>
+          <label style={{ marginBottom: '10px', display: 'block' }}>
+            Available Fragrances
+          </label>
+          <div className={styles.fragranceGrid}>
+            {ALL_FRAGRANCES.map(f => (
+              <label key={f.id} className={styles.fragranceOption}>
+                <input
+                  type="checkbox"
+                  checked={selectedFragrances.includes(f.id)}
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      setSelectedFragrances(prev => [...prev, f.id]);
+                    } else {
+                      setSelectedFragrances(prev => prev.filter(id => id !== f.id));
+                    }
+                  }}
+                />
+                <span>{f.label}</span>
+              </label>
+            ))}
+          </div>
+          <div style={{ display: 'flex', gap: '8px', marginTop: '10px' }}>
+            <button
+              type="button"
+              className={styles.addBtn}
+              onClick={() => setSelectedFragrances(ALL_FRAGRANCES.map(f => f.id))}
+            >
+              Select All 15
+            </button>
+            <button
+              type="button"
+              className={styles.cancelBtn}
+              onClick={() => setSelectedFragrances([])}
+            >
+              Clear All
+            </button>
+          </div>
+        </div>
+        <div className={styles.formGroupFull}>
+          <label style={{ marginBottom: '10px', display: 'block' }}>
+            Colors (optional)
+          </label>
+          <p style={{ fontSize: '12px', color: '#7A7068', marginBottom: '10px' }}>
+            Add colors if this candle comes in different color options
+          </p>
+          {formData.colors?.map((color, idx) => (
+            <div key={idx} className={`${styles.optionRow} ${styles.resinOptionRow}`}>
+              <input
+                type="text"
+                placeholder="Color Name (e.g. Pink)"
+                value={color.name}
+                onChange={e => {
+                  const newColors = [...formData.colors];
+                  newColors[idx].name = e.target.value;
+                  setFormData({ ...formData, colors: newColors });
+                }}
+              />
+              <input
+                type="color"
+                value={color.hex}
+                onChange={e => {
+                  const newColors = [...formData.colors];
+                  newColors[idx].hex = e.target.value;
+                  setFormData({ ...formData, colors: newColors });
+                }}
+              />
+              <button
+                type="button"
+                className={styles.removeImg}
+                onClick={() => removeColor(idx)}
+              >
+                &times;
+              </button>
+            </div>
+          ))}
+          <button type="button" className={styles.addBtn} onClick={addColor}>
+            + Add Color
+          </button>
+        </div>
 
         {formData.category === 'Resin' && (
           <section className={styles.formSection}>

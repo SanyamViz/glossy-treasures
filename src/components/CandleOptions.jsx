@@ -1,29 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import styles from './CandleOptions.module.css';
 
-export default function CandleOptions({ onPriceChange, basePrice, fragrances = [], sizes = [], onOptionsChange }) {
-  // Use props if available, otherwise fall back to empty array or defaults
-  const [selectedFragrance, setSelectedFragrance] = useState(fragrances[0] || { label: 'Default', available: true });
-  const [selectedSize, setSelectedSize] = useState(sizes[0] || { label: 'Standard', value: 'standard', price: basePrice });
+export default function CandleOptions({ onPriceChange, basePrice, fragrances = [], sizes = [], colors = [], onOptionsChange }) {
+  const [selectedFragrance, setSelectedFragrance] = useState(fragrances[0] || null);
+  const [selectedSize, setSelectedSize] = useState(sizes[0] || null);
+  const [selectedColor, setSelectedColor] = useState(colors[0] || null);
 
-  // Notify parent whenever options change
   useEffect(() => {
     if (onOptionsChange) {
       onOptionsChange({
-        fragrance: selectedFragrance.label,
-        size: selectedSize.label
+        fragrance: selectedFragrance?.label || null,
+        size: selectedSize?.label || null,
+        color: selectedColor?.name || null,
       });
     }
-  }, [selectedFragrance, selectedSize, onOptionsChange]);
+  }, [selectedFragrance, selectedSize, selectedColor, onOptionsChange]);
 
-  const handleFragranceChange = (f) => {
-    setSelectedFragrance(f);
-  };
+  const handleFragranceChange = (f) => setSelectedFragrance(f);
 
   const handleSizeChange = (s) => {
     setSelectedSize(s);
     if (onPriceChange) onPriceChange(s.price);
   };
+
+  const handleColorChange = (c) => setSelectedColor(c);
 
   return (
     <div className={styles.options}>
@@ -34,7 +34,7 @@ export default function CandleOptions({ onPriceChange, basePrice, fragrances = [
             {fragrances.map(f => (
               <button
                 key={f.id}
-                className={`${styles.chip} ${selectedFragrance.id === f.id ? styles.active : ''}`}
+                className={`${styles.chip} ${selectedFragrance?.id === f.id ? styles.active : ''}`}
                 onClick={() => handleFragranceChange(f)}
                 disabled={!f.available}
               >
@@ -42,7 +42,9 @@ export default function CandleOptions({ onPriceChange, basePrice, fragrances = [
               </button>
             ))}
           </div>
-          {selectedFragrance.desc && <p className={styles.fragranceDesc}>{selectedFragrance.desc}</p>}
+          {selectedFragrance?.desc && (
+            <p className={styles.fragranceDesc}>{selectedFragrance.desc}</p>
+          )}
         </div>
       )}
 
@@ -52,11 +54,33 @@ export default function CandleOptions({ onPriceChange, basePrice, fragrances = [
           <div className={styles.sizeGrid}>
             {sizes.map(s => (
               <button
-                key={s.id}
-                className={`${styles.sizeBtn} ${selectedSize.id === s.id ? styles.active : ''}`}
+                key={s.id || s.label}
+                className={`${styles.sizeBtn} ${selectedSize?.label === s.label ? styles.active : ''}`}
                 onClick={() => handleSizeChange(s)}
               >
                 {s.label} — ₹{(s.price || 0).toLocaleString('en-IN')}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {colors.length > 0 && (
+        <div className={styles.optionGroup}>
+          <span className={styles.label}>Choose Color</span>
+          <div className={styles.colorRow}>
+            {colors.map(c => (
+              <button
+                key={c.id || c.name}
+                className={`${styles.colorBtn} ${selectedColor?.name === c.name ? styles.colorActive : ''}`}
+                onClick={() => handleColorChange(c)}
+                title={c.name}
+              >
+                <span
+                  className={styles.colorSwatch}
+                  style={{ background: c.hex || c.color || '#ccc' }}
+                />
+                <span className={styles.colorLabel}>{c.name}</span>
               </button>
             ))}
           </div>

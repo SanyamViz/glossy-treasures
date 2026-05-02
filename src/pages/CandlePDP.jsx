@@ -133,9 +133,10 @@ export default function CandlePDP() {
       <div className={styles.section} ref={el => sectionRefs.current[1] = el}>
         <CandleOptions
           onPriceChange={setCurrentPrice}
-          basePrice={product.price}
-          fragrances={product.fragrances}
-          sizes={product.sizes}
+          basePrice={product.basePrice || product.price || 0}
+          fragrances={product.fragrances || []}
+          sizes={product.sizes || []}
+          colors={product.colors || []}
           onOptionsChange={setSelectedOptions}
         />
       </div>
