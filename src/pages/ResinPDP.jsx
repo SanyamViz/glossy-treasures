@@ -100,8 +100,7 @@ export default function ResinPDP() {
       </button>
 
       {/* 1. Gallery */}
-      <ProductGallery images={product.images?.[0] || product.images} productType="resin" slug={product.slug} />
-
+      <ProductGallery images={product.images || []} productType="resin" slug={product.slug} />
       {/* 2. Product Header */}
       <header className={`${styles.section} ${styles.header}`} ref={el => sectionRefs.current[0] = el}>
         <div className={styles.titleRow}>
