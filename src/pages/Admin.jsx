@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styles from './Admin.module.css';
 
-const ADMIN_PASSWORD = 'glossy2024';
+const ADMIN_PASSWORD = 'AngelManchanda@152116';
 
 const STATUS_COLORS = {
   PENDING: { bg: '#FFF3CD', text: '#856404' },
@@ -530,7 +530,7 @@ function ProductForm({ onClose, refresh, initialData }) {
 
       const res = await fetch(url, {
         method: initialData ? 'PUT' : 'POST',
-        headers: { 'Authorization': `Bearer glossy2024` },
+        headers: { 'Authorization': `Bearer AngelManchanda@152116` },
         body: data
       });
 
