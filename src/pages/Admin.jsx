@@ -125,7 +125,7 @@ export default function Admin() {
         },
         body: JSON.stringify({ status: newStatus })
       });
-      
+
       if (response.ok) {
         setOrders(prev => {
           const updated = prev.map(o => o.orderNumber === orderNumber ? { ...o, status: newStatus } : o);
@@ -213,7 +213,7 @@ export default function Admin() {
     }
   }, [isAuthenticated]);
 
-  const filteredOrders = orders.filter(o => 
+  const filteredOrders = orders.filter(o =>
     o.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     o.orderNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
     o.phone.includes(searchTerm)
@@ -325,7 +325,7 @@ export default function Admin() {
                         </td>
                         <td data-label="Status">
                           <div className={styles.statusBadgeWrapper} style={{ backgroundColor: STATUS_COLORS[order.status].bg, color: STATUS_COLORS[order.status].text }}>
-                            <select 
+                            <select
                               className={styles.statusSelectHidden}
                               value={order.status}
                               onChange={(e) => updateStatus(order.orderNumber, e.target.value)}
@@ -338,7 +338,7 @@ export default function Admin() {
                         <td data-label="Actions">
                           <div className={styles.actions}>
                             <a href={`https://wa.me/91${order.phone}`} target="_blank" rel="noopener noreferrer" className={`${styles.actionBtn} ${styles.whatsappBtn}`} title="Message on WhatsApp">
-                              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.771-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793 0-.853.448-1.273.607-1.446.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86.173.088.274.072.376-.043.101-.116.433-.506.548-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564c.173.087.289.129.332.202.043.073.043.419-.101.824z"/></svg>
+                              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.771-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793 0-.853.448-1.273.607-1.446.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86.173.088.274.072.376-.043.101-.116.433-.506.548-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564c.173.087.289.129.332.202.043.073.043.419-.101.824z" /></svg>
                             </a>
                             <button className={styles.actionBtn} onClick={() => copyToClipboard(order.orderNumber)} title="Copy Order Number">
                               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
@@ -357,15 +357,15 @@ export default function Admin() {
             <div className={styles.discountFormWrap}>
               <h3>Create New Discount</h3>
               <form onSubmit={handleCreateDiscount} className={styles.discountForm}>
-                <input type="text" placeholder="Code (e.g. BLOOM10)" value={newDiscount.code} onChange={e => setNewDiscount({...newDiscount, code: e.target.value.toUpperCase()})} required />
-                <select value={newDiscount.type} onChange={e => setNewDiscount({...newDiscount, type: e.target.value})}>
+                <input type="text" placeholder="Code (e.g. BLOOM10)" value={newDiscount.code} onChange={e => setNewDiscount({ ...newDiscount, code: e.target.value.toUpperCase() })} required />
+                <select value={newDiscount.type} onChange={e => setNewDiscount({ ...newDiscount, type: e.target.value })}>
                   <option value="percentage">Percentage %</option>
                   <option value="fixed">Fixed ₹</option>
                 </select>
-                <input type="number" placeholder="Value" value={newDiscount.value} onChange={e => setNewDiscount({...newDiscount, value: e.target.value})} required />
-                <input type="number" placeholder="Min Order ₹" value={newDiscount.minOrder} onChange={e => setNewDiscount({...newDiscount, minOrder: e.target.value})} />
-                <input type="number" placeholder="Max Uses" value={newDiscount.maxUses} onChange={e => setNewDiscount({...newDiscount, maxUses: e.target.value})} />
-                <input type="date" value={newDiscount.expiresAt} onChange={e => setNewDiscount({...newDiscount, expiresAt: e.target.value})} />
+                <input type="number" placeholder="Value" value={newDiscount.value} onChange={e => setNewDiscount({ ...newDiscount, value: e.target.value })} required />
+                <input type="number" placeholder="Min Order ₹" value={newDiscount.minOrder} onChange={e => setNewDiscount({ ...newDiscount, minOrder: e.target.value })} />
+                <input type="number" placeholder="Max Uses" value={newDiscount.maxUses} onChange={e => setNewDiscount({ ...newDiscount, maxUses: e.target.value })} />
+                <input type="date" value={newDiscount.expiresAt} onChange={e => setNewDiscount({ ...newDiscount, expiresAt: e.target.value })} />
                 <button type="submit" className={styles.createBtn}>Create Code</button>
               </form>
             </div>
@@ -408,8 +408,8 @@ export default function Admin() {
             </div>
           </div>
         ) : (
-          <ProductsTab 
-            products={products} 
+          <ProductsTab
+            products={products}
             editingProduct={editingProduct}
             onEdit={(p) => { setEditingProduct(p); setShowProductForm(true); }}
             onDelete={handleDeleteProduct}
@@ -430,16 +430,16 @@ export default function Admin() {
 function ProductsTab({ products, onEdit, onDelete, onToggle, onAdd, showForm, setShowForm, refresh, editingProduct }) {
   const [searchTerm, setSearchTerm] = useState('');
 
-  const filteredProducts = products.filter(p => 
+  const filteredProducts = products.filter(p =>
     p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     p.category.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   if (showForm) {
-    return <ProductForm 
-      onClose={() => setShowForm(false)} 
-      refresh={refresh} 
-      initialData={editingProduct} 
+    return <ProductForm
+      onClose={() => setShowForm(false)}
+      refresh={refresh}
+      initialData={editingProduct}
     />;
   }
 
@@ -478,7 +478,7 @@ function ProductsTab({ products, onEdit, onDelete, onToggle, onAdd, showForm, se
                 <div className={styles.productCardActions}>
                   <button className={styles.editBtn} onClick={() => onEdit(product)}>Edit</button>
                   <button className={styles.actionBtn} onClick={() => onToggle(product)} title={product.active ? "Deactivate" : "Activate"}>
-                    {product.active ? 
+                    {product.active ?
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#155724" strokeWidth="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg> :
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#721c24" strokeWidth="2"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
                     }
@@ -520,14 +520,14 @@ function ProductForm({ onClose, refresh, initialData }) {
           data.append(key, formData[key]);
         }
       });
-      
+
       images.forEach(img => data.append('images', img));
       data.append('existingImages', JSON.stringify(existingImages));
 
-      const url = initialData 
+      const url = initialData
         ? `${import.meta.env.VITE_API_URL}/api/products/${initialData.id}`
         : `${import.meta.env.VITE_API_URL}/api/products`;
-      
+
       const res = await fetch(url, {
         method: initialData ? 'PUT' : 'POST',
         headers: { 'Authorization': `Bearer glossy2024` },
@@ -551,7 +551,7 @@ function ProductForm({ onClose, refresh, initialData }) {
   };
 
   const addSize = () => {
-    const newSize = formData.category === 'Candle' 
+    const newSize = formData.category === 'Candle'
       ? { label: '', price: '', burnTime: '' }
       : { label: '', price: '' };
     setFormData({ ...formData, sizes: [...(formData.sizes || []), newSize] });
@@ -586,34 +586,34 @@ function ProductForm({ onClose, refresh, initialData }) {
           <div className={styles.formGrid}>
             <div className={styles.formGroup}>
               <label>Product Name</label>
-              <input type="text" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} required />
+              <input type="text" value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} required />
             </div>
             <div className={styles.formGroup}>
               <label>Category</label>
-              <select value={formData.category} onChange={e => setFormData({...formData, category: e.target.value})}>
+              <select value={formData.category} onChange={e => setFormData({ ...formData, category: e.target.value })}>
                 <option value="Candle">Candle</option>
                 <option value="Resin">Resin</option>
               </select>
             </div>
             <div className={`${styles.formGroup} ${styles.formGroupFull}`}>
               <label>Description</label>
-              <textarea rows="3" value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} required />
+              <textarea rows="3" value={formData.description} onChange={e => setFormData({ ...formData, description: e.target.value })} required />
             </div>
             <div className={styles.formGroup}>
               <label>Base Price (₹)</label>
-              <input type="number" value={formData.basePrice} onChange={e => setFormData({...formData, basePrice: e.target.value})} required />
+              <input type="number" value={formData.basePrice} onChange={e => setFormData({ ...formData, basePrice: e.target.value })} required />
             </div>
             <div className={styles.formGroup}>
               <label>Original Price (Optional ₹)</label>
-              <input type="number" value={formData.originalPrice} onChange={e => setFormData({...formData, originalPrice: e.target.value})} />
+              <input type="number" value={formData.originalPrice} onChange={e => setFormData({ ...formData, originalPrice: e.target.value })} />
             </div>
             <div className={styles.formGroup}>
               <label>Badge (e.g. "New")</label>
-              <input type="text" value={formData.badge} onChange={e => setFormData({...formData, badge: e.target.value})} />
+              <input type="text" value={formData.badge} onChange={e => setFormData({ ...formData, badge: e.target.value })} />
             </div>
             <div className={styles.formGroup}>
               <label>Occasion</label>
-              <select value={formData.occasion} onChange={e => setFormData({...formData, occasion: e.target.value})}>
+              <select value={formData.occasion} onChange={e => setFormData({ ...formData, occasion: e.target.value })}>
                 <option value="Self Care">Self Care</option>
                 <option value="Home Decor">Home Decor</option>
                 <option value="Gifting">Gifting</option>
@@ -624,19 +624,19 @@ function ProductForm({ onClose, refresh, initialData }) {
             </div>
             <div className={styles.formGroup}>
               <label>Stock Count</label>
-              <input type="number" value={formData.stock} onChange={e => setFormData({...formData, stock: e.target.value})} />
+              <input type="number" value={formData.stock} onChange={e => setFormData({ ...formData, stock: e.target.value })} />
             </div>
             <div className={styles.toggleRow}>
               <label className={styles.toggleItem}>
-                <input type="checkbox" checked={formData.inStock} onChange={e => setFormData({...formData, inStock: e.target.checked})} />
+                <input type="checkbox" checked={formData.inStock} onChange={e => setFormData({ ...formData, inStock: e.target.checked })} />
                 In Stock
               </label>
               <label className={styles.toggleItem}>
-                <input type="checkbox" checked={formData.bestseller} onChange={e => setFormData({...formData, bestseller: e.target.checked})} />
+                <input type="checkbox" checked={formData.bestseller} onChange={e => setFormData({ ...formData, bestseller: e.target.checked })} />
                 Bestseller
               </label>
               <label className={styles.toggleItem}>
-                <input type="checkbox" checked={formData.active} onChange={e => setFormData({...formData, active: e.target.checked})} />
+                <input type="checkbox" checked={formData.active} onChange={e => setFormData({ ...formData, active: e.target.checked })} />
                 Active
               </label>
             </div>
@@ -652,15 +652,15 @@ function ProductForm({ onClose, refresh, initialData }) {
                 <button type="button" className={styles.removeImg} onClick={() => setExistingImages(existingImages.filter((_, i) => i !== idx))}>&times;</button>
               </div>
             ))}
-            {images.map((img, idx) => (
+            {(images || []).map((img, idx) => (
               <div key={`new-${idx}`} className={styles.imagePreview}>
                 <img src={URL.createObjectURL(img)} alt="Product" />
                 <button type="button" className={styles.removeImg} onClick={() => setImages(images.filter((_, i) => i !== idx))}>&times;</button>
               </div>
             ))}
-            {(existingImages.length + images.length) < 6 && (
+            {((existingImages || []).length + (images || []).length) < 6 && (
               <label className={styles.uploadPlaceholder}>
-                <input type="file" hidden multiple accept="image/*" onChange={e => setImages([...images, ...Array.from(e.target.files)].slice(0, 6 - existingImages.length))} />
+                <input type="file" hidden multiple accept="image/*" onChange={e => setImages([...(images || []), ...Array.from(e.target.files)].slice(0, 6 - (existingImages || []).length))} />
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
                 <span>Upload</span>
               </label>
@@ -674,7 +674,7 @@ function ProductForm({ onClose, refresh, initialData }) {
             <div className={styles.formGrid}>
               <div className={styles.formGroup}>
                 <label>Scent Family</label>
-                <select value={formData.scentFamily} onChange={e => setFormData({...formData, scentFamily: e.target.value})}>
+                <select value={formData.scentFamily} onChange={e => setFormData({ ...formData, scentFamily: e.target.value })}>
                   <option value="Floral">Floral</option>
                   <option value="Woody">Woody</option>
                   <option value="Fresh">Fresh</option>
@@ -685,11 +685,11 @@ function ProductForm({ onClose, refresh, initialData }) {
               </div>
               <div className={styles.formGroup}>
                 <label>Burn Time</label>
-                <input type="text" placeholder="e.g. 45 hrs" value={formData.burnTime} onChange={e => setFormData({...formData, burnTime: e.target.value})} />
+                <input type="text" placeholder="e.g. 45 hrs" value={formData.burnTime} onChange={e => setFormData({ ...formData, burnTime: e.target.value })} />
               </div>
               <div className={`${styles.formGroup} ${styles.formGroupFull}`}>
                 <label>Ingredients</label>
-                <textarea rows="2" value={formData.ingredients} onChange={e => setFormData({...formData, ingredients: e.target.value})} />
+                <textarea rows="2" value={formData.ingredients} onChange={e => setFormData({ ...formData, ingredients: e.target.value })} />
               </div>
               <div className={styles.formGroupFull}>
                 <label style={{ marginBottom: '10px', display: 'block' }}>Sizes</label>
@@ -698,17 +698,17 @@ function ProductForm({ onClose, refresh, initialData }) {
                     <input type="text" placeholder="Label (e.g. 150g)" value={size.label} onChange={e => {
                       const newSizes = [...formData.sizes];
                       newSizes[idx].label = e.target.value;
-                      setFormData({...formData, sizes: newSizes});
+                      setFormData({ ...formData, sizes: newSizes });
                     }} />
                     <input type="number" placeholder="Price" value={size.price} onChange={e => {
                       const newSizes = [...formData.sizes];
                       newSizes[idx].price = e.target.value;
-                      setFormData({...formData, sizes: newSizes});
+                      setFormData({ ...formData, sizes: newSizes });
                     }} />
                     <input type="text" placeholder="Burn Time" value={size.burnTime} onChange={e => {
                       const newSizes = [...formData.sizes];
                       newSizes[idx].burnTime = e.target.value;
-                      setFormData({...formData, sizes: newSizes});
+                      setFormData({ ...formData, sizes: newSizes });
                     }} />
                     <button type="button" className={styles.removeImg} onClick={() => removeSize(idx)}>&times;</button>
                   </div>
@@ -725,7 +725,7 @@ function ProductForm({ onClose, refresh, initialData }) {
             <div className={styles.formGrid}>
               <div className={styles.formGroup}>
                 <label>Type</label>
-                <select value={formData.type} onChange={e => setFormData({...formData, type: e.target.value})}>
+                <select value={formData.type} onChange={e => setFormData({ ...formData, type: e.target.value })}>
                   <option value="">Select Type</option>
                   {['Frame', 'Baby Keepsake', 'Wedding Invitation', 'Wedding Garlands Frame', 'Clock', 'Name Plate', 'Platter', 'Jewellery', 'Diary', 'Keychain', 'Bookmark', 'LED Stand', 'Car Hanging', 'Fridge Magnet'].map(t => (
                     <option key={t} value={t}>{t}</option>
@@ -739,12 +739,12 @@ function ProductForm({ onClose, refresh, initialData }) {
                     <input type="text" placeholder="Color Name" value={color.name} onChange={e => {
                       const newColors = [...formData.colors];
                       newColors[idx].name = e.target.value;
-                      setFormData({...formData, colors: newColors});
+                      setFormData({ ...formData, colors: newColors });
                     }} />
                     <input type="color" value={color.hex} onChange={e => {
                       const newColors = [...formData.colors];
                       newColors[idx].hex = e.target.value;
-                      setFormData({...formData, colors: newColors});
+                      setFormData({ ...formData, colors: newColors });
                     }} />
                     <button type="button" className={styles.removeImg} onClick={() => removeColor(idx)}>&times;</button>
                   </div>
@@ -758,12 +758,12 @@ function ProductForm({ onClose, refresh, initialData }) {
                     <input type="text" placeholder="Size Label" value={size.label} onChange={e => {
                       const newSizes = [...formData.sizes];
                       newSizes[idx].label = e.target.value;
-                      setFormData({...formData, sizes: newSizes});
+                      setFormData({ ...formData, sizes: newSizes });
                     }} />
                     <input type="number" placeholder="Price" value={size.price} onChange={e => {
                       const newSizes = [...formData.sizes];
                       newSizes[idx].price = e.target.value;
-                      setFormData({...formData, sizes: newSizes});
+                      setFormData({ ...formData, sizes: newSizes });
                     }} />
                     <button type="button" className={styles.removeImg} onClick={() => removeSize(idx)}>&times;</button>
                   </div>
@@ -772,7 +772,7 @@ function ProductForm({ onClose, refresh, initialData }) {
               </div>
               <div className={`${styles.formGroup} ${styles.formGroupFull}`}>
                 <label className={styles.toggleItem}>
-                  <input type="checkbox" checked={formData.personalization?.active} onChange={e => setFormData({...formData, personalization: {...formData.personalization, active: e.target.checked}})} />
+                  <input type="checkbox" checked={formData.personalization?.active} onChange={e => setFormData({ ...formData, personalization: { ...formData.personalization, active: e.target.checked } })} />
                   Enable Personalization
                 </label>
                 {formData.personalization?.active && (
@@ -781,10 +781,10 @@ function ProductForm({ onClose, refresh, initialData }) {
                       {['Name', 'Date', 'Message'].map(field => (
                         <label key={field} style={{ fontSize: '13px', display: 'flex', alignItems: 'center', gap: '6px' }}>
                           <input type="checkbox" checked={formData.personalization.fields?.includes(field)} onChange={e => {
-                            const newFields = e.target.checked 
+                            const newFields = e.target.checked
                               ? [...(formData.personalization.fields || []), field]
                               : formData.personalization.fields.filter(f => f !== field);
-                            setFormData({...formData, personalization: {...formData.personalization, fields: newFields}});
+                            setFormData({ ...formData, personalization: { ...formData.personalization, fields: newFields } });
                           }} />
                           {field}
                         </label>
@@ -792,7 +792,7 @@ function ProductForm({ onClose, refresh, initialData }) {
                     </div>
                     <div className={styles.formGroup}>
                       <label>Extra Charge (₹)</label>
-                      <input type="number" value={formData.personalization.extraCharge} onChange={e => setFormData({...formData, personalization: {...formData.personalization, extraCharge: e.target.value}})} />
+                      <input type="number" value={formData.personalization.extraCharge} onChange={e => setFormData({ ...formData, personalization: { ...formData.personalization, extraCharge: e.target.value } })} />
                     </div>
                   </div>
                 )}
