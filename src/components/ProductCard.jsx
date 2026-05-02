@@ -24,15 +24,7 @@ const ProductCard = ({ product, category }) => {
   const discount = product.originalPrice
     ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)
     : null;
-  if (!images || images.length === 0) {
-    return (
-      <div className={styles.gallery}>
-        <div className={styles.slide}>
-          <img src="/placeholder.jpg" alt="Product" />
-        </div>
-      </div>
-    );
-  }
+
   return (
     <div className={styles.card} onClick={handleNavigate}>
       <motion.div
@@ -41,7 +33,7 @@ const ProductCard = ({ product, category }) => {
         transition={{ duration: 0.5, type: "spring", stiffness: 300, damping: 30 }}
       >
         <motion.img
-          src={product.image}
+          src={product.images?.[0] || product.image || '/placeholder.jpg'}
           alt={product.name}
           className={styles.image}
           layoutId={product.slug}
