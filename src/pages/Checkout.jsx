@@ -48,7 +48,7 @@ const Checkout = () => {
   const [upiId, setUpiId] = useState('');
   const [card, setCard] = useState({ number: '', expiry: '', cvv: '', name: '' });
   const [cardFocus, setCardFocus] = useState(null);
-  
+
   // ── Discounts ──
   const [discountCode, setDiscountCode] = useState('');
   const [discountAmount, setDiscountAmount] = useState(0);
@@ -216,7 +216,9 @@ const Checkout = () => {
             category: item.category || 'hamper',
             price: item.price,
             quantity: item.quantity,
-            selectedOptions: item.selectedOptions || {}
+            selectedSize: item.selectedOptions?.size || item.selectedSize || null,
+            selectedFragrance: item.selectedOptions?.fragrance || item.selectedFragrance || null,
+            personalization: item.selectedOptions?.personalization || null,
           }))
         }),
       });
@@ -558,9 +560,13 @@ const Checkout = () => {
             />
             <div className={styles.reviewItemInfo}>
               <span className={styles.reviewItemName}>{item.name}</span>
-              {item.selectedOptions && Object.entries(item.selectedOptions).map(([key, value]) => (
-                value && <span key={key} className={styles.reviewItemVariant}>{value}</span>
-              ))}
+              {item.selectedOptions && Object.entries(item.selectedOptions).map(([key, value]) => {
+                if (!value) return null;
+                const display = typeof value === 'object'
+                  ? Object.values(value).filter(Boolean).join(' · ')
+                  : value;
+                return display ? <span key={key} className={styles.reviewItemVariant}>{display}</span> : null;
+              })}
               <span className={styles.reviewItemQty}>Qty: {item.quantity}</span>
             </div>
             <span className={styles.reviewItemPrice}>
@@ -716,9 +722,13 @@ const Checkout = () => {
                     </div>
                     <div className={styles.sidebarItemInfo}>
                       <span className={styles.sidebarItemName}>{item.name}</span>
-                      {item.selectedOptions && Object.entries(item.selectedOptions).map(([key, value]) => (
-                        value && <span key={key} className={styles.sidebarItemVariant}>{value}</span>
-                      ))}
+                      {item.selectedOptions && Object.entries(item.selectedOptions).map(([key, value]) => {
+                        if (!value) return null;
+                        const display = typeof value === 'object'
+                          ? Object.values(value).filter(Boolean).join(' · ')
+                          : value;
+                        return display ? <span key={key} className={styles.reviewItemVariant}>{display}</span> : null;
+                      })}
                     </div>
                     <span className={styles.sidebarItemPrice}>
                       ₹{(item.price * item.quantity).toLocaleString('en-IN')}

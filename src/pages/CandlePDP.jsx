@@ -22,7 +22,7 @@ export default function CandlePDP() {
 
   const { addToCart } = useCart();
   const [qty, setQty] = useState(1);
-  const [currentPrice, setCurrentPrice] = useState(product?.price || 0);
+  const [currentPrice, setCurrentPrice] = useState(0);
   const [selectedOptions, setSelectedOptions] = useState({});
   const [isSuccess, setIsSuccess] = useState(false);
   const [isMainCTAVisible, setIsMainCTAVisible] = useState(true);
@@ -30,6 +30,12 @@ export default function CandlePDP() {
   const mainCTARef = useRef(null);
   const hamperRef = useRef(null);
   const sectionRefs = useRef([]);
+
+  useEffect(() => {
+    if (product) {
+      setCurrentPrice(product.basePrice || product.price || 0);
+    }
+  }, [product]);
 
   useEffect(() => {
     setPdpLoading(true);

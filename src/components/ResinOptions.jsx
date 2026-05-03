@@ -7,6 +7,8 @@ export default function ResinOptions({ colors = [], frameSizes = [], standMateri
   const [selectedStand, setSelectedStand] = useState(standMaterials[0] || null);
   const [customColor, setCustomColor] = useState('');
   const [msg, setMsg] = useState('');
+  const [personName, setPersonName] = useState('');
+  const [personDate, setPersonDate] = useState('');
 
   // Update total price whenever frame size or stand material changes
   useEffect(() => {
@@ -25,10 +27,14 @@ export default function ResinOptions({ colors = [], frameSizes = [], standMateri
         color: selectedColor.hex === 'custom' ? `Custom: ${customColor}` : selectedColor.label,
         size: selectedFrameSize?.label,
         stand: selectedStand?.label,
-        personalization: msg
+        personalization: {
+          name: personName,
+          date: personDate,
+          message: msg
+        }
       });
     }
-  }, [selectedFrameSize, selectedStand, selectedColor, customColor, msg, basePrice, onPriceChange, onOptionsChange]);
+  }, [selectedFrameSize, selectedStand, selectedColor, customColor, msg, personName, personDate, basePrice, onPriceChange, onOptionsChange]);
 
   const handleFrameSizeChange = (s) => {
     setSelectedFrameSize(s);
@@ -108,10 +114,22 @@ export default function ResinOptions({ colors = [], frameSizes = [], standMateri
       <div className={styles.personalCard}>
         <p className={styles.personalTitle}>Personalize This Piece</p>
         <p className={styles.personalSub}>Add a name, date, or message — cast right into the resin.</p>
-        
+
         <div className={styles.fields}>
-          <input type="text" placeholder="Name / Initial" className={styles.input} />
-          <input type="text" placeholder="Date (e.g. 14 Feb 2024)" className={styles.input} />
+          <input
+            type="text"
+            placeholder="Name / Initial"
+            className={styles.input}
+            value={personName}
+            onChange={e => setPersonName(e.target.value)}
+          />
+          <input
+            type="text"
+            placeholder="Date (e.g. 14 Feb 2024)"
+            className={styles.input}
+            value={personDate}
+            onChange={e => setPersonDate(e.target.value)}
+          />
           <div className={styles.textareaWrap}>
             <textarea
               placeholder="Special message..."
@@ -124,7 +142,7 @@ export default function ResinOptions({ colors = [], frameSizes = [], standMateri
             <span className={styles.counter}>{msg.length}/80</span>
           </div>
         </div>
-        
+
         <p className={styles.note}>Made to order · Crafted in 5–7 days · Ships with a handwritten note</p>
       </div>
     </div>

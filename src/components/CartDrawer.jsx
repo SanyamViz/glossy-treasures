@@ -63,7 +63,7 @@ const CartDrawer = ({ isOpen, onClose }) => {
                 </div>
               ) : (
                 <div className={styles.itemsList}>
-                   {cartItems.map((item) => (
+                  {cartItems.map((item) => (
                     <div key={item.cartId} className={styles.cartItem}>
                       <img src={item.image} alt={item.name} className={styles.itemImage} />
                       <div className={styles.itemDetails}>
@@ -72,9 +72,13 @@ const CartDrawer = ({ isOpen, onClose }) => {
                             <h3 className={styles.itemName}>{item.name}</h3>
                             {item.selectedOptions && (
                               <div className={styles.itemOptions}>
-                                {Object.entries(item.selectedOptions).map(([key, value]) => (
-                                  value && <span key={key} className={styles.optionTag}>{value}</span>
-                                ))}
+                                {Object.entries(item.selectedOptions).map(([key, value]) => {
+                                  if (!value) return null;
+                                  const display = typeof value === 'object'
+                                    ? Object.values(value).filter(Boolean).join(' · ')
+                                    : value;
+                                  return display ? <span key={key} className={styles.optionTag}>{display}</span> : null;
+                                })}
                               </div>
                             )}
                           </div>
