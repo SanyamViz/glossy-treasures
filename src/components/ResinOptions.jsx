@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import styles from './ResinOptions.module.css';
 
-export default function ResinOptions({ colors = [], frameSizes = [], standMaterials = [], basePrice = 0, onPriceChange, onOptionsChange }) {
+export default function ResinOptions({ colors = [], sizes = [], frameSizes = [], standMaterials = [], basePrice = 0, onPriceChange, onOptionsChange }) {
   const [selectedColor, setSelectedColor] = useState(colors[0] || { label: 'Custom', hex: 'custom' });
+  const [selectedSize, setSelectedSize] = useState(sizes[0] || null);
   const [selectedFrameSize, setSelectedFrameSize] = useState(frameSizes[0] || null);
   const [selectedStand, setSelectedStand] = useState(standMaterials[0] || null);
   const [customColor, setCustomColor] = useState('');
@@ -74,6 +75,26 @@ export default function ResinOptions({ colors = [], frameSizes = [], standMateri
               onChange={(e) => setCustomColor(e.target.value)}
             />
           )}
+        </div>
+      )}
+
+      {sizes.length > 0 && (
+        <div className={styles.optionGroup}>
+          <span className={styles.label}>Choose Size</span>
+          <div className={styles.chipScroll}>
+            {sizes.map(s => (
+              <button
+                key={s.id || s.label}
+                className={`${styles.chip} ${selectedSize?.label === s.label ? styles.active : ''}`}
+                onClick={() => {
+                  setSelectedSize(s);
+                  if (onPriceChange && s.price) onPriceChange(s.price);
+                }}
+              >
+                {s.label} {s.price ? `— ₹${s.price}` : ''}
+              </button>
+            ))}
+          </div>
         </div>
       )}
 

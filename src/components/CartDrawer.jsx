@@ -86,7 +86,7 @@ const CartDrawer = ({ isOpen, onClose }) => {
                             Remove
                           </button>
                         </div>
-                        <p className={styles.itemPrice}>₹{(item.price || 0).toLocaleString('en-IN')}</p>
+                        <p className={styles.itemPrice}>₹{(item.basePrice || item.price || 0).toLocaleString('en-IN')}</p>
                         <div className={styles.quantityControls}>
                           <button onClick={() => updateQuantity(item.cartId, item.quantity - 1)}>−</button>
                           <span>{item.quantity}</span>

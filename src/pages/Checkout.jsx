@@ -214,7 +214,7 @@ const Checkout = () => {
             productSlug: item.slug,
             productName: item.name,
             category: item.category || 'hamper',
-            price: item.price,
+            price: item.basePrice || item.price || 0,
             quantity: item.quantity,
             selectedSize: item.selectedOptions?.size || item.selectedSize || null,
             selectedFragrance: item.selectedOptions?.fragrance || item.selectedFragrance || null,
@@ -570,7 +570,7 @@ const Checkout = () => {
               <span className={styles.reviewItemQty}>Qty: {item.quantity}</span>
             </div>
             <span className={styles.reviewItemPrice}>
-              ₹{(item.price * item.quantity).toLocaleString('en-IN')}
+              ₹{((item.basePrice || item.price || 0) * item.quantity).toLocaleString('en-IN')}
             </span>
           </div>
         ))}
@@ -636,7 +636,7 @@ const Checkout = () => {
                     <span className={styles.miniQty}>{item.quantity}</span>
                   </div>
                   <span className={styles.miniName}>{item.name}</span>
-                  <span className={styles.miniPrice}>₹{(item.price * item.quantity).toLocaleString('en-IN')}</span>
+                  <span className={styles.miniPrice}>₹{((item.basePrice || item.price || 0) * item.quantity).toLocaleString('en-IN')}</span>
                 </div>
               ))}
               <div className={styles.miniTotal}>
@@ -731,7 +731,7 @@ const Checkout = () => {
                       })}
                     </div>
                     <span className={styles.sidebarItemPrice}>
-                      ₹{(item.price * item.quantity).toLocaleString('en-IN')}
+                      ₹{((item.basePrice || item.price || 0) * item.quantity).toLocaleString('en-IN')}
                     </span>
                   </div>
                 ))}

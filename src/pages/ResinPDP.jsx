@@ -83,6 +83,12 @@ export default function ResinPDP() {
   };
 
   // 4. Fallback guard after all hooks
+  if (pdpLoading) return (
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh', background: '#FAF8F5' }}>
+      <p style={{ fontFamily: 'Jost, sans-serif', color: '#7A7068', letterSpacing: '0.1em', fontSize: '13px' }}>Loading...</p>
+    </div>
+  );
+
   if (!product) {
     return (
       <div className={styles.page} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '50vh', flexDirection: 'column' }}>
@@ -130,10 +136,11 @@ export default function ResinPDP() {
       <div className={styles.section} ref={el => sectionRefs.current[1] = el}>
         <ResinOptions
           onPriceChange={setCurrentPrice}
-          basePrice={product.price}
-          colors={product.colors}
-          frameSizes={product.frameSizes}
-          standMaterials={product.standMaterials}
+          basePrice={product.basePrice || product.price || 0}
+          colors={product.colors || []}
+          sizes={product.sizes || []}
+          frameSizes={product.frameSizes || []}
+          standMaterials={product.standMaterials || []}
           onOptionsChange={setSelectedOptions}
         />
       </div>
