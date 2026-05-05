@@ -26,7 +26,7 @@ export default function ResinOptions({ colors = [], sizes = [], frameSizes = [],
     if (onOptionsChange) {
       onOptionsChange({
         color: selectedColor.hex === 'custom' ? `Custom: ${customColor}` : selectedColor.label,
-        size: selectedFrameSize?.label,
+        size: selectedSize?.label || selectedFrameSize?.label,
         stand: selectedStand?.label,
         personalization: {
           name: personName,

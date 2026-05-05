@@ -219,6 +219,7 @@ const Checkout = () => {
             selectedSize: item.selectedOptions?.size || item.selectedSize || null,
             selectedFragrance: item.selectedOptions?.fragrance || item.selectedFragrance || null,
             personalization: item.selectedOptions?.personalization || null,
+            selectedOptions: item.selectedOptions || {}
           }))
         }),
       });

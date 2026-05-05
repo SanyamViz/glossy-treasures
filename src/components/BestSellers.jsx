@@ -1,20 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './BestSellers.css';
-import candleImg from '../assets/candlebest.png'
-import { getBestsellers } from '../data/products';
 
 const TABS = ["See All", "Candles", "Platters", "Frames", "Keepsakes", "Hampers", "Jewellery"];
 
 export default function BestSellers() {
     const [activeTab, setActiveTab] = useState("See All");
-    const bestSellers = getBestsellers();
+    const [bestSellers, setBestSellers] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        fetch(`${import.meta.env.VITE_API_URL}/api/products?bestseller=true`)
+            .then(res => res.json())
+            .then(data => {
+                if (Array.isArray(data)) setBestSellers(data);
+                setLoading(false);
+            })
+            .catch(err => {
+                console.error(err);
+                setLoading(false);
+            });
+    }, []);
 
     const filteredProducts = activeTab === "See All"
         ? bestSellers
         : bestSellers.filter(product => {
-            const cat = product.category.toLowerCase();
-            const type = product.type?.toLowerCase();
+            const cat = product.category?.toLowerCase() || '';
+            const type = product.type?.toLowerCase() || '';
             const tab = activeTab.toLowerCase();
 
             if (tab === 'candles') return cat === 'candle';
@@ -26,6 +38,8 @@ export default function BestSellers() {
 
             return cat === tab || type === tab;
         });
+
+    if (loading && bestSellers.length === 0) return null;
 
     return (
         <section className="best-sellers-section">
@@ -55,7 +69,7 @@ export default function BestSellers() {
                         >
                             <div className="product-image-container">
                                 <span className="best-seller-badge">BEST SELLER</span>
-                                <img src={product.image} alt={product.name} className="product-image" loading="lazy" />
+                                <img src={product.image || product.images?.[0]} alt={product.name} className="product-image" loading="lazy" />
                             </div>
                             <div className="product-info">
                                 <h3 className="product-name">{product.name}</h3>

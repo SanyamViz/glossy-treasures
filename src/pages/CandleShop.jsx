@@ -21,9 +21,8 @@ const FILTER_CONFIGS = [
     key: 'size',
     label: 'Size',
     options: [
-      { label: '150g', value: '150g' },
-      { label: '250g', value: '250g' },
-      { label: '400g', value: '400g' },
+      { label: 'Small', value: 'Small' },
+      { label: 'Big', value: 'Big' },
     ]
   },
 
@@ -100,7 +99,11 @@ const CandleShop = () => {
       result = result.filter(p => activeFilters.scentFamily.includes(p.scentFamily));
     }
     if (activeFilters.size.length > 0) {
-      result = result.filter(p => activeFilters.size.includes(p.weight));
+      result = result.filter(p => {
+        const hasDirectSize = p.weight && activeFilters.size.includes(p.weight);
+        const hasSizeInArray = p.sizes && p.sizes.some(s => activeFilters.size.includes(s.label));
+        return hasDirectSize || hasSizeInArray;
+      });
     }
     if (activeFilters.occasion.length > 0) {
       result = result.filter(p => activeFilters.occasion.includes(p.occasion));

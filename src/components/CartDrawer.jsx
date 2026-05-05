@@ -65,7 +65,7 @@ const CartDrawer = ({ isOpen, onClose }) => {
                 <div className={styles.itemsList}>
                   {cartItems.map((item) => (
                     <div key={item.cartId} className={styles.cartItem}>
-                      <img src={item.image} alt={item.name} className={styles.itemImage} />
+                      <img src={item.image || item.images?.[0]} alt={item.name} className={styles.itemImage} />
                       <div className={styles.itemDetails}>
                         <div className={styles.itemHeader}>
                           <div>

@@ -58,13 +58,24 @@ export default function WelcomePopup({ setIsPopupOpen }) {
     }, 400);
   };
 
-  const handleSubscribe = () => {
+  const handleSubscribe = async () => {
     if (!email.includes('@') || !email.includes('.')) {
       setError('Please enter a valid email');
       return;
     }
 
     setError('');
+    
+    try {
+      await fetch(`${import.meta.env.VITE_API_URL}/api/newsletter`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+      });
+    } catch (e) {
+      console.error("Newsletter subscription error:", e);
+    }
+
     setIsSuccess(true);
     
     // Also block for 1 hour after successful subscription

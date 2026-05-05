@@ -534,7 +534,8 @@ function ProductForm({ onClose, refresh, initialData }) {
     try {
       const data = new FormData();
       Object.keys(formData).forEach(key => {
-        if (['sizes', 'colors', 'personalization', 'fragrances'].includes(key)) {
+        if (key === 'fragrances') return;
+        if (['sizes', 'colors', 'personalization'].includes(key)) {
           data.append(key, JSON.stringify(formData[key]));
         } else {
           data.append(key, formData[key]);
@@ -622,6 +623,10 @@ function ProductForm({ onClose, refresh, initialData }) {
                 <option value="Candle">Candle</option>
                 <option value="Resin">Resin</option>
               </select>
+            </div>
+            <div className={styles.formGroup}>
+              <label>Type</label>
+              <input type="text" placeholder="e.g. Platter, LED Stand" value={formData.type} onChange={e => setFormData({ ...formData, type: e.target.value })} />
             </div>
             <div className={`${styles.formGroup} ${styles.formGroupFull}`}>
               <label>Description</label>
@@ -719,72 +724,104 @@ function ProductForm({ onClose, refresh, initialData }) {
                 <label>Ingredients</label>
                 <textarea rows="2" value={formData.ingredients} onChange={e => setFormData({ ...formData, ingredients: e.target.value })} />
               </div>
-              <div className={styles.formGroupFull}>
-                <label style={{ marginBottom: '10px', display: 'block' }}>Sizes</label>
-                {formData.sizes?.map((size, idx) => (
-                  <div key={idx} className={styles.optionRow}>
-                    <input type="text" placeholder="Label (e.g. 150g)" value={size.label} onChange={e => {
-                      const newSizes = [...formData.sizes];
-                      newSizes[idx].label = e.target.value;
-                      setFormData({ ...formData, sizes: newSizes });
-                    }} />
-                    <input type="number" placeholder="Price" value={size.price} onChange={e => {
-                      const newSizes = [...formData.sizes];
-                      newSizes[idx].price = e.target.value;
-                      setFormData({ ...formData, sizes: newSizes });
-                    }} />
-                    <input type="text" placeholder="Burn Time" value={size.burnTime} onChange={e => {
-                      const newSizes = [...formData.sizes];
-                      newSizes[idx].burnTime = e.target.value;
-                      setFormData({ ...formData, sizes: newSizes });
-                    }} />
-                    <button type="button" className={styles.removeImg} onClick={() => removeSize(idx)}>&times;</button>
-                  </div>
+            </div>
+            
+            <div className={styles.formGroupFull} style={{ marginTop: '20px' }}>
+              <label style={{ marginBottom: '10px', display: 'block' }}>
+                Available Fragrances
+              </label>
+              <div className={styles.fragranceGrid}>
+                {ALL_FRAGRANCES.map(f => (
+                  <label key={f.id} className={styles.fragranceOption}>
+                    <input
+                      type="checkbox"
+                      checked={selectedFragrances.includes(f.id)}
+                      onChange={(e) => {
+                        if (e.target.checked) {
+                          setSelectedFragrances(prev => [...prev, f.id]);
+                        } else {
+                          setSelectedFragrances(prev => prev.filter(id => id !== f.id));
+                        }
+                      }}
+                    />
+                    <span>{f.label}</span>
+                  </label>
                 ))}
-                <button type="button" className={styles.addBtn} onClick={addSize}>+ Add Size</button>
+              </div>
+              <div style={{ display: 'flex', gap: '8px', marginTop: '10px' }}>
+                <button
+                  type="button"
+                  className={styles.addBtn}
+                  onClick={() => setSelectedFragrances(ALL_FRAGRANCES.map(f => f.id))}
+                >
+                  Select All 15
+                </button>
+                <button
+                  type="button"
+                  className={styles.cancelBtn}
+                  onClick={() => setSelectedFragrances([])}
+                >
+                  Clear All
+                </button>
               </div>
             </div>
+
           </section>
         )}
-        <div className={styles.formGroupFull}>
-          <label style={{ marginBottom: '10px', display: 'block' }}>
-            Available Fragrances
-          </label>
-          <div className={styles.fragranceGrid}>
-            {ALL_FRAGRANCES.map(f => (
-              <label key={f.id} className={styles.fragranceOption}>
-                <input
-                  type="checkbox"
-                  checked={selectedFragrances.includes(f.id)}
-                  onChange={(e) => {
-                    if (e.target.checked) {
-                      setSelectedFragrances(prev => [...prev, f.id]);
-                    } else {
-                      setSelectedFragrances(prev => prev.filter(id => id !== f.id));
-                    }
+
+        <section className={styles.formSection}>
+          <h3>Sizes</h3>
+          <div className={styles.formGroupFull}>
+            <p style={{ fontSize: '12px', color: '#7A7068', marginBottom: '10px' }}>
+              Add sizes for your product. (Candle: Small, Big | Resin: 4inch, 5inch, 6inch, 8inch, 10inch, 12inch)
+            </p>
+            {formData.sizes?.map((size, idx) => (
+              <div key={idx} className={styles.optionRow}>
+                <select 
+                  value={size.label} 
+                  onChange={e => {
+                    const newSizes = [...formData.sizes];
+                    newSizes[idx].label = e.target.value;
+                    setFormData({ ...formData, sizes: newSizes });
                   }}
-                />
-                <span>{f.label}</span>
-              </label>
+                  style={{ flex: 1, padding: '10px', border: '1px solid #E5E0D8', borderRadius: '4px' }}
+                >
+                  <option value="">Select Size</option>
+                  {formData.category === 'Candle' ? (
+                    <>
+                      <option value="Small">Small</option>
+                      <option value="Big">Big</option>
+                    </>
+                  ) : (
+                    <>
+                      <option value="4inch">4inch</option>
+                      <option value="5inch">5inch</option>
+                      <option value="6inch">6inch</option>
+                      <option value="8inch">8inch</option>
+                      <option value="10inch">10inch</option>
+                      <option value="12inch">12inch</option>
+                    </>
+                  )}
+                </select>
+                <input type="number" placeholder="Price" value={size.price} onChange={e => {
+                  const newSizes = [...formData.sizes];
+                  newSizes[idx].price = e.target.value;
+                  setFormData({ ...formData, sizes: newSizes });
+                }} />
+                {formData.category === 'Candle' && (
+                  <input type="text" placeholder="Burn Time" value={size.burnTime || ''} onChange={e => {
+                    const newSizes = [...formData.sizes];
+                    newSizes[idx].burnTime = e.target.value;
+                    setFormData({ ...formData, sizes: newSizes });
+                  }} />
+                )}
+                <button type="button" className={styles.removeImg} onClick={() => removeSize(idx)}>&times;</button>
+              </div>
             ))}
+            <button type="button" className={styles.addBtn} onClick={addSize}>+ Add Size</button>
           </div>
-          <div style={{ display: 'flex', gap: '8px', marginTop: '10px' }}>
-            <button
-              type="button"
-              className={styles.addBtn}
-              onClick={() => setSelectedFragrances(ALL_FRAGRANCES.map(f => f.id))}
-            >
-              Select All 15
-            </button>
-            <button
-              type="button"
-              className={styles.cancelBtn}
-              onClick={() => setSelectedFragrances([])}
-            >
-              Clear All
-            </button>
-          </div>
-        </div>
+        </section>
+        {/* Fragrances moved to Candle section */}
         <div className={styles.formGroupFull}>
           <label style={{ marginBottom: '10px', display: 'block' }}>
             Colors (optional)
@@ -840,44 +877,7 @@ function ProductForm({ onClose, refresh, initialData }) {
                   ))}
                 </select>
               </div>
-              <div className={styles.formGroupFull}>
-                <label style={{ marginBottom: '10px', display: 'block' }}>Colors</label>
-                {formData.colors?.map((color, idx) => (
-                  <div key={idx} className={`${styles.optionRow} ${styles.resinOptionRow}`}>
-                    <input type="text" placeholder="Color Name" value={color.name} onChange={e => {
-                      const newColors = [...formData.colors];
-                      newColors[idx].name = e.target.value;
-                      setFormData({ ...formData, colors: newColors });
-                    }} />
-                    <input type="color" value={color.hex} onChange={e => {
-                      const newColors = [...formData.colors];
-                      newColors[idx].hex = e.target.value;
-                      setFormData({ ...formData, colors: newColors });
-                    }} />
-                    <button type="button" className={styles.removeImg} onClick={() => removeColor(idx)}>&times;</button>
-                  </div>
-                ))}
-                <button type="button" className={styles.addBtn} onClick={addColor}>+ Add Color</button>
-              </div>
-              <div className={styles.formGroupFull}>
-                <label style={{ marginBottom: '10px', display: 'block' }}>Sizes</label>
-                {formData.sizes?.map((size, idx) => (
-                  <div key={idx} className={`${styles.optionRow} ${styles.resinOptionRow}`}>
-                    <input type="text" placeholder="Size Label" value={size.label} onChange={e => {
-                      const newSizes = [...formData.sizes];
-                      newSizes[idx].label = e.target.value;
-                      setFormData({ ...formData, sizes: newSizes });
-                    }} />
-                    <input type="number" placeholder="Price" value={size.price} onChange={e => {
-                      const newSizes = [...formData.sizes];
-                      newSizes[idx].price = e.target.value;
-                      setFormData({ ...formData, sizes: newSizes });
-                    }} />
-                    <button type="button" className={styles.removeImg} onClick={() => removeSize(idx)}>&times;</button>
-                  </div>
-                ))}
-                <button type="button" className={styles.addBtn} onClick={addSize}>+ Add Size</button>
-              </div>
+
               <div className={`${styles.formGroup} ${styles.formGroupFull}`}>
                 <label className={styles.toggleItem}>
                   <input type="checkbox" checked={formData.personalization?.active} onChange={e => setFormData({ ...formData, personalization: { ...formData.personalization, active: e.target.checked } })} />

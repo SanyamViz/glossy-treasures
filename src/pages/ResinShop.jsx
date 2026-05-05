@@ -10,26 +10,25 @@ const FILTER_CONFIGS = [
     label: 'Type',
     options: [
       { label: 'All', value: 'all' },
-      { label: 'Plate', value: 'Plate' },
-      { label: 'Coaster', value: 'Coaster' },
-      { label: 'Tray', value: 'Tray' },
+      { label: 'Platter', value: 'Platter' },
+      { label: 'Diary', value: 'Diary' },
+      { label: 'LED Stand', value: 'LED Stand' },
       { label: 'Frame', value: 'Frame' },
-      { label: 'Dish', value: 'Dish' },
-      { label: 'Box', value: 'Box' },
+      { label: 'Baby Keepsake', value: 'Baby Keepsake' },
+      { label: 'Wedding Invitation', value: 'Wedding Invitation' },
+      { label: 'Wedding Garland Frame', value: 'Wedding Garland Frame' },
+      { label: 'Clock', value: 'Clock' },
+      { label: 'Keychain', value: 'Keychain' },
+      { label: 'Name plate', value: 'Nameplate' },
+      { label: 'Bookmarks', value: 'Bookmarks' },
+      { label: 'Jwellery', value: 'Jwellery' },
+      { label: 'Car Hanging', value: 'Car Hanging' },
+      { label: 'Fridge Magnets', value: 'Fridge Magnets' },
+
+
     ]
   },
-  {
-    key: 'color',
-    label: 'Color',
-    options: [
-      { label: 'All', value: 'all' },
-      { label: 'Blush Pink', value: 'Blush Pink' },
-      { label: 'Ocean Teal', value: 'Ocean Teal' },
-      { label: 'Midnight', value: 'Midnight' },
-      { label: 'Ivory Gold', value: 'Ivory Gold' },
-      { label: 'Forest', value: 'Forest' },
-    ]
-  },
+
   {
     key: 'occasion',
     label: 'Occasion',
@@ -38,6 +37,22 @@ const FILTER_CONFIGS = [
       { label: 'Home Decor', value: 'Home Decor' },
       { label: 'Gifting', value: 'Gifting' },
       { label: 'Wedding', value: 'Wedding' },
+      { label: 'Self Care', value: 'Self Care' },
+      { label: 'New Arrival', value: 'New Arrival' },
+      { label: 'Wedding', value: 'Wedding' },
+    ]
+  },
+  {
+    key: 'size',
+    label: 'Size',
+    options: [
+      { label: 'All', value: 'all' },
+      { label: '4inch', value: '4inch' },
+      { label: '5inch', value: '5inch' },
+      { label: '6inch', value: '6inch' },
+      { label: '8inch', value: '8inch' },
+      { label: '10inch', value: '10inch' },
+      { label: '12inch', value: '12inch' },
     ]
   }
 ];
@@ -47,7 +62,8 @@ const ResinShop = () => {
   const [activeFilters, setActiveFilters] = useState({
     type: [],
     color: [],
-    occasion: []
+    occasion: [],
+    size: []
   });
   const [sortBy, setSortBy] = useState('newest');
   const [visibleCount, setVisibleCount] = useState(6);
@@ -94,6 +110,14 @@ const ResinShop = () => {
     }
     if (activeFilters.occasion.length > 0) {
       result = result.filter(p => activeFilters.occasion.includes(p.occasion));
+    }
+    if (activeFilters.size.length > 0) {
+      result = result.filter(p => {
+        // check if product.size exists (string), or product.sizes array exists
+        const hasDirectSize = p.size && activeFilters.size.includes(p.size);
+        const hasSizeInArray = p.sizes && p.sizes.some(s => activeFilters.size.includes(s.label));
+        return hasDirectSize || hasSizeInArray;
+      });
     }
 
     // Sort
