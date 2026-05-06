@@ -7,18 +7,28 @@ import styles from './Checkout.module.css';
 
 // ── Pincode → City/State lookup (expand as needed) ──
 const PINCODE_MAP = {
+  '110001': { city: 'New Delhi', state: 'Delhi' },
+  '110002': { city: 'New Delhi', state: 'Delhi' },
+  '110003': { city: 'New Delhi', state: 'Delhi' },
+
   '141001': { city: 'Ludhiana', state: 'Punjab' },
   '141002': { city: 'Ludhiana', state: 'Punjab' },
-  '110001': { city: 'New Delhi', state: 'Delhi' },
+  '141003': { city: 'Ludhiana', state: 'Punjab' },
+
+  '160001': { city: 'Chandigarh', state: 'Chandigarh' },
+  '160002': { city: 'Chandigarh', state: 'Chandigarh' },
+
   '400001': { city: 'Mumbai', state: 'Maharashtra' },
+  '400002': { city: 'Mumbai', state: 'Maharashtra' },
+
   '560001': { city: 'Bengaluru', state: 'Karnataka' },
   '600001': { city: 'Chennai', state: 'Tamil Nadu' },
   '700001': { city: 'Kolkata', state: 'West Bengal' },
   '500001': { city: 'Hyderabad', state: 'Telangana' },
-  '411001': { city: 'Pune', state: 'Maharashtra' },
-  '302001': { city: 'Jaipur', state: 'Rajasthan' },
-};
 
+  '411001': { city: 'Pune', state: 'Maharashtra' },
+  '302001': { city: 'Jaipur', state: 'Rajasthan' }
+};
 const PAYMENT_METHODS = [
   { id: 'upi', label: 'UPI', icon: '⚡', desc: 'Pay via any UPI app' },
   { id: 'card', label: 'Card', icon: '💳', desc: 'Credit or Debit card' },
@@ -498,7 +508,7 @@ const Checkout = () => {
             <label className={styles.label}>Name on Card</label>
             <input
               className={`${styles.input} ${errors.cardName ? styles.inputError : ''}`}
-              type="text" placeholder="Angel Sharma"
+              type="text" placeholder="Your Name"
               value={card.name}
               onChange={e => setCard(c => ({ ...c, name: e.target.value }))}
               onFocus={() => setCardFocus('name')}

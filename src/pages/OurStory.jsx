@@ -120,7 +120,7 @@ const OurStory = () => {
                         Made by hand.<br />Felt by heart.
                     </h1>
                     <p className={`${styles.heroSub} ${phase >= 3 ? styles.heroSubIn : ''}`}>
-                        A one-woman studio tucked in Ludhiana, crafting pieces
+                        A one-woman studio tucked in Abohar , crafting pieces
                         that carry warmth, intention, and a quiet kind of beauty.
                     </p>
                 </div>
@@ -139,7 +139,7 @@ const OurStory = () => {
             >
                 {[
                     { value: 5000, suffix: '+', label: 'Orders Delivered' },
-                    { value: 3, suffix: '+', label: 'Years of Craft' },
+                    { value: 2, suffix: '+', label: 'Years of Craft' },
                     { value: 100, suffix: '%', label: 'Handmade' },
                     { value: 12, suffix: '+', label: 'Scents & Styles' },
                 ].map((s, i) => (

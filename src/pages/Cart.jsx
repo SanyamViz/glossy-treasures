@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
-import { SignedIn, SignedOut, SignInButton } from "@clerk/react";
+import { useUser, SignInButton } from "@clerk/react";
 import styles from './Cart.module.css';
 
 const Cart = () => {
+  const { isSignedIn } = useUser();
   const { cartItems, removeFromCart, updateQuantity, cartTotal, totalItems } = useCart();
   const navigate = useNavigate();
   const [mounted, setMounted] = useState(false);
@@ -184,7 +185,7 @@ const Cart = () => {
                 <span>₹{(cartTotal + (freeShipping ? 0 : 99)).toLocaleString('en-IN')}</span>
               </div>
 
-              <SignedIn>
+              {isSignedIn ? (
                 <button className={styles.checkoutBtn} onClick={() => navigate('/checkout')}>
                   <span>PROCEED TO CHECKOUT</span>
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -192,9 +193,7 @@ const Cart = () => {
                     <polyline points="12 5 19 12 12 19" />
                   </svg>
                 </button>
-              </SignedIn>
-
-              <SignedOut>
+              ) : (
                 <SignInButton mode="modal">
                   <button className={styles.checkoutBtn}>
                     <span>SIGN IN TO CHECKOUT</span>
@@ -204,7 +203,7 @@ const Cart = () => {
                     </svg>
                   </button>
                 </SignInButton>
-              </SignedOut>
+              )}
 
               <div className={styles.trust}>
                 <span>🔒 Safe &amp; Secure</span>
@@ -231,17 +230,15 @@ const Cart = () => {
           </span>
         </div>
 
-        <SignedIn>
+        {isSignedIn ? (
           <button className={styles.stickyBtn} onClick={() => navigate('/checkout')}>
             CHECKOUT
           </button>
-        </SignedIn>
-
-        <SignedOut>
+        ) : (
           <SignInButton mode="modal">
             <button className={styles.stickyBtn}>SIGN IN</button>
           </SignInButton>
-        </SignedOut>
+        )}
       </div>
     </div>
   );
