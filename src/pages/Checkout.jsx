@@ -197,8 +197,10 @@ const Checkout = () => {
       }
 
       const orderData = await orderRes.json();
+      console.log("API RESPONSE (Order):", orderData);
+
       if (!orderRes.ok) {
-        throw new Error(orderData.error || orderData.message || "Failed to save order");
+        throw new Error(orderData.message || orderData.error || "Failed to save order");
       }
       console.log("Order saved in DB:", orderData.orderNumber);
 
@@ -216,8 +218,10 @@ const Checkout = () => {
         }
 
         const payData = await payRes.json();
+        console.log("API RESPONSE (Payment):", payData);
+
         if (!payData.success) {
-          throw new Error(payData.details || payData.message || "Payment initialization failed");
+          throw new Error(payData.error || payData.message || "Payment initialization failed");
         }
 
         const razorpayOrderId = payData.order_id;
