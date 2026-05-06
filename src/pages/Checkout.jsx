@@ -179,7 +179,7 @@ const Checkout = () => {
       // ── STEP 1: CREATE RAZORPAY ORDER (IF ONLINE) ──
       if (payMethod !== 'cod') {
         console.log("Initializing payment...");
-        const payRes = await fetch(`${api.baseUrl}/api/payments/create-order`, {
+        const payRes = await fetch(`${api.baseUrl}/api/create-order`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ amount: grandTotal })
