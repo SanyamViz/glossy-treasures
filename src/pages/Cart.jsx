@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
-import { Show, SignInButton } from "@clerk/react";
+import { SignedIn, SignedOut, SignInButton } from "@clerk/react";
 import styles from './Cart.module.css';
 
 const Cart = () => {
@@ -184,7 +184,7 @@ const Cart = () => {
                 <span>₹{(cartTotal + (freeShipping ? 0 : 99)).toLocaleString('en-IN')}</span>
               </div>
 
-              <Show when="signed-in">
+              <SignedIn>
                 <button className={styles.checkoutBtn} onClick={() => navigate('/checkout')}>
                   <span>PROCEED TO CHECKOUT</span>
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -192,9 +192,9 @@ const Cart = () => {
                     <polyline points="12 5 19 12 12 19" />
                   </svg>
                 </button>
-              </Show>
+              </SignedIn>
 
-              <Show when="signed-out">
+              <SignedOut>
                 <SignInButton mode="modal">
                   <button className={styles.checkoutBtn}>
                     <span>SIGN IN TO CHECKOUT</span>
@@ -204,7 +204,7 @@ const Cart = () => {
                     </svg>
                   </button>
                 </SignInButton>
-              </Show>
+              </SignedOut>
 
               <div className={styles.trust}>
                 <span>🔒 Safe &amp; Secure</span>
@@ -231,17 +231,17 @@ const Cart = () => {
           </span>
         </div>
 
-        <Show when="signed-in">
+        <SignedIn>
           <button className={styles.stickyBtn} onClick={() => navigate('/checkout')}>
             CHECKOUT
           </button>
-        </Show>
+        </SignedIn>
 
-        <Show when="signed-out">
+        <SignedOut>
           <SignInButton mode="modal">
             <button className={styles.stickyBtn}>SIGN IN</button>
           </SignInButton>
-        </Show>
+        </SignedOut>
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './ScentQuiz.css';
 const QUESTIONS = [
@@ -78,6 +78,34 @@ export default function ScentQuiz() {
     const [answers, setAnswers] = useState([]);
     const [showResult, setShowResult] = useState(false);
 
+    const [quizResult, setQuizResult] = useState(null);
+    const [recommendedProduct, setRecommendedProduct] = useState(null);
+
+    const QUIZ_SCENT_MAP = {
+      'floral': 'Floral',
+      'woody': 'Woody',
+      'fresh': 'Fresh',
+      'warm': 'Warm',
+      'citrus': 'Citrus',
+      'gourmand': 'Gourmand',
+    };
+
+    useEffect(() => {
+      if (quizResult) {
+        const scentFamily = QUIZ_SCENT_MAP[quizResult.toLowerCase()];
+        if (scentFamily) {
+          fetch(`${import.meta.env.VITE_API_URL}/api/products?category=candle&scentFamily=${scentFamily}`)
+            .then(r => r.json())
+            .then(data => {
+              if (Array.isArray(data) && data.length > 0) {
+                setRecommendedProduct(data[0]);
+              }
+            })
+            .catch(console.error);
+        }
+      }
+    }, [quizResult]);
+
     const handleAnswer = (option) => {
         const newAnswers = [...answers];
         newAnswers[currentQuestion] = option;
@@ -87,6 +115,17 @@ export default function ScentQuiz() {
             if (currentQuestion < QUESTIONS.length - 1) {
                 setCurrentQuestion(currentQuestion + 1);
             } else {
+                let finalResult = 'warm';
+                if (newAnswers.includes("Warm & Cozy") || newAnswers.includes("Warm Woods & Spice")) {
+                    finalResult = 'woody';
+                } else if (newAnswers.includes("Calm & Relaxing") || newAnswers.includes("Florals & Botanicals")) {
+                    finalResult = 'floral';
+                } else if (newAnswers.includes("Fresh & Uplifting") || newAnswers.includes("Fresh Citrus & Herbs")) {
+                    finalResult = 'fresh';
+                } else if (newAnswers.includes("Sweet & Creamy")) {
+                    finalResult = 'gourmand';
+                }
+                setQuizResult(finalResult);
                 setShowResult(true);
             }
         }, 400);
@@ -97,19 +136,8 @@ export default function ScentQuiz() {
         setCurrentQuestion(0);
         setAnswers([]);
         setShowResult(false);
-    };
-
-    const getResult = () => {
-        if (answers.includes("A gift for someone special") || answers.includes("A wedding or celebration")) {
-            return results['bloom-gift'];
-        } else if (answers.includes("Warm & Cozy") || answers.includes("Warm Woods & Spice")) {
-            return results['amber-oud'];
-        } else if (answers.includes("Calm & Relaxing") || answers.includes("Florals & Botanicals")) {
-            return results['rose-peony'];
-        } else if (answers.includes("Fresh & Uplifting") || answers.includes("Fresh Citrus & Herbs")) {
-            return results['eucalyptus-mint'];
-        }
-        return results['amber-oud']; // Default
+        setQuizResult(null);
+        setRecommendedProduct(null);
     };
 
     return (
@@ -148,34 +176,37 @@ export default function ScentQuiz() {
                 </div>
             )}
 
-            {showResult && (() => {
-                const resultData = getResult();
-                return (
-                    <div className="quiz-result-card fade-in">
-                        <p className="quiz-result-label">YOUR PERFECT MATCH</p>
-                        <img
-                            src={resultData.image}
-                            alt={resultData.name}
-                            style={{
-                                width: '100px',
-                                height: '100px',
-                                objectFit: 'cover',
-                                border: '1.5px solid #B8965A',
-                                marginBottom: '16px'
-                            }}
-                        />
-                        <h2 className="quiz-result-title">{resultData.name}</h2>
-                        <p className="quiz-result-desc">{resultData.description}</p>
-                        <p className="quiz-result-price">{resultData.price}</p>
-                        <div className="quiz-result-actions">
-                            <Link to={resultData.link || '/shop'} className="quiz-shop-btn">
-                                {resultData.name === 'The Bloom Gift Set' ? 'BUILD A HAMPER' : 'SHOP NOW'}
-                            </Link>
-                            <button className="quiz-retake-btn" onClick={resetQuiz}>RETAKE QUIZ</button>
-                        </div>
-                    </div>
-                );
-            })()}
+            {showResult && (
+                <div className="quiz-result-card fade-in">
+                    <p className="quiz-result-label">YOUR PERFECT MATCH</p>
+                    {recommendedProduct ? (
+                        <>
+                            <img
+                                src={recommendedProduct.image || recommendedProduct.images?.[0]}
+                                alt={recommendedProduct.name}
+                                style={{
+                                    width: '100px',
+                                    height: '100px',
+                                    objectFit: 'cover',
+                                    border: '1.5px solid #B8965A',
+                                    marginBottom: '16px'
+                                }}
+                            />
+                            <h2 className="quiz-result-title">{recommendedProduct.name}</h2>
+                            <p className="quiz-result-desc">{recommendedProduct.description}</p>
+                            <p className="quiz-result-price">₹{recommendedProduct.basePrice}</p>
+                            <div className="quiz-result-actions">
+                                <Link to={`/shop/candles/${recommendedProduct.slug}`} className="quiz-shop-btn">
+                                    SHOP NOW
+                                </Link>
+                                <button className="quiz-retake-btn" onClick={resetQuiz}>RETAKE QUIZ</button>
+                            </div>
+                        </>
+                    ) : (
+                        <div style={{ padding: '40px' }}>Loading your perfect match...</div>
+                    )}
+                </div>
+            )}
         </section>
     );
 }

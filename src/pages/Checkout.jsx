@@ -55,6 +55,13 @@ const Checkout = () => {
   const [discountApplied, setDiscountApplied] = useState(false);
 
   const { user, isLoaded, isSignedIn } = useUser();
+
+  useEffect(() => {
+    if (isLoaded && !isSignedIn) {
+      navigate('/cart');
+    }
+  }, [isLoaded, isSignedIn, navigate]);
+
   const phoneRef = useRef(null);
   const freeShipping = cartTotal >= 999;
   const shipping = freeShipping ? 0 : 99;
