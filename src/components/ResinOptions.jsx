@@ -14,12 +14,16 @@ export default function ResinOptions({ colors = [], sizes = [], frameSizes = [],
   // Update total price whenever frame size or stand material changes
   useEffect(() => {
     let totalPrice = basePrice;
-    if (selectedFrameSize) {
-      totalPrice = selectedFrameSize.price; // frameSizes in products.js have absolute prices
+    if (selectedSize) {
+      totalPrice = selectedSize.price || basePrice;
+    } else if (selectedFrameSize) {
+      totalPrice = selectedFrameSize.price; 
     }
+    
     if (selectedStand) {
       totalPrice += (selectedStand.priceAdd || 0);
     }
+    
     if (onPriceChange) onPriceChange(totalPrice);
 
     // Also notify parent of all selected options
@@ -35,7 +39,7 @@ export default function ResinOptions({ colors = [], sizes = [], frameSizes = [],
         }
       });
     }
-  }, [selectedFrameSize, selectedStand, selectedColor, customColor, msg, personName, personDate, basePrice, onPriceChange, onOptionsChange]);
+  }, [selectedSize, selectedFrameSize, selectedStand, selectedColor, customColor, msg, personName, personDate, basePrice, onPriceChange, onOptionsChange]);
 
   const handleFrameSizeChange = (s) => {
     setSelectedFrameSize(s);
@@ -88,7 +92,6 @@ export default function ResinOptions({ colors = [], sizes = [], frameSizes = [],
                 className={`${styles.chip} ${selectedSize?.label === s.label ? styles.active : ''}`}
                 onClick={() => {
                   setSelectedSize(s);
-                  if (onPriceChange && s.price) onPriceChange(s.price);
                 }}
               >
                 {s.label} {s.price ? `— ₹${s.price}` : ''}

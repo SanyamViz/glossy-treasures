@@ -6,7 +6,13 @@ export default function CandleOptions({ onPriceChange, basePrice, fragrances = [
   const [selectedSize, setSelectedSize] = useState(sizes[0] || null);
   const [selectedColor, setSelectedColor] = useState(colors[0] || null);
 
+  // Sync state and price with parent
   useEffect(() => {
+    // 1. Calculate Price
+    const newPrice = selectedSize?.price || basePrice;
+    if (onPriceChange) onPriceChange(newPrice);
+
+    // 2. Notify Parent of Options
     if (onOptionsChange) {
       onOptionsChange({
         fragrance: selectedFragrance?.label || null,
@@ -14,16 +20,7 @@ export default function CandleOptions({ onPriceChange, basePrice, fragrances = [
         color: selectedColor?.name || null,
       });
     }
-  }, [selectedFragrance, selectedSize, selectedColor, onOptionsChange]);
-
-  const handleFragranceChange = (f) => setSelectedFragrance(f);
-
-  const handleSizeChange = (s) => {
-    setSelectedSize(s);
-    if (onPriceChange) onPriceChange(s.price);
-  };
-
-  const handleColorChange = (c) => setSelectedColor(c);
+  }, [selectedFragrance, selectedSize, selectedColor, basePrice, onPriceChange, onOptionsChange]);
 
   return (
     <div className={styles.options}>
@@ -35,7 +32,7 @@ export default function CandleOptions({ onPriceChange, basePrice, fragrances = [
               <button
                 key={f.id}
                 className={`${styles.chip} ${selectedFragrance?.id === f.id ? styles.active : ''}`}
-                onClick={() => handleFragranceChange(f)}
+                onClick={() => setSelectedFragrance(f)}
                 disabled={!f.available}
               >
                 {f.label}
@@ -56,7 +53,7 @@ export default function CandleOptions({ onPriceChange, basePrice, fragrances = [
               <button
                 key={s.id || s.label}
                 className={`${styles.sizeBtn} ${selectedSize?.label === s.label ? styles.active : ''}`}
-                onClick={() => handleSizeChange(s)}
+                onClick={() => setSelectedSize(s)}
               >
                 {s.label} — ₹{(s.price || 0).toLocaleString('en-IN')}
               </button>
@@ -73,7 +70,7 @@ export default function CandleOptions({ onPriceChange, basePrice, fragrances = [
               <button
                 key={c.id || c.name}
                 className={`${styles.colorBtn} ${selectedColor?.name === c.name ? styles.colorActive : ''}`}
-                onClick={() => handleColorChange(c)}
+                onClick={() => setSelectedColor(c)}
                 title={c.name}
               >
                 <span

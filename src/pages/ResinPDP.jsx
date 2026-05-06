@@ -194,7 +194,7 @@ export default function ResinPDP() {
         <MadeByAngel />
       </div>
 
-      <StickyCartBar price={product.price || 0} onAddToCart={handleAddToCart} isVisible={!isMainCTAVisible} />
+      <StickyCartBar price={currentPrice} onAddToCart={handleAddToCart} isVisible={!isMainCTAVisible} />
     </div>
   );
 }

@@ -252,6 +252,9 @@ const Checkout = () => {
                 }),
               });
 
+              const verifyData = await verifyRes.json();
+              console.log("Verification Response:", verifyData);
+
               if (verifyRes.ok) {
                 orderPlaced.current = true;
                 clearCart();
@@ -262,7 +265,8 @@ const Checkout = () => {
                   }
                 });
               } else {
-                alert('Payment verification failed. Please contact support.');
+                console.error("Verification Failed Details:", verifyData);
+                alert(`Payment verification failed: ${verifyData.message || 'Unknown error'}. Please contact support.`);
               }
             } catch (err) {
               alert('Error verifying payment.');

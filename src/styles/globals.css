@@ -104,14 +104,6 @@ button:active,
     transform: scale(1.04);
 }
 
-body {
-    margin: 0;
-    background: linear-gradient(180deg,
-            #f8f5f2 0%,
-            #f5ebe0 50%,
-            #f8f5f2 100%);
-}
-
 .bg-blobs {
     position: fixed;
     inset: 0;
