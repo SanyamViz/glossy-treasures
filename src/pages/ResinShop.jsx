@@ -19,7 +19,7 @@ const FILTER_CONFIGS = [
       { label: 'Wedding Garland Frame', value: 'Wedding Garland Frame' },
       { label: 'Clock', value: 'Clock' },
       { label: 'Keychain', value: 'Keychain' },
-      { label: 'Name plate', value: 'Nameplate' },
+      { label: 'Name Plate', value: 'Name Plate' },
       { label: 'Bookmarks', value: 'Bookmarks' },
       { label: 'Jwellery', value: 'Jwellery' },
       { label: 'Car Hanging', value: 'Car Hanging' },

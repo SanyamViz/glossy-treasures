@@ -3,7 +3,7 @@ import { CANDLES, RESIN_PRODUCTS } from './products.js';
 export const COLLECTIONS = [
   {
     id: 'col1',
-    slug: 'gifting-edit',
+    slug: 'gifting',
     name: 'The Gifting Edit',
     tagline: 'For the ones who deserve something beautiful.',
     description: 'A carefully curated selection of our most-loved pieces — perfect for birthdays, anniversaries, or just because. Each product in this collection has been chosen for its ability to make someone feel truly seen.',
@@ -17,7 +17,7 @@ export const COLLECTIONS = [
   },
   {
     id: 'col2',
-    slug: 'wedding-season',
+    slug: 'wedding',
     name: 'Wedding Season',
     tagline: 'Gifts as beautiful as the occasion itself.',
     description: 'Handcrafted pieces designed to become part of your most cherished memories. From trousseau additions to guest favours — everything here tells a story worth keeping.',
@@ -31,7 +31,7 @@ export const COLLECTIONS = [
   },
   {
     id: 'col3',
-    slug: 'self-care-rituals',
+    slug: 'self-care',
     name: 'Self Care Rituals',
     tagline: 'Because you are worth the slow Sunday.',
     description: 'Light a candle, find your corner, breathe. This collection is designed for the ritual of coming back to yourself — one quiet evening at a time.',
@@ -45,7 +45,7 @@ export const COLLECTIONS = [
   },
   {
     id: 'col4',
-    slug: 'home-sanctuary',
+    slug: 'home-decor',
     name: 'Home & Sanctuary',
     tagline: 'Turn your space into a feeling.',
     description: 'Every home deserves objects that earn their place. This collection brings together pieces that add quiet beauty to everyday corners — the shelf, the table, the windowsill.',

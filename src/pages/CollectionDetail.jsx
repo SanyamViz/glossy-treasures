@@ -22,13 +22,27 @@ const CollectionDetail = () => {
     const found = COLLECTIONS.find(c => c.slug === slug);
     if (found) {
       setCollection(found);
-      // Simulate loading state
-      const timer = setTimeout(() => {
-        setProducts(getCollectionProducts(found.productSlugs));
-        setLoading(false);
-      }, 600);
-      return () => clearTimeout(timer);
     }
+
+    const COLLECTION_OCCASION_MAP = {
+      'new-arrivals': 'New Arrival',
+      'bestsellers': 'Bestsellers',
+      'wedding': 'Wedding',
+      'self-care': 'Self Care',
+      'home-decor': 'Home Decor',
+      'gifting': 'Gifting',
+    };
+
+    const occasion = COLLECTION_OCCASION_MAP[slug];
+    if (!occasion) { setLoading(false); return; }
+
+    fetch(`${import.meta.env.VITE_API_URL}/api/products?occasion=${encodeURIComponent(occasion)}`)
+      .then(r => r.json())
+      .then(data => {
+        setProducts(Array.isArray(data) ? data : []);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
   }, [slug]);
 
   useEffect(() => {
@@ -113,14 +127,18 @@ const CollectionDetail = () => {
         <div className={`${styles.grid} ${gridVisible ? styles.visibleGrid : ''}`}>
           {loading ? (
             // Shimmer Loading State
-            Array(collection.productCount).fill(0).map((_, i) => (
+            Array(collection.productCount || 4).fill(0).map((_, i) => (
               <div key={i} className={styles.skeleton}>
                 <div className={styles.shimmer}></div>
               </div>
             ))
+          ) : products.length === 0 ? (
+            <div className={styles.emptyState} style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '40px' }}>
+              No products in this collection yet
+            </div>
           ) : (
             products.map((product, index) => {
-              const isCandle = CANDLES.some(c => c.slug === product.slug);
+              const isCandle = product.category === 'candle';
               return (
                 <div
                   key={product.id}
