@@ -171,32 +171,12 @@ const Checkout = () => {
     }
 
     setPlacing(true);
-    console.log("Starting order placement process...");
+    console.log("--- Starting Order Flow ---");
 
     try {
-      let razorpayOrderId = null;
-
-      // ── STEP 1: CREATE RAZORPAY ORDER (IF ONLINE) ──
-      if (payMethod !== 'cod') {
-        console.log("Initializing payment...");
-        const payRes = await fetch(`${api.baseUrl}/api/create-order`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ amount: grandTotal })
-        });
-        
-        const payData = await payRes.json();
-        console.log("Razorpay API Response:", payData);
-
-        if (!payData.success) {
-          throw new Error(payData.message || "Payment initialization failed");
-        }
-        razorpayOrderId = payData.order_id;
-      }
-
-      // ── STEP 2: SAVE ORDER IN DB ──
-      console.log("Saving order to database...");
-      const response = await fetch(`${api.baseUrl}/api/orders`, {
+      // ── STEP 1: CREATE ORDER IN DATABASE ──
+      console.log("1. Saving order to database...");
+      const orderRes = await fetch(`${api.baseUrl}/api/orders`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -204,7 +184,6 @@ const Checkout = () => {
           address: form.address, city: form.city, state: form.state, pincode: form.pincode,
           giftNote: form.giftNote, paymentMethod: payMethod, total: grandTotal,
           discountCode: discountApplied ? discountCode : null, discountAmount,
-          razorpayOrderId, // Pass the already created ID
           items: cartItems.map(item => ({
             productSlug: item.slug, productName: item.name, category: item.category || 'hamper',
             price: item.basePrice || item.price || 0, quantity: item.quantity,
@@ -213,16 +192,38 @@ const Checkout = () => {
         }),
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || errorData.message || 'Failed to save order');
+      if (orderRes.status === 500) {
+        throw new Error("Server error while saving order. Please try again later.");
       }
 
-      const orderData = await response.json();
-      console.log("Order saved successfully:", orderData);
+      const orderData = await orderRes.json();
+      if (!orderRes.ok) {
+        throw new Error(orderData.error || orderData.message || "Failed to save order");
+      }
+      console.log("Order saved in DB:", orderData.orderNumber);
 
-      // ── STEP 3: OPEN RAZORPAY CHECKOUT ──
-      if (razorpayOrderId) {
+      // ── STEP 2: IF ONLINE, CREATE RAZORPAY ORDER ──
+      if (payMethod !== 'cod') {
+        console.log("2. Initializing payment...");
+        const payRes = await fetch(`${api.baseUrl}/api/create-order`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ amount: grandTotal })
+        });
+
+        if (payRes.status === 500) {
+          throw new Error("Server error while initializing payment. Please try again.");
+        }
+
+        const payData = await payRes.json();
+        if (!payData.success) {
+          throw new Error(payData.details || payData.message || "Payment initialization failed");
+        }
+
+        const razorpayOrderId = payData.order_id;
+        console.log("Razorpay Order Created:", razorpayOrderId);
+
+        // ── STEP 3: OPEN RAZORPAY MODAL ──
         const isLoaded = await loadRazorpay();
         if (!isLoaded) throw new Error("Razorpay SDK failed to load.");
 
@@ -235,7 +236,7 @@ const Checkout = () => {
           image: "https://glossytreasures.shop/logo.png",
           order_id: razorpayOrderId,
           handler: async (response) => {
-            console.log("Razorpay Success Callback:", response);
+            console.log("Payment Success:", response.razorpay_payment_id);
             try {
               const verifyRes = await fetch(`${api.baseUrl}/api/orders/verify`, {
                 method: 'POST',
@@ -260,18 +261,12 @@ const Checkout = () => {
                 alert('Payment verification failed. Please contact support.');
               }
             } catch (err) {
-              console.error("Verification Error:", err);
               alert('Error verifying payment.');
             }
           },
           prefill: { name: form.name, email: form.email, contact: form.phone },
           theme: { color: "#B8965A" },
-          modal: {
-            ondismiss: () => {
-              console.log("Checkout modal closed by user");
-              setPlacing(false);
-            }
-          }
+          modal: { ondismiss: () => setPlacing(false) }
         };
 
         console.log("Razorpay Options:", options);
@@ -290,15 +285,14 @@ const Checkout = () => {
         }
       });
     } catch (err) {
-      console.error('Final Checkout Error:', err);
-      alert(err.message || "Payment initialization failed. Please try again.");
+      console.error('Checkout Error:', err);
+      alert(err.message || "An unexpected error occurred.");
     } finally {
       setPlacing(false);
     }
   };
 
   const stepContent = [
-    // ── STEP 0: DELIVERY ─────────────────────────────
     <div key="delivery" className={styles.formSection}>
       <h2 className={styles.sectionTitle}>Contact Details</h2>
       <div className={styles.field}>
@@ -339,7 +333,6 @@ const Checkout = () => {
       </div>
     </div>,
 
-    // ── STEP 1: PAYMENT ───────────────────────────────
     <div key="payment" className={styles.formSection}>
       <h2 className={styles.sectionTitle}>Payment Method</h2>
       <div className={styles.payMethods}>
@@ -351,16 +344,8 @@ const Checkout = () => {
           </button>
         ))}
       </div>
-      <div className={styles.payNoteContainer}>
-        {payMethod !== 'cod' ? (
-          <p className={styles.payNote}>🔒 Secure payment via Razorpay. All major UPI apps & cards supported.</p>
-        ) : (
-          <p className={styles.payNote}>📦 Pay ₹{grandTotal.toLocaleString('en-IN')} in cash on delivery.</p>
-        )}
-      </div>
     </div>,
 
-    // ── STEP 2: REVIEW ────────────────────────────────
     <div key="review" className={styles.formSection}>
       <h2 className={styles.sectionTitle}>Review Your Order</h2>
       <div className={styles.reviewCard}>
@@ -421,7 +406,7 @@ const Checkout = () => {
                 <button className={styles.nextBtn} onClick={handleNext}>Continue →</button>
               ) : (
                 <button className={styles.placeBtn} onClick={handlePlaceOrder} disabled={placing}>
-                  {placing ? 'Initializing payment...' : `Pay ₹${grandTotal.toLocaleString('en-IN')}`}
+                  {placing ? 'Processing...' : `Pay ₹${grandTotal.toLocaleString('en-IN')}`}
                 </button>
               )}
             </div>
