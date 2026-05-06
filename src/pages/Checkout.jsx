@@ -174,8 +174,33 @@ const Checkout = () => {
     console.log("--- Starting Order Flow ---");
 
     try {
-      // ── STEP 1: CREATE ORDER IN DATABASE ──
-      console.log("1. Saving order to database...");
+      let rzpOrderId = null;
+
+      // ── STEP 1: CREATE RAZORPAY ORDER (IF ONLINE) ──
+      if (payMethod !== 'cod') {
+        console.log("1. Initializing payment...");
+        const payRes = await fetch(`${api.baseUrl}/api/create-order`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ amount: grandTotal })
+        });
+
+        if (payRes.status === 500) {
+          const errData = await payRes.json();
+          throw new Error(errData.details || "Server error while initializing payment.");
+        }
+
+        const payData = await payRes.json();
+        if (!payData.success) {
+          throw new Error(payData.error || payData.message || "Payment initialization failed");
+        }
+
+        rzpOrderId = payData.order_id;
+        console.log("Razorpay Order Created:", rzpOrderId);
+      }
+
+      // ── STEP 2: CREATE ORDER IN DATABASE ──
+      console.log("2. Saving order to database...");
       const orderRes = await fetch(`${api.baseUrl}/api/orders`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -184,17 +209,22 @@ const Checkout = () => {
           address: form.address, city: form.city, state: form.state, pincode: form.pincode,
           giftNote: form.giftNote, paymentMethod: payMethod, total: grandTotal,
           discountCode: discountApplied ? discountCode : null, discountAmount,
+          razorpayOrderId: rzpOrderId, // CRITICAL: Link the Razorpay ID here!
           items: cartItems.map(item => ({
-            productSlug: item.slug, productName: item.name, category: item.category || 'hamper',
-            price: item.basePrice || item.price || 0, quantity: item.quantity,
-            selectedOptions: item.selectedOptions || {}
+            productSlug: item.slug,
+            productName: item.name,
+            category: item.category || 'resin',
+            price: item.basePrice || item.price || 0,
+            quantity: item.quantity,
+            selectedSize: item.selectedOptions?.size || item.selectedSize || null,
+            selectedFragrance: item.selectedOptions?.fragrance || item.selectedFragrance || null,
+            selectedColor: item.selectedOptions?.color || item.selectedColor || null,
+            personalization: item.selectedOptions?.personalization
+              ? JSON.stringify(item.selectedOptions.personalization)
+              : null,
           }))
         }),
       });
-
-      if (orderRes.status === 500) {
-        throw new Error("Server error while saving order. Please try again later.");
-      }
 
       const orderData = await orderRes.json();
       console.log("API RESPONSE (Order):", orderData);
@@ -204,30 +234,8 @@ const Checkout = () => {
       }
       console.log("Order saved in DB:", orderData.orderNumber);
 
-      // ── STEP 2: IF ONLINE, CREATE RAZORPAY ORDER ──
+      // ── STEP 3: OPEN RAZORPAY MODAL (IF ONLINE) ──
       if (payMethod !== 'cod') {
-        console.log("2. Initializing payment...");
-        const payRes = await fetch(`${api.baseUrl}/api/create-order`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ amount: grandTotal })
-        });
-
-        if (payRes.status === 500) {
-          throw new Error("Server error while initializing payment. Please try again.");
-        }
-
-        const payData = await payRes.json();
-        console.log("API RESPONSE (Payment):", payData);
-
-        if (!payData.success) {
-          throw new Error(payData.error || payData.message || "Payment initialization failed");
-        }
-
-        const razorpayOrderId = payData.order_id;
-        console.log("Razorpay Order Created:", razorpayOrderId);
-
-        // ── STEP 3: OPEN RAZORPAY MODAL ──
         const isLoaded = await loadRazorpay();
         if (!isLoaded) throw new Error("Razorpay SDK failed to load.");
 
@@ -238,9 +246,9 @@ const Checkout = () => {
           name: "Glossy Treasures",
           description: `Order #${orderData.orderNumber}`,
           image: "https://glossytreasures.shop/logo.png",
-          order_id: razorpayOrderId,
+          order_id: rzpOrderId,
           handler: async (response) => {
-            console.log("Payment Success:", response.razorpay_payment_id);
+            console.log("Payment Success callback trigger...");
             try {
               const verifyRes = await fetch(`${api.baseUrl}/api/orders/verify`, {
                 method: 'POST',
@@ -265,7 +273,6 @@ const Checkout = () => {
                   }
                 });
               } else {
-                console.error("Verification Failed Details:", verifyData);
                 alert(`Payment verification failed: ${verifyData.message || 'Unknown error'}. Please contact support.`);
               }
             } catch (err) {
@@ -277,7 +284,6 @@ const Checkout = () => {
           modal: { ondismiss: () => setPlacing(false) }
         };
 
-        console.log("Razorpay Options:", options);
         const rzp = new window.Razorpay(options);
         rzp.open();
         return;

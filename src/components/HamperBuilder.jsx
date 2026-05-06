@@ -1,15 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { useCart } from '../context/CartContext';
 import styles from './HamperBuilder.module.css';
 
-const SUGGESTED_PRODUCTS = [
-  { id: 1, name: "Lavender Haze Candle", price: 699, image: "https://images.unsplash.com/photo-1602028915047-37269d1a73f7?w=400&q=70" },
-  { id: 2, name: "Blush Coaster Set", price: 899, image: "https://images.unsplash.com/photo-1615796153287-98eacf0abb13?w=400&q=70" },
-  { id: 3, name: "Rose & Musk Candle", price: 699, image: "https://images.unsplash.com/photo-1603207894673-6f0bf0efab0f?w=400&q=70" },
-  { id: 4, name: "Ivory Jewellery Dish", price: 1199, image: "https://images.unsplash.com/photo-1580893246395-52aead8960dc?w=400&q=70" },
-  { id: 5, name: "Sandalwood Candle", price: 799, image: "https://images.unsplash.com/photo-1529651737248-dad5e287768e?w=400&q=70" }
-];
-
 export default function HamperBuilder({ currentProduct }) {
+  const { addToCart } = useCart();
+  const [availableProducts, setAvailableProducts] = useState([]);
   const [items, setItems] = useState([]);
   const [showNote, setShowNote] = useState(false);
   const [usePremiumPkg, setUsePremiumPkg] = useState(false);
@@ -17,8 +12,15 @@ export default function HamperBuilder({ currentProduct }) {
   const [total, setTotal] = useState(baseProductPrice);
 
   useEffect(() => {
+    fetch(`${import.meta.env.VITE_API_URL}/api/products`)
+      .then(r => r.json())
+      .then(data => setAvailableProducts(Array.isArray(data) ? data : []))
+      .catch(console.error);
+  }, []);
+
+  useEffect(() => {
     let newTotal = baseProductPrice;
-    items.forEach(item => newTotal += item.price);
+    items.forEach(item => newTotal += (item.basePrice || item.price || 0));
     if (usePremiumPkg) newTotal += 99;
     setTotal(newTotal);
   }, [items, usePremiumPkg, baseProductPrice]);
@@ -27,12 +29,39 @@ export default function HamperBuilder({ currentProduct }) {
     e.preventDefault();
     if (items.find(i => i.id === product.id)) return;
     setItems(prev => [...prev, product]);
-
-    // Bounce animation on the button/card could be added via ref or state class
   };
 
   const removeItem = (id) => {
     setItems(prev => prev.filter(i => i.id !== id));
+  };
+
+  const handleProceed = () => {
+    const selectedItems = items.map(i => ({
+      id: i.id,
+      name: i.name,
+      price: i.basePrice || i.price || 0
+    }));
+
+    // Add current product as well
+    selectedItems.unshift({
+      id: currentProduct.id,
+      name: currentProduct.name,
+      price: baseProductPrice
+    });
+
+    addToCart({
+      slug: 'custom-hamper-' + Date.now(),
+      name: 'Custom Hamper',
+      price: total,
+      basePrice: total,
+      category: 'hamper',
+      images: [],
+      quantity: 1,
+      selectedOptions: { items: selectedItems, premiumPackaging: usePremiumPkg }
+    }, 1);
+
+    // Provide some feedback
+    alert("Hamper added to cart!");
   };
 
   return (
@@ -41,10 +70,10 @@ export default function HamperBuilder({ currentProduct }) {
       <p className={styles.subtext}>Pair this with something beautiful.</p>
 
       <div className={styles.horizontalScroll}>
-        {SUGGESTED_PRODUCTS.map(product => (
+        {availableProducts.filter(p => p.slug !== currentProduct?.slug).map(product => (
           <div key={product.id} className={styles.productCard}>
             <div className={styles.imgWrapper}>
-              <img src={product.image} alt={product.name} />
+              <img src={product.images?.[0] || 'https://via.placeholder.com/400'} alt={product.name} />
               <button
                 className={`${styles.addBtn} ${items.find(i => i.id === product.id) ? styles.added : ''}`}
                 onClick={(e) => addItem(e, product)}
@@ -66,14 +95,14 @@ export default function HamperBuilder({ currentProduct }) {
         <div className={styles.summaryList}>
           <div className={styles.summaryRow}>
             <span>🔒 {currentProduct?.name}</span>
-            <span>₹{(currentProduct?.price || currentProduct?.basePrice || 0).toLocaleString('en-IN')}</span>
+            <span>₹{baseProductPrice.toLocaleString('en-IN')}</span>
           </div>
 
           {items.map(item => (
             <div key={item.id} className={`${styles.summaryRow} ${styles.slideDown}`}>
               <span>{item.name}</span>
               <div className={styles.rowRight}>
-                <span>₹{item.price.toLocaleString('en-IN')}</span>
+                <span>₹{(item.basePrice || item.price || 0).toLocaleString('en-IN')}</span>
                 <button className={styles.removeBtn} onClick={() => removeItem(item.id)}>✕</button>
               </div>
             </div>
@@ -112,7 +141,7 @@ export default function HamperBuilder({ currentProduct }) {
           <span className={styles.totalVal}>₹{total.toLocaleString('en-IN')}</span>
         </div>
 
-        <button className={styles.proceedBtn}>
+        <button className={styles.proceedBtn} onClick={handleProceed}>
           PROCEED WITH HAMPER
         </button>
       </div>

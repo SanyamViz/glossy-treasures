@@ -77,6 +77,10 @@ export default function ResinPDP() {
     addToCart({
       ...product,
       price: currentPrice,
+      basePrice: currentPrice,
+      selectedColor: selectedOptions?.color || null,
+      selectedSize: selectedOptions?.size || null,
+      personalization: selectedOptions?.personalization || null,
       selectedOptions
     }, qty);
     setTimeout(() => setIsSuccess(false), 1000);

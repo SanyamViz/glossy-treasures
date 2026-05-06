@@ -29,9 +29,10 @@ export default function ResinOptions({ colors = [], sizes = [], frameSizes = [],
     // Also notify parent of all selected options
     if (onOptionsChange) {
       onOptionsChange({
-        color: selectedColor.hex === 'custom' ? `Custom: ${customColor}` : selectedColor.label,
-        size: selectedSize?.label || selectedFrameSize?.label,
-        stand: selectedStand?.label,
+        color: selectedColor ? (selectedColor.hex === 'custom' ? `Custom: ${customColor}` : `${selectedColor.label || selectedColor.name}`) : null,
+        colorHex: selectedColor?.hex || null,
+        size: selectedSize?.label || selectedFrameSize?.label || null,
+        stand: selectedStand?.label || null,
         personalization: {
           name: personName,
           date: personDate,

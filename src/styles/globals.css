@@ -118,7 +118,8 @@ button:active,
     position: absolute;
     width: 400px;
     height: 400px;
-    background: #e8e0d5;
+    background: #c49c6547;
+    opacity: 0.00001;
     border-radius: 50%;
     filter: blur(120px);
     opacity: 0.4;
@@ -126,7 +127,7 @@ button:active,
 }
 
 .bg-blobs::after {
-    left: 60%;
+
     top: 50%;
     animation-delay: 5s;
 }

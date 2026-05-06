@@ -18,6 +18,7 @@ export default function CandleOptions({ onPriceChange, basePrice, fragrances = [
         fragrance: selectedFragrance?.label || null,
         size: selectedSize?.label || null,
         color: selectedColor?.name || null,
+        colorHex: selectedColor?.hex || null,
       });
     }
   }, [selectedFragrance, selectedSize, selectedColor, basePrice, onPriceChange, onOptionsChange]);

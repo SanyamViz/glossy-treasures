@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform, useSpring } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
-import { CANDLES, RESIN_PRODUCTS } from '../data/products';
 import { Show, SignInButton, SignUpButton, UserButton } from "@clerk/react";
 import CartDrawer from './CartDrawer';
 import './Navbar.css';
@@ -16,15 +15,7 @@ const MESSAGES = [
 
 /* ─── Inline SVG icons ───────────────────────────────────── */
 const HamburgerIcon = () => (
-  <svg
-    className="nav-icon"
-    width="22"
-    height="22"
-    viewBox="0 0 22 22"
-    fill="none"
-    aria-hidden="true"
-    xmlns="http://www.w3.org/2000/svg"
-  >
+  <svg className="nav-icon" width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
     <line x1="2" y1="5" x2="20" y2="5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
     <line x1="2" y1="11" x2="20" y2="11" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
     <line x1="2" y1="17" x2="20" y2="17" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
@@ -32,30 +23,14 @@ const HamburgerIcon = () => (
 );
 
 const CloseIcon = () => (
-  <svg
-    className="nav-icon"
-    width="22"
-    height="22"
-    viewBox="0 0 22 22"
-    fill="none"
-    aria-hidden="true"
-    xmlns="http://www.w3.org/2000/svg"
-  >
+  <svg className="nav-icon" width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
     <line x1="3" y1="3" x2="19" y2="19" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
     <line x1="19" y1="3" x2="3" y2="19" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
   </svg>
 );
 
 const SearchIcon = () => (
-  <svg
-    className="nav-icon"
-    width="20"
-    height="20"
-    viewBox="0 0 20 20"
-    fill="none"
-    aria-hidden="true"
-    xmlns="http://www.w3.org/2000/svg"
-  >
+  <svg className="nav-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
     <circle cx="8.5" cy="8.5" r="5.5" stroke="currentColor" strokeWidth="1.5" />
     <line x1="12.5" y1="12.5" x2="17" y2="17" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
   </svg>
@@ -67,28 +42,8 @@ const CartIcon = () => (
   </svg>
 );
 
-const ChevronLeftIcon = () => (
-  <svg
-    width="14"
-    height="14"
-    viewBox="0 0 14 14"
-    fill="none"
-    aria-hidden="true"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <polyline points="9,2 4,7 9,12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokelinejoin="round" />
-  </svg>
-);
-
 const ChevronRightIcon = () => (
-  <svg
-    width="14"
-    height="14"
-    viewBox="0 0 14 14"
-    fill="none"
-    aria-hidden="true"
-    xmlns="http://www.w3.org/2000/svg"
-  >
+  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
     <polyline points="5,2 10,7 5,12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
   </svg>
 );
@@ -105,22 +60,32 @@ const NAV_LINKS = [
       { label: 'Self Care Rituals', href: '/collections/self-care-rituals' },
     ]
   },
-  { label: 'Shop', href: '/shop/candles' },
+  { label: 'Candles', href: '/shop/candles' },
+  { label: 'Resin Art', href: '/shop/resin' },
   { label: 'Our Story', href: '/our-story' },
   { label: 'Contact', href: '/contact' },
 ];
 
-/* ─── Hardcoded cart count removed ───────────────────────── */
+const POPULAR_SEARCHES = [
+  { label: 'Rose Candle', path: '/shop/candles/rose-bouquet' },
+  { label: 'Resin Frame', path: '/shop/resin?type=Frame' },
+  { label: 'Wedding', path: '/collections/wedding' },
+  { label: 'Gifting', path: '/collections/gifting' },
+  { label: 'Bubble Candle', path: '/shop/candles/bubble' },
+];
 
 /* ═══════════════════════════════════════════════════════════
    Navbar Component
    ═══════════════════════════════════════════════════════════ */
 export default function Navbar() {
   const { totalItems } = useCart();
+  const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const [searchLoading, setSearchLoading] = useState(false);
   const [expandedItem, setExpandedItem] = useState(null);
 
   /* ── Framer Motion Scroll Effects ── */
@@ -131,22 +96,18 @@ export default function Navbar() {
   const navBg = useTransform(scrollY, [0, 60], ["rgba(250, 248, 245, 1)", "rgba(250, 248, 245, 0.75)"]);
   const navBorder = useTransform(scrollY, [0, 60], ["rgba(232, 224, 213, 0)", "rgba(232, 224, 213, 1)"]);
 
-  /* ── Search filter logic ── */
-  let searchResults = [];
-  if (searchTerm.length >= 2) {
-    const query = searchTerm.toLowerCase();
-    const allProducts = [
-      ...CANDLES.map(p => ({ ...p, productType: 'candles' })),
-      ...RESIN_PRODUCTS.map(p => ({ ...p, productType: 'resin' }))
-    ];
-    searchResults = allProducts.filter(p => {
-      return (
-        (p.name && p.name.toLowerCase().includes(query)) ||
-        (p.scentFamily && p.scentFamily.toLowerCase().includes(query)) ||
-        (p.category && p.category.toLowerCase().includes(query))
-      );
-    });
-  }
+  /* ── Search logic (Backend) ── */
+  useEffect(() => {
+    if (searchTerm.length < 2) { setSearchResults([]); return; }
+    setSearchLoading(true);
+    const timeout = setTimeout(() => {
+      fetch(`${import.meta.env.VITE_API_URL}/api/products/search?q=${encodeURIComponent(searchTerm)}`)
+        .then(r => r.json())
+        .then(data => { setSearchResults(Array.isArray(data) ? data : []); setSearchLoading(false); })
+        .catch(() => setSearchLoading(false));
+    }, 300);
+    return () => clearTimeout(timeout);
+  }, [searchTerm]);
 
   /* ── Lock body scroll when menu or search is open ── */
   useEffect(() => {
@@ -156,8 +117,7 @@ export default function Navbar() {
 
   return (
     <header className="gt-header" role="banner">
-
-      {/* ── Scroll Progress Bar ── */}
+      {/* Scroll Progress Bar */}
       <motion.div
         style={{
           scaleX: scrollYProgress,
@@ -172,7 +132,7 @@ export default function Navbar() {
         }}
       />
 
-      {/* ── Announcement Bar — pure CSS infinite ticker ── */}
+      {/* Announcement Bar */}
       <div className="gt-announcement-bar" aria-label="Announcements">
         <div className="gt-ann-text-wrap">
           <div className="gt-ticker-track" aria-hidden="true">
@@ -187,14 +147,10 @@ export default function Navbar() {
               </span>
             ))}
           </div>
-          {/* Screen-reader accessible text */}
-          <p className="gt-ann-sr-only">
-            {MESSAGES[0]}. {MESSAGES[1]}. {MESSAGES[2]}.
-          </p>
         </div>
       </div>
 
-      {/* ── Main Navbar ── */}
+      {/* Main Navbar */}
       <motion.nav
         className="gt-navbar"
         aria-label="Main navigation"
@@ -206,177 +162,70 @@ export default function Navbar() {
           borderBottomColor: navBorder,
         }}
       >
-        {/* Left — Hamburger */}
         <div className="gt-nav-left">
-          <button
-            className="gt-icon-btn"
-            onClick={() => setMenuOpen(true)}
-            aria-label="Open navigation menu"
-            aria-expanded={menuOpen}
-            aria-controls="gt-mobile-menu"
-          >
+          <button className="gt-icon-btn" onClick={() => setMenuOpen(true)} aria-label="Open navigation menu">
             <HamburgerIcon />
           </button>
         </div>
 
-        {/* Center — Brand */}
         <div className="gt-nav-center">
-          <a href="/" className="gt-brand" aria-label="Glossy Treasures — Home">
-            Glossy Treasures
-          </a>
+          <Link to="/" className="gt-brand">Glossy Treasures</Link>
         </div>
 
-        {/* Right — Search + Cart */}
         <div className="gt-nav-right">
-          <button
-            className="gt-icon-btn"
-            aria-label="Search"
-            onClick={() => setSearchOpen(true)}
-          >
+          <button className="gt-icon-btn" onClick={() => setSearchOpen(true)} aria-label="Search">
             <SearchIcon />
           </button>
-
-          <button
-            className="gt-icon-btn gt-cart-btn"
-            aria-label={`Cart — ${totalItems} item${totalItems !== 1 ? 's' : ''}`}
-            onClick={() => setIsCartOpen(true)}
-          >
+          <button className="gt-icon-btn gt-cart-btn" onClick={() => setIsCartOpen(true)} aria-label="Cart">
             <CartIcon />
-            {totalItems > 0 && (
-              <span className="gt-cart-badge" aria-hidden="true">
-                {totalItems}
-              </span>
-            )}
+            {totalItems > 0 && <span className="gt-cart-badge">{totalItems}</span>}
           </button>
         </div>
       </motion.nav>
 
-      {/* ── Mobile Drawer Menu ── */}
+      {/* Mobile Drawer Menu */}
       <AnimatePresence>
         {menuOpen && (
           <>
-            {/* Backdrop */}
-            <motion.div
-              className="gt-menu-backdrop-motion"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              onClick={() => setMenuOpen(false)}
-              aria-hidden="true"
-            />
-
-            {/* Drawer Panel */}
-            <motion.div
-              className="gt-menu-panel-motion"
-              initial={{ x: '-100%' }}
-              animate={{ x: '0%' }}
-              exit={{ x: '-100%' }}
-              transition={{ type: 'tween', duration: 0.38, ease: [0.76, 0, 0.24, 1] }}
-              role="dialog"
-              aria-modal="true"
-              aria-label="Navigation menu"
-            >
-              {/* Drawer Header */}
+            <motion.div className="gt-menu-backdrop-motion" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setMenuOpen(false)} />
+            <motion.div className="gt-menu-panel-motion" initial={{ x: '-100%' }} animate={{ x: '0%' }} exit={{ x: '-100%' }} transition={{ type: 'tween', duration: 0.38, ease: [0.76, 0, 0.24, 1] }}>
               <div className="gt-drawer-header">
                 <span className="gt-drawer-brand">Glossy Treasures</span>
-                <button
-                  className="gt-menu-close-motion"
-                  onClick={() => setMenuOpen(false)}
-                  aria-label="Close menu"
-                >
-                  <CloseIcon />
-                </button>
+                <button className="gt-menu-close-motion" onClick={() => setMenuOpen(false)}><CloseIcon /></button>
               </div>
-
-              {/* Nav Links */}
               <nav className="gt-drawer-nav">
                 <ul className="gt-drawer-list">
                   {NAV_LINKS.map((item, i) => (
-                    <motion.li
-                      key={item.label}
-                      className="gt-drawer-item"
-                      initial={{ opacity: 0, x: -28 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{
-                        delay: 0.18 + i * 0.07,
-                        duration: 0.38,
-                        ease: [0.22, 1, 0.36, 1]
-                      }}
-                    >
+                    <motion.li key={item.label} className="gt-drawer-item" initial={{ opacity: 0, x: -28 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.18 + i * 0.07 }}>
                       {item.children ? (
                         <>
-                          <button
-                            className={`gt-drawer-link gt-drawer-link--parent ${expandedItem === item.label ? 'is-active' : ''}`}
-                            onClick={() => setExpandedItem(
-                              expandedItem === item.label ? null : item.label
-                            )}
-                          >
+                          <button className="gt-drawer-link gt-drawer-link--parent" onClick={() => setExpandedItem(expandedItem === item.label ? null : item.label)}>
                             {item.label}
-                            <motion.span
-                              className="gt-drawer-arrow"
-                              animate={{ rotate: expandedItem === item.label ? 90 : 0 }}
-                              transition={{ duration: 0.22 }}
-                            >
-                              <ChevronRightIcon />
-                            </motion.span>
+                            <motion.span animate={{ rotate: expandedItem === item.label ? 90 : 0 }}><ChevronRightIcon /></motion.span>
                           </button>
-
                           <AnimatePresence>
                             {expandedItem === item.label && (
-                              <motion.ul
-                                className="gt-drawer-children"
-                                initial={{ height: 0, opacity: 0 }}
-                                animate={{ height: 'auto', opacity: 1 }}
-                                exit={{ height: 0, opacity: 0 }}
-                                transition={{ duration: 0.28, ease: 'easeOut' }}
-                              >
-                                {item.children.map((child, ci) => (
-                                  <motion.li
-                                    key={child.label}
-                                    initial={{ opacity: 0, x: -12 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    transition={{ delay: ci * 0.055, duration: 0.25 }}
-                                  >
-
-                                    <a
-                                      href={child.href}
-                                      className="gt-drawer-child-link"
-                                      onClick={() => setMenuOpen(false)}
-                                    >
-                                      {child.label}
-                                    </a>
-                                  </motion.li>
+                              <motion.ul className="gt-drawer-children" initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }}>
+                                {item.children.map(child => (
+                                  <li key={child.label}><Link to={child.href} className="gt-drawer-child-link" onClick={() => setMenuOpen(false)}>{child.label}</Link></li>
                                 ))}
                               </motion.ul>
                             )}
                           </AnimatePresence>
                         </>
                       ) : (
-                        <a
-                          href={item.href}
-                          className="gt-drawer-link"
-                          onClick={() => setMenuOpen(false)}
-                        >
-                          {item.label}
-                        </a>
+                        <Link to={item.href} className="gt-drawer-link" onClick={() => setMenuOpen(false)}>{item.label}</Link>
                       )}
                     </motion.li>
                   ))}
                 </ul>
               </nav>
-
-              {/* Drawer Footer */}
               <div className="gt-drawer-footer">
                 <div className="drawerAuth">
                   <Show when="signed-out">
                     <div className="drawerAuthButtons">
-                      <SignInButton mode="modal">
-                        <button className="drawerSignIn">Sign In</button>
-                      </SignInButton>
-                      <SignUpButton mode="modal">
-                        <button className="drawerJoinBtn">Join Now</button>
-                      </SignUpButton>
+                      <SignInButton mode="modal"><button className="drawerSignIn">Sign In</button></SignInButton>
+                      <SignUpButton mode="modal"><button className="drawerJoinBtn">Join Now</button></SignUpButton>
                     </div>
                   </Show>
                   <Show when="signed-in">
@@ -391,104 +240,68 @@ export default function Navbar() {
                     </Link>
                   </Show>
                 </div>
-
-                <p className="gt-drawer-footer-label">Follow Along</p>
-                <a
-                  href="https://instagram.com/glossy_treasures"
-                  className="gt-drawer-instagram"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  @glossy_treasures
-                </a>
               </div>
             </motion.div>
           </>
         )}
       </AnimatePresence>
-      {/* ── Search Full-Screen Panel ── */}
-      <div
-        className={`gt-search-panel ${searchOpen ? 'gt-search-panel--open' : ''}`}
-        aria-hidden={!searchOpen}
-        role="dialog"
-        aria-label="Search panel"
-      >
-        <button
-          className="gt-search-close"
-          onClick={() => setSearchOpen(false)}
-          aria-label="Close search"
-        >
-          &times;
-        </button>
+
+      {/* Search Full-Screen Panel */}
+      <div className={`gt-search-panel ${searchOpen ? 'gt-search-panel--open' : ''}`}>
+        <button className="gt-search-close" onClick={() => setSearchOpen(false)}>&times;</button>
         <div className="gt-search-input-row">
           <SearchIcon />
-          <input
-            type="text"
-            className="gt-search-input"
-            placeholder="Search for a scent, a piece..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
+          <input type="text" className="gt-search-input" placeholder="Search for a scent, a piece..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
         </div>
+        
         {searchTerm.length >= 2 ? (
           <div className="gt-search-results-container">
-            {searchResults.length > 0 ? (
-              <div className="gt-search-results-grid">
-                {searchResults.map(product => (
-                  <a 
-                    key={`${product.productType}-${product.slug}`} 
-                    href={`/shop/${product.productType}/${product.slug}`} 
-                    className="gt-search-result-item"
-                    onClick={() => {
-                      setSearchOpen(false);
-                      setSearchTerm('');
-                    }}
-                  >
-                    <img src={product.image} alt={product.name} className="gt-search-result-image" loading="lazy" />
-                    <div className="gt-search-result-info">
-                      <p className="gt-search-result-name">{product.name}</p>
-                      <p className="gt-search-result-price">₹{product.price}</p>
-                      <span className="gt-search-result-badge">{product.category}</span>
+            {searchLoading ? <p>Searching...</p> : (
+              searchResults.length > 0 ? (
+                <div className="gt-search-results-grid">
+                  {searchResults.map(product => (
+                    <div 
+                      key={product.id} 
+                      className="gt-search-result-item"
+                      style={{ cursor: 'pointer' }}
+                      onClick={() => {
+                        navigate(`/shop/${product.category === 'resin' ? 'resin' : 'candles'}/${product.slug}`);
+                        setSearchOpen(false);
+                        setSearchTerm('');
+                      }}
+                    >
+                      <img src={product.image || product.images?.[0]} alt={product.name} className="gt-search-result-image" />
+                      <div className="gt-search-result-info">
+                        <p className="gt-search-result-name">{product.name}</p>
+                        <p className="gt-search-result-price">₹{product.basePrice}</p>
+                        <span className="gt-search-result-badge">{product.category}</span>
+                      </div>
                     </div>
-                  </a>
-                ))}
-              </div>
-            ) : (
-              <p className="gt-search-no-results">No products found for "{searchTerm}"</p>
+                  ))}
+                </div>
+              ) : <p className="gt-search-no-results">No products found</p>
             )}
           </div>
         ) : (
-          <>
-            <div className="gt-quick-links">
-              <p className="gt-quick-links-label">POPULAR SEARCHES</p>
-              <ul className="gt-quick-links-list">
-                {['Scented Candles', 'Resin Platters', 'Wedding Gifts', 'Custom Hampers', 'Bookmarks'].map((link) => (
-                  <li key={link}>
-                    <a href={`/search?q=${encodeURIComponent(link)}`} className="gt-quick-link-item">
-                      {link} <span>&rarr;</span>
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div className="gt-search-featured">
-              <p className="gt-search-featured-label">FEATURED</p>
-              <div className="gt-search-featured-row">
-                <a href="/shop" className="gt-search-featured-card">
-                  <img src="https://placehold.co/140x140/E8E0D5/7A7068" alt="New Arrivals" loading="lazy" />
-                  <p>New Arrivals</p>
-                </a>
-                <a href="/shop/wedding-special" className="gt-search-featured-card">
-                  <img src="https://placehold.co/140x140/F0EBE3/7A7068" alt="Wedding Special" loading="lazy" />
-                  <p>Wedding Special</p>
-                </a>
-                <a href="/build-hamper" className="gt-search-featured-card">
-                  <img src="https://placehold.co/140x140/E8E0D5/C4948A" alt="Gift Hampers" loading="lazy" />
-                  <p>Gift Hampers</p>
-                </a>
-              </div>
-            </div>
-          </>
+          <div className="gt-quick-links">
+            <p className="gt-quick-links-label">POPULAR SEARCHES</p>
+            <ul className="gt-quick-links-list">
+              {POPULAR_SEARCHES.map((link) => (
+                <li key={link.label}>
+                  <div 
+                    className="gt-quick-link-item" 
+                    style={{ cursor: 'pointer' }}
+                    onClick={() => {
+                      navigate(link.path);
+                      setSearchOpen(false);
+                    }}
+                  >
+                    {link.label} <span>&rarr;</span>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
         )}
       </div>
 

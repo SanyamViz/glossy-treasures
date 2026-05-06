@@ -79,7 +79,12 @@ export default function CandlePDP() {
     addToCart({
       ...product,
       price: currentPrice,
-      selectedOptions
+      basePrice: currentPrice,
+      selectedColor: selectedOptions?.color || null,
+      selectedSize: selectedOptions?.size || null,
+      selectedFragrance: selectedOptions?.fragrance || null,
+      personalization: selectedOptions?.personalization || null,
+      selectedOptions,
     }, qty);
     setTimeout(() => setIsSuccess(false), 1000);
   };
