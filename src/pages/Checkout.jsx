@@ -37,33 +37,18 @@ const Checkout = () => {
   const { cartItems, cartTotal, clearCart } = useCart();
   const navigate = useNavigate();
   const [mounted, setMounted] = useState(false);
-  const [step, setStep] = useState(0);          // 0=delivery 1=payment 2=review
+  const [step, setStep] = useState(0);
   const [summaryOpen, setSummaryOpen] = useState(false);
   const [placing, setPlacing] = useState(false);
   const [errors, setErrors] = useState({});
 
-  // ── Helper: Load Razorpay script ──────────────────────────────────────────
-  const loadRazorpay = () => {
-    return new Promise((resolve) => {
-      const script = document.createElement('script');
-      script.src = 'https://checkout.razorpay.com/v1/checkout.js';
-      script.onload = () => resolve(true);
-      script.onerror = () => resolve(false);
-      document.body.appendChild(script);
-    });
-  };
-
-  // ── Delivery form ──
   const [form, setForm] = useState({
     name: '', phone: '', email: '',
     address: '', city: '', state: '', pincode: '',
     giftNote: '',
   });
 
-  // ── Payment ──
   const [payMethod, setPayMethod] = useState('upi');
-
-  // ── Discounts ──
   const [discountCode, setDiscountCode] = useState('');
   const [discountAmount, setDiscountAmount] = useState(0);
   const [discountApplied, setDiscountApplied] = useState(false);
@@ -71,9 +56,7 @@ const Checkout = () => {
   const { user, isLoaded, isSignedIn } = useUser();
 
   useEffect(() => {
-    if (isLoaded && !isSignedIn) {
-      navigate('/cart');
-    }
+    if (isLoaded && !isSignedIn) navigate('/cart');
   }, [isLoaded, isSignedIn, navigate]);
 
   const phoneRef = useRef(null);
@@ -81,7 +64,6 @@ const Checkout = () => {
   const shipping = freeShipping ? 0 : 99;
   const grandTotal = cartTotal + shipping - discountAmount;
 
-  // ── Auto-fill from Clerk ──
   useEffect(() => {
     if (isLoaded && isSignedIn && user) {
       setForm(f => ({
@@ -99,35 +81,39 @@ const Checkout = () => {
 
   const orderPlaced = useRef(false);
 
-  // Redirect if cart empty — but NOT if we just placed an order
   useEffect(() => {
-    if (cartItems.length === 0 && !orderPlaced.current) {
-      navigate('/cart');
-    }
+    if (cartItems.length === 0 && !orderPlaced.current) navigate('/cart');
   }, [cartItems]);
 
-  // ── Pincode autofill ──
+  const loadRazorpay = () => {
+    return new Promise((resolve) => {
+      if (window.Razorpay) return resolve(true);
+      const script = document.createElement('script');
+      script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+      script.onload = () => resolve(true);
+      script.onerror = () => resolve(false);
+      document.body.appendChild(script);
+    });
+  };
+
   const handlePincode = (val) => {
     const v = val.replace(/\D/g, '').slice(0, 6);
     setForm(f => ({ ...f, pincode: v }));
     if (v.length === 6 && PINCODE_MAP[v]) {
-      setForm(f => ({ ...f, pincode: v, city: PINCODE_MAP[v].city, state: PINCODE_MAP[v].state }));
+      setForm(f => ({ ...f, city: PINCODE_MAP[v].city, state: PINCODE_MAP[v].state }));
     }
   };
 
-  // ── Phone auto-advance ──
   const handlePhone = (val) => {
     const v = val.replace(/\D/g, '').slice(0, 10);
     setForm(f => ({ ...f, phone: v }));
   };
 
-  // ── Field change ──
   const setField = (key, val) => {
     setForm(f => ({ ...f, [key]: val }));
     if (errors[key]) setErrors(e => ({ ...e, [key]: null }));
   };
 
-  // ── Validate delivery ──
   const validateDelivery = () => {
     const e = {};
     if (!form.name.trim()) e.name = 'Please enter your name';
@@ -179,35 +165,49 @@ const Checkout = () => {
   };
 
   const handlePlaceOrder = async () => {
+    if (grandTotal <= 0) {
+      alert("Invalid order amount.");
+      return;
+    }
+
     setPlacing(true);
+    console.log("Starting order placement process...");
+
     try {
+      let razorpayOrderId = null;
+
+      // ── STEP 1: CREATE RAZORPAY ORDER (IF ONLINE) ──
+      if (payMethod !== 'cod') {
+        console.log("Initializing payment...");
+        const payRes = await fetch(`${api.baseUrl}/api/payments/create-order`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ amount: grandTotal })
+        });
+        
+        const payData = await payRes.json();
+        console.log("Razorpay API Response:", payData);
+
+        if (!payData.success) {
+          throw new Error(payData.message || "Payment initialization failed");
+        }
+        razorpayOrderId = payData.order_id;
+      }
+
+      // ── STEP 2: SAVE ORDER IN DB ──
+      console.log("Saving order to database...");
       const response = await fetch(`${api.baseUrl}/api/orders`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          name: form.name,
-          email: form.email,
-          phone: form.phone,
-          address: form.address,
-          city: form.city,
-          state: form.state,
-          pincode: form.pincode,
-          giftNote: form.giftNote,
-          paymentMethod: payMethod,
-          total: grandTotal,
-          discountCode: discountApplied ? discountCode : null,
-          discountAmount: discountAmount,
+          name: form.name, email: form.email, phone: form.phone,
+          address: form.address, city: form.city, state: form.state, pincode: form.pincode,
+          giftNote: form.giftNote, paymentMethod: payMethod, total: grandTotal,
+          discountCode: discountApplied ? discountCode : null, discountAmount,
+          razorpayOrderId, // Pass the already created ID
           items: cartItems.map(item => ({
-            productSlug: item.slug,
-            productName: item.name,
-            category: item.category || 'hamper',
-            price: item.basePrice || item.price || 0,
-            quantity: item.quantity,
-            selectedSize: item.selectedOptions?.size || item.selectedSize || null,
-            selectedFragrance: item.selectedOptions?.fragrance || item.selectedFragrance || null,
-            personalization: item.selectedOptions?.personalization || null,
+            productSlug: item.slug, productName: item.name, category: item.category || 'hamper',
+            price: item.basePrice || item.price || 0, quantity: item.quantity,
             selectedOptions: item.selectedOptions || {}
           }))
         }),
@@ -215,31 +215,27 @@ const Checkout = () => {
 
       if (!response.ok) {
         const errorData = await response.json();
-        const err = new Error(errorData.error || errorData.message || 'Order failed');
-        err.details = errorData.details;
-        throw err;
+        throw new Error(errorData.error || errorData.message || 'Failed to save order');
       }
 
-      const data = await response.json();
+      const orderData = await response.json();
+      console.log("Order saved successfully:", orderData);
 
-      // If Razorpay order created, open Checkout
-      if (data.razorpayOrderId) {
-        const res = await loadRazorpay();
-        if (!res) {
-          alert('Razorpay SDK failed to load.');
-          setPlacing(false);
-          return;
-        }
+      // ── STEP 3: OPEN RAZORPAY CHECKOUT ──
+      if (razorpayOrderId) {
+        const isLoaded = await loadRazorpay();
+        if (!isLoaded) throw new Error("Razorpay SDK failed to load.");
 
         const options = {
           key: import.meta.env.VITE_RAZORPAY_KEY_ID,
           amount: Math.round(grandTotal * 100),
           currency: "INR",
           name: "Glossy Treasures",
-          description: `Order #${data.orderNumber}`,
+          description: `Order #${orderData.orderNumber}`,
           image: "https://glossytreasures.shop/logo.png",
-          order_id: data.razorpayOrderId,
+          order_id: razorpayOrderId,
           handler: async (response) => {
+            console.log("Razorpay Success Callback:", response);
             try {
               const verifyRes = await fetch(`${api.baseUrl}/api/orders/verify`, {
                 method: 'POST',
@@ -256,51 +252,46 @@ const Checkout = () => {
                 clearCart();
                 navigate('/order-confirmed', {
                   state: {
-                    orderNumber: data.orderNumber,
-                    name: form.name,
-                    payMethod,
-                    total: grandTotal,
-                    email: form.email,
+                    orderNumber: orderData.orderNumber, name: form.name,
+                    payMethod, total: grandTotal, email: form.email,
                   }
                 });
               } else {
-                alert('Payment verification failed.');
+                alert('Payment verification failed. Please contact support.');
               }
             } catch (err) {
+              console.error("Verification Error:", err);
               alert('Error verifying payment.');
             }
           },
-          prefill: {
-            name: form.name,
-            email: form.email,
-            contact: form.phone,
-          },
-          theme: {
-            color: "#B8965A",
-          },
+          prefill: { name: form.name, email: form.email, contact: form.phone },
+          theme: { color: "#B8965A" },
+          modal: {
+            ondismiss: () => {
+              console.log("Checkout modal closed by user");
+              setPlacing(false);
+            }
+          }
         };
 
+        console.log("Razorpay Options:", options);
         const rzp = new window.Razorpay(options);
         rzp.open();
-        setPlacing(false);
         return;
       }
 
+      // COD Path
       orderPlaced.current = true;
       clearCart();
       navigate('/order-confirmed', {
         state: {
-          orderNumber: data.orderNumber,
-          name: form.name,
-          payMethod,
-          total: grandTotal,
-          email: form.email,
+          orderNumber: orderData.orderNumber, name: form.name,
+          payMethod, total: grandTotal, email: form.email,
         }
       });
     } catch (err) {
-      console.error('Order error:', err);
-      const msg = err.details ? `${err.message}: ${err.details}` : err.message;
-      alert(msg || "Something went wrong.");
+      console.error('Final Checkout Error:', err);
+      alert(err.message || "Payment initialization failed. Please try again.");
     } finally {
       setPlacing(false);
     }
@@ -310,155 +301,61 @@ const Checkout = () => {
     // ── STEP 0: DELIVERY ─────────────────────────────
     <div key="delivery" className={styles.formSection}>
       <h2 className={styles.sectionTitle}>Contact Details</h2>
-
       <div className={styles.field}>
         <label className={styles.label}>Full Name</label>
-        <input
-          className={`${styles.input} ${errors.name ? styles.inputError : ''}`}
-          type="text" placeholder="Your Name"
-          value={form.name}
-          onChange={e => setField('name', e.target.value)}
-          autoComplete="name"
-        />
+        <input className={`${styles.input} ${errors.name ? styles.inputError : ''}`} type="text" value={form.name} onChange={e => setField('name', e.target.value)} />
         {errors.name && <span className={styles.error}>{errors.name}</span>}
       </div>
-
       <div className={styles.row}>
         <div className={styles.field}>
           <label className={styles.label}>Phone</label>
           <div className={styles.phoneWrap}>
             <span className={styles.phonePrefix}>+91</span>
-            <input
-              ref={phoneRef}
-              className={`${styles.input} ${styles.phoneInput} ${errors.phone ? styles.inputError : ''}`}
-              type="tel" placeholder="Phone number"
-              value={form.phone}
-              onChange={e => handlePhone(e.target.value)}
-              inputMode="numeric"
-              autoComplete="tel"
-            />
+            <input className={`${styles.input} ${styles.phoneInput} ${errors.phone ? styles.inputError : ''}`} type="tel" value={form.phone} onChange={e => handlePhone(e.target.value)} />
           </div>
           {errors.phone && <span className={styles.error}>{errors.phone}</span>}
         </div>
         <div className={styles.field}>
           <label className={styles.label}>Email</label>
-          <input
-            className={`${styles.input} ${errors.email ? styles.inputError : ''}`}
-            type="email" placeholder="you@email.com"
-            value={form.email}
-            onChange={e => setField('email', e.target.value)}
-            autoComplete="email"
-          />
+          <input className={`${styles.input} ${errors.email ? styles.inputError : ''}`} type="email" value={form.email} onChange={e => setField('email', e.target.value)} />
           {errors.email && <span className={styles.error}>{errors.email}</span>}
         </div>
       </div>
-
       <h2 className={`${styles.sectionTitle} ${styles.mt}`}>Delivery Address</h2>
-
       <div className={styles.field}>
         <label className={styles.label}>Address</label>
-        <input
-          className={`${styles.input} ${errors.address ? styles.inputError : ''}`}
-          type="text" placeholder="House No., Street, Area"
-          value={form.address}
-          onChange={e => setField('address', e.target.value)}
-          autoComplete="street-address"
-        />
+        <input className={`${styles.input} ${errors.address ? styles.inputError : ''}`} type="text" value={form.address} onChange={e => setField('address', e.target.value)} />
         {errors.address && <span className={styles.error}>{errors.address}</span>}
       </div>
-
       <div className={styles.field}>
         <label className={styles.label}>Pincode</label>
-        <input
-          className={`${styles.input} ${errors.pincode ? styles.inputError : ''}`}
-          type="text" placeholder="Your Pincode"
-          value={form.pincode}
-          onChange={e => handlePincode(e.target.value)}
-          inputMode="numeric"
-          autoComplete="postal-code"
-        />
+        <input className={`${styles.input} ${errors.pincode ? styles.inputError : ''}`} type="text" value={form.pincode} onChange={e => handlePincode(e.target.value)} />
         {errors.pincode && <span className={styles.error}>{errors.pincode}</span>}
         {form.city && <span className={styles.autofill}>✓ {form.city}, {form.state}</span>}
       </div>
-
       <div className={styles.row}>
-        <div className={styles.field}>
-          <label className={styles.label}>City</label>
-          <input
-            className={`${styles.input} ${errors.city ? styles.inputError : ''}`}
-            type="text" placeholder="Your City"
-            value={form.city}
-            onChange={e => setField('city', e.target.value)}
-            autoComplete="address-level2"
-          />
-          {errors.city && <span className={styles.error}>{errors.city}</span>}
-        </div>
-        <div className={styles.field}>
-          <label className={styles.label}>State</label>
-          <input
-            className={`${styles.input} ${errors.state ? styles.inputError : ''}`}
-            type="text" placeholder="State"
-            value={form.state}
-            onChange={e => setField('state', e.target.value)}
-            autoComplete="address-level1"
-          />
-          {errors.state && <span className={styles.error}>{errors.state}</span>}
-        </div>
-      </div>
-
-      <div className={styles.field}>
-        <label className={styles.label}>
-          Gift Note <span className={styles.optional}>(optional)</span>
-        </label>
-        <textarea
-          className={styles.textarea}
-          placeholder="Add a personal message..."
-          value={form.giftNote}
-          onChange={e => setField('giftNote', e.target.value)}
-          rows={3}
-          maxLength={200}
-        />
-        <span className={styles.charCount}>{form.giftNote.length}/200</span>
+        <div className={styles.field}><label className={styles.label}>City</label><input className={styles.input} type="text" value={form.city} readOnly /></div>
+        <div className={styles.field}><label className={styles.label}>State</label><input className={styles.input} type="text" value={form.state} readOnly /></div>
       </div>
     </div>,
 
     // ── STEP 1: PAYMENT ───────────────────────────────
     <div key="payment" className={styles.formSection}>
       <h2 className={styles.sectionTitle}>Payment Method</h2>
-
       <div className={styles.payMethods}>
         {PAYMENT_METHODS.map(m => (
-          <button
-            key={m.id}
-            className={`${styles.payMethod} ${payMethod === m.id ? styles.payActive : ''}`}
-            onClick={() => { setPayMethod(m.id); setErrors({}); }}
-            type="button"
-          >
+          <button key={m.id} className={`${styles.payMethod} ${payMethod === m.id ? styles.payActive : ''}`} onClick={() => setPayMethod(m.id)} type="button">
             <span className={styles.payIcon}>{m.icon}</span>
-            <div className={styles.payInfo}>
-              <span className={styles.payLabel}>{m.label}</span>
-              <span className={styles.payDesc}>{m.desc}</span>
-            </div>
+            <div className={styles.payInfo}><span className={styles.payLabel}>{m.label}</span><span className={styles.payDesc}>{m.desc}</span></div>
             <div className={`${styles.payRadio} ${payMethod === m.id ? styles.payRadioActive : ''}`} />
           </button>
         ))}
       </div>
-
       <div className={styles.payNoteContainer}>
         {payMethod !== 'cod' ? (
-          <>
-            <p className={styles.payNote}>
-              🔒 Secure payment via Razorpay. All major UPI apps & cards supported.
-            </p>
-            <div className={styles.trustBadges}>
-              <span className={styles.trustBadge}>✓ Secure</span>
-              <span className={styles.trustBadge}>✓ Razorpay</span>
-            </div>
-          </>
+          <p className={styles.payNote}>🔒 Secure payment via Razorpay. All major UPI apps & cards supported.</p>
         ) : (
-          <p className={styles.payNote}>
-            📦 Pay ₹{grandTotal.toLocaleString('en-IN')} in cash on delivery.
-          </p>
+          <p className={styles.payNote}>📦 Pay ₹{grandTotal.toLocaleString('en-IN')} in cash on delivery.</p>
         )}
       </div>
     </div>,
@@ -466,38 +363,16 @@ const Checkout = () => {
     // ── STEP 2: REVIEW ────────────────────────────────
     <div key="review" className={styles.formSection}>
       <h2 className={styles.sectionTitle}>Review Your Order</h2>
-
       <div className={styles.reviewCard}>
-        <div className={styles.reviewCardHeader}>
-          <span>Delivering to</span>
-          <button className={styles.editBtn} onClick={() => setStep(0)}>Edit</button>
-        </div>
         <p className={styles.reviewName}>{form.name}</p>
         <p className={styles.reviewDetail}>{form.address}, {form.city}, {form.state} — {form.pincode}</p>
-        <p className={styles.reviewDetail}>{form.phone} · {form.email}</p>
+        <p className={styles.reviewDetail}>{payMethod.toUpperCase()} · ₹{grandTotal.toLocaleString('en-IN')}</p>
       </div>
-
-      <div className={styles.reviewCard}>
-        <div className={styles.reviewCardHeader}>
-          <span>Payment</span>
-          <button className={styles.editBtn} onClick={() => setStep(1)}>Edit</button>
-        </div>
-        <p className={styles.reviewName}>
-          {payMethod === 'cod' ? 'Cash on Delivery' : 'Online Payment (Razorpay)'}
-        </p>
-      </div>
-
       <div className={styles.reviewItems}>
         {cartItems.map(item => (
           <div key={item.cartId} className={styles.reviewItem}>
-            <img src={item.image || item.images?.[0]} alt={item.name} className={styles.reviewItemImg} />
-            <div className={styles.reviewItemInfo}>
-              <span className={styles.reviewItemName}>{item.name}</span>
-              <span className={styles.reviewItemQty}>Qty: {item.quantity}</span>
-            </div>
-            <span className={styles.reviewItemPrice}>
-              ₹{((item.basePrice || item.price || 0) * item.quantity).toLocaleString('en-IN')}
-            </span>
+            <div className={styles.reviewItemInfo}><span className={styles.reviewItemName}>{item.name}</span><span className={styles.reviewItemQty}>Qty: {item.quantity}</span></div>
+            <span className={styles.reviewItemPrice}>₹{((item.basePrice || item.price || 0) * item.quantity).toLocaleString('en-IN')}</span>
           </div>
         ))}
       </div>
@@ -512,9 +387,7 @@ const Checkout = () => {
           <div className={styles.steps}>
             {STEPS.map((s, i) => (
               <React.Fragment key={s}>
-                <div className={`${styles.stepDot} ${i <= step ? styles.stepDone : ''} ${i === step ? styles.stepCurrent : ''}`}>
-                  {i < step ? '✓' : i + 1}
-                </div>
+                <div className={`${styles.stepDot} ${i <= step ? styles.stepDone : ''} ${i === step ? styles.stepCurrent : ''}`}>{i < step ? '✓' : i + 1}</div>
                 <span className={`${styles.stepLabel} ${i <= step ? styles.stepLabelActive : ''}`}>{s}</span>
                 {i < STEPS.length - 1 && <div className={`${styles.stepLine} ${i < step ? styles.stepLineDone : ''}`} />}
               </React.Fragment>
@@ -524,25 +397,15 @@ const Checkout = () => {
 
         <div className={styles.layout}>
           <div className={styles.formWrap}>
-            {/* Mobile summary toggle */}
             <button className={styles.summaryToggle} onClick={() => setSummaryOpen(!summaryOpen)}>
-              <span>{summaryOpen ? 'Hide' : 'Show'} order summary</span>
+              <span>{summaryOpen ? 'Hide' : 'Show'} summary</span>
               <span>₹{grandTotal.toLocaleString('en-IN')}</span>
             </button>
-
             <div className={styles.stepContent}>{stepContent[step]}</div>
-
-            {/* Discount Section (Restored) */}
             <div className={styles.discountSectionMobile}>
               {!discountApplied ? (
                 <div className={styles.discountRow}>
-                  <input
-                    className={styles.discountInput}
-                    type="text"
-                    placeholder="Discount code"
-                    value={discountCode}
-                    onChange={e => setDiscountCode(e.target.value.toUpperCase())}
-                  />
+                  <input className={styles.discountInput} type="text" placeholder="Discount code" value={discountCode} onChange={e => setDiscountCode(e.target.value.toUpperCase())} />
                   <button className={styles.applyBtn} onClick={handleApplyDiscount}>Apply</button>
                 </div>
               ) : (
@@ -552,20 +415,17 @@ const Checkout = () => {
                 </div>
               )}
             </div>
-
             <div className={styles.navBtns}>
               {step > 0 && <button className={styles.backBtn} onClick={handleBack}>← Back</button>}
               {step < 2 ? (
                 <button className={styles.nextBtn} onClick={handleNext}>Continue →</button>
               ) : (
                 <button className={styles.placeBtn} onClick={handlePlaceOrder} disabled={placing}>
-                  {placing ? 'Processing...' : `Pay ₹${grandTotal.toLocaleString('en-IN')}`}
+                  {placing ? 'Initializing payment...' : `Pay ₹${grandTotal.toLocaleString('en-IN')}`}
                 </button>
               )}
             </div>
           </div>
-
-          {/* Desktop Summary Sidebar (Implicitly handled by CSS if layout is correct) */}
         </div>
       </div>
     </div>
