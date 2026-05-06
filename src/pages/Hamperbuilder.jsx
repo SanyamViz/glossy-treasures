@@ -181,7 +181,7 @@ const HamperBuilder = () => {
             }
         };
         addToCart(hamperItem);
-        navigate('/cart');
+        navigate('/Cart');
     };
 
     // ── Step renders ──

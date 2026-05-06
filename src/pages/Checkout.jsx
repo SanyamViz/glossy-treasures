@@ -13,7 +13,7 @@ const PINCODE_MAP = {
 
   '141001': { city: 'Ludhiana', state: 'Punjab' },
   '141002': { city: 'Ludhiana', state: 'Punjab' },
-  '141003': { city: 'Ludhiana', state: 'Punjab' },
+  '152116': { city: 'Abohar', state: 'Punjab' },
 
   '160001': { city: 'Chandigarh', state: 'Chandigarh' },
   '160002': { city: 'Chandigarh', state: 'Chandigarh' },
@@ -45,6 +45,17 @@ const Checkout = () => {
   const [summaryOpen, setSummaryOpen] = useState(false);
   const [placing, setPlacing] = useState(false);
   const [errors, setErrors] = useState({});
+
+  // ── Helper: Load Razorpay script ──────────────────────────────────────────
+  const loadRazorpay = () => {
+    return new Promise((resolve) => {
+      const script = document.createElement('script');
+      script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+      script.onload = () => resolve(true);
+      script.onerror = () => resolve(false);
+      document.body.appendChild(script);
+    });
+  };
 
   // ── Delivery form ──
   const [form, setForm] = useState({
@@ -248,6 +259,71 @@ const Checkout = () => {
       }
 
       const data = await response.json();
+
+      // If Razorpay order created, open Checkout
+      if (data.razorpayOrderId) {
+        const res = await loadRazorpay();
+        if (!res) {
+          alert('Razorpay SDK failed to load. Are you online?');
+          setPlacing(false);
+          return;
+        }
+
+        const options = {
+          key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+          amount: Math.round(grandTotal * 100),
+          currency: "INR",
+          name: "Glossy Treasures",
+          description: `Order #${data.orderNumber}`,
+          image: "https://glossytreasures.shop/logo.png",
+          order_id: data.razorpayOrderId,
+          handler: async (response) => {
+            try {
+              const verifyRes = await fetch(`${api.baseUrl}/api/orders/verify`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  razorpay_order_id: response.razorpay_order_id,
+                  razorpay_payment_id: response.razorpay_payment_id,
+                  razorpay_signature: response.razorpay_signature,
+                }),
+              });
+
+              if (verifyRes.ok) {
+                orderPlaced.current = true;
+                clearCart();
+                navigate('/order-confirmed', {
+                  state: {
+                    orderNumber: data.orderNumber,
+                    name: form.name,
+                    payMethod,
+                    total: grandTotal,
+                    email: form.email,
+                  }
+                });
+              } else {
+                alert('Payment verification failed. Please contact support.');
+              }
+            } catch (err) {
+              console.error('Verification error:', err);
+              alert('Error verifying payment.');
+            }
+          },
+          prefill: {
+            name: form.name,
+            email: form.email,
+            contact: form.phone,
+          },
+          theme: {
+            color: "#B8965A",
+          },
+        };
+
+        const rzp = new window.Razorpay(options);
+        rzp.open();
+        setPlacing(false);
+        return;
+      }
 
       orderPlaced.current = true;  // must be set BEFORE clearCart
       clearCart();
