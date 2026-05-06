@@ -10,13 +10,13 @@ import candleImg from '../assets/categoryicons/candle.jpeg';
 import resinImg from '../assets/categoryicons/resin.jpeg';
 
 const categories = [
-    { label: 'Gifting Edit', to: '/collections/gifting-edit', img: giftingImg },
-    { label: 'Wedding Special', to: '/collections/wedding-season', img: weddingImg },
-    { label: 'Self Care', to: '/collections/self-care-rituals', img: selfcareImg },
-    { label: 'Home Sanctuary', to: '/collections/home-sanctuary', img: homeImg },
+    { label: 'Gifting', to: '/collections/gifting', img: giftingImg },
+    { label: 'Wedding Special', to: '/collections/wedding', img: weddingImg },
+    { label: 'Self Care', to: '/collections/self-care', img: selfcareImg },
+    { label: 'Home Decor', to: '/collections/home-decor', img: homeImg },
     { label: 'New Arrivals', to: '/collections/new-arrivals', img: newImg },
     { label: 'Bestsellers', to: '/collections/bestsellers', img: bestsellerImg },
-    { label: 'Soy Candles', to: '/shop/candles', img: candleImg },
+    { label: 'Candles', to: '/shop/candles', img: candleImg },
     { label: 'Resin Art', to: '/shop/resin', img: resinImg },
 ];
 
