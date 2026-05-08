@@ -46,8 +46,8 @@ export default function FeaturedProducts() {
                         console.log('DEBUG: First product featured type:', typeof data[0].featured);
                     }
                     
-                    // Use a more robust filter in case of type mismatches
-                    const onlyFeatured = data.filter(p => p.featured === true || p.featured === 'true' || p.featured === 1);
+                    // Use the exact requested logic for featured filtering
+                    const onlyFeatured = data.filter(product => product.featured === true);
                     console.log('DEBUG: Filtered featured (count):', onlyFeatured.length);
                     setFeaturedProducts(onlyFeatured);
                 }

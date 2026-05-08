@@ -625,6 +625,7 @@ function ProductForm({ onClose, refresh, initialData }) {
       });
 
       const result = await res.json();
+      console.log('DEBUG: Admin Save Response:', result);
       if (res.ok) {
         alert('Product saved!');
         refresh();
