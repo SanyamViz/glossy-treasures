@@ -38,9 +38,11 @@ export default function FeaturedProducts() {
             .then(res => res.json())
             .then(data => {
                 if (Array.isArray(data)) {
+                    console.log('DEBUG: Featured Products fetched:', data);
                     // Double check filtering on frontend to be 100% sure
                     // Only show products where featured is explicitly true
                     const onlyFeatured = data.filter(p => p.featured === true);
+                    console.log('DEBUG: Filtered featured:', onlyFeatured);
                     setFeaturedProducts(onlyFeatured);
                 }
                 setLoading(false);

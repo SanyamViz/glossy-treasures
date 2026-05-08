@@ -568,14 +568,16 @@ function ProductsTab({ products, onEdit, onDelete, onToggle, onAdd, showForm, se
 }
 
 function ProductForm({ onClose, refresh, initialData }) {
-  const [formData, setFormData] = useState(initialData || {
+  const defaults = {
     name: '', description: '', category: 'Candle', type: '',
     basePrice: '', originalPrice: '', badge: '', occasion: 'Self Care',
     stock: 0, inStock: true, bestseller: false, active: true,
     burnTime: '', scentFamily: 'Floral', ingredients: '',
     sizes: [], colors: [], personalization: { active: false, fields: [], extraCharge: 0 },
     customSize: '', showInHamper: false, featured: false
-  });
+  };
+
+  const [formData, setFormData] = useState({ ...defaults, ...initialData });
   const [images, setImages] = useState([]);
   const [existingImages, setExistingImages] = useState(initialData?.images || []);
   const [selectedFragrances, setSelectedFragrances] = useState(
