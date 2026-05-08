@@ -18,7 +18,6 @@ import CandlePDP from './pages/CandlePDP';
 import Shipping from './pages/Shipping';
 import Hamperbuilder from './pages/Hamperbuilder';
 import ResinPDP from './pages/ResinPDP';
-import ResinPDP from './pages/ResinPDP';
 import Contact from './pages/Contact';
 import NotFound from './pages/Notfound';
 import Wholesale from './pages/Wholesale';
@@ -50,7 +49,7 @@ class ErrorBoundary extends React.Component {
 function App() {
   const location = useLocation();
   const isAdmin = location.pathname === '/admin';
-  
+
   const content = (
     <AnimatePresence mode="wait">
       <Routes location={location} key={location.pathname}>
