@@ -574,7 +574,7 @@ function ProductForm({ onClose, refresh, initialData }) {
     stock: 0, inStock: true, bestseller: false, active: true,
     burnTime: '', scentFamily: 'Floral', ingredients: '',
     sizes: [], colors: [], personalization: { active: false, fields: [], extraCharge: 0 },
-    customSize: '', showInHamper: false, bestseller: false, featured: false
+    customSize: '', showInHamper: false, featured: false
   });
   const [images, setImages] = useState([]);
   const [existingImages, setExistingImages] = useState(initialData?.images || []);

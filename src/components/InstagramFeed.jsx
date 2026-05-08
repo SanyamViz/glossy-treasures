@@ -46,7 +46,7 @@ export default function InstagramFeed() {
                         {slide.map((reel) => (
                             <a
                                 key={reel.id}
-                                href="https://www.instagram.com/reel/DLsLK7dv7D2/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA=="
+                                href={reel.link}
                                 target="_blank"
                                 rel="noreferrer"
                                 className="insta-reel-item"

@@ -13,11 +13,15 @@ export default function BestSellers() {
         fetch(`${import.meta.env.VITE_API_URL}/api/products?bestseller=true`)
             .then(res => res.json())
             .then(data => {
-                if (Array.isArray(data)) setBestSellers(data);
+                if (Array.isArray(data)) {
+                    // Double check filtering on frontend
+                    const onlyBestsellers = data.filter(p => p.bestseller === true);
+                    setBestSellers(onlyBestsellers);
+                }
                 setLoading(false);
             })
             .catch(err => {
-                console.error(err);
+                console.error('Bestseller fetch error:', err);
                 setLoading(false);
             });
     }, []);

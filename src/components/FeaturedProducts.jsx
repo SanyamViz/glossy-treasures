@@ -37,11 +37,16 @@ export default function FeaturedProducts() {
         fetch(`${import.meta.env.VITE_API_URL}/api/products?featured=true`)
             .then(res => res.json())
             .then(data => {
-                if (Array.isArray(data)) setFeaturedProducts(data);
+                if (Array.isArray(data)) {
+                    // Double check filtering on frontend to be 100% sure
+                    // Only show products where featured is explicitly true
+                    const onlyFeatured = data.filter(p => p.featured === true);
+                    setFeaturedProducts(onlyFeatured);
+                }
                 setLoading(false);
             })
             .catch(err => {
-                console.error(err);
+                console.error('Featured fetch error:', err);
                 setLoading(false);
             });
     }, []);
