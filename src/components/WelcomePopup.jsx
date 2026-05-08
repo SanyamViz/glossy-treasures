@@ -59,7 +59,7 @@ export default function WelcomePopup({ setIsPopupOpen }) {
   };
 
   const handleSubscribe = async () => {
-    if (!email.includes('@') || !email.includes('.')) {
+    if (!email || !email.includes('@')) {
       setError('Please enter a valid email');
       return;
     }
@@ -67,22 +67,25 @@ export default function WelcomePopup({ setIsPopupOpen }) {
     setError('');
     
     try {
-      await fetch(`${import.meta.env.VITE_API_URL}/api/newsletter`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/newsletter/subscribe`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email })
       });
+      const data = await res.json();
+      if (data.success) {
+        setIsSuccess(true);
+        localStorage.setItem(
+          'gt_popup_seen',
+          JSON.stringify({ timestamp: Date.now() })
+        );
+      } else {
+        alert(data.error || 'Something went wrong. Please try again.');
+      }
     } catch (e) {
       console.error("Newsletter subscription error:", e);
+      alert('Error sending coupon. Please try again.');
     }
-
-    setIsSuccess(true);
-    
-    // Also block for 1 hour after successful subscription
-    localStorage.setItem(
-      'gt_popup_seen',
-      JSON.stringify({ timestamp: Date.now() })
-    );
   };
 
   if (!isRendered) return null;

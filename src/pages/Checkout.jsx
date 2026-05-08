@@ -210,19 +210,37 @@ const Checkout = () => {
           giftNote: form.giftNote, paymentMethod: payMethod, total: grandTotal,
           discountCode: discountApplied ? discountCode : null, discountAmount,
           razorpayOrderId: rzpOrderId, // CRITICAL: Link the Razorpay ID here!
-          items: cartItems.map(item => ({
-            productSlug: item.slug,
-            productName: item.name,
-            category: item.category || 'resin',
-            price: item.basePrice || item.price || 0,
-            quantity: item.quantity,
-            selectedSize: item.selectedOptions?.size || item.selectedSize || null,
-            selectedFragrance: item.selectedOptions?.fragrance || item.selectedFragrance || null,
-            selectedColor: item.selectedOptions?.color || item.selectedColor || null,
-            personalization: item.selectedOptions?.personalization
-              ? JSON.stringify(item.selectedOptions.personalization)
-              : null,
-          }))
+          items: cartItems.map(item => {
+            if (item.category === 'hamper') {
+              const hamperContents = Array.isArray(item.selectedOptions?.items)
+                ? item.selectedOptions.items.map(hi => `${hi.name || hi.productName}${hi.quantity > 1 ? ` ×${hi.quantity}` : ''}`).join(', ')
+                : 'Custom Hamper';
+              return {
+                productSlug: item.slug,
+                productName: `Custom Hamper: ${hamperContents}`,
+                category: 'hamper',
+                price: item.basePrice || item.price || 0,
+                quantity: item.quantity,
+                selectedSize: null,
+                selectedFragrance: null,
+                selectedColor: null,
+                personalization: null,
+              };
+            }
+            return {
+              productSlug: item.slug,
+              productName: item.name,
+              category: item.category || 'candle',
+              price: item.basePrice || item.price || 0,
+              quantity: item.quantity,
+              selectedSize: item.selectedOptions?.size || item.selectedSize || null,
+              selectedFragrance: item.selectedOptions?.fragrance || item.selectedFragrance || null,
+              selectedColor: item.selectedOptions?.color || item.selectedColor || null,
+              personalization: item.selectedOptions?.personalization
+                ? JSON.stringify(item.selectedOptions.personalization)
+                : null,
+            };
+          })
         }),
       });
 

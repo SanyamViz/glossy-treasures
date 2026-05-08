@@ -106,6 +106,18 @@ const Cart = () => {
                       {item.selectedFragrance && <p className={styles.itemVariant}>Fragrance: {item.selectedFragrance}</p>}
                       {item.selectedSize && <p className={styles.itemVariant}>{item.selectedSize}</p>}
                       {item.selectedType && <p className={styles.itemVariant}>{item.selectedType}</p>}
+                      {item.category === 'hamper' && item.selectedOptions?.items && (
+                        <div className={styles.hamperItemsList}>
+                          {Array.isArray(item.selectedOptions.items)
+                            ? item.selectedOptions.items.map((hi, idx) => (
+                                <p key={idx} className={styles.hamperItem}>
+                                  {hi.name || hi.productName} {hi.quantity > 1 ? `×${hi.quantity}` : ''}
+                                </p>
+                              ))
+                            : null
+                          }
+                        </div>
+                      )}
                     </div>
                     <span className={styles.itemPrice}>
                       ₹{((item.basePrice || item.price || 0) * item.quantity).toLocaleString('en-IN')}

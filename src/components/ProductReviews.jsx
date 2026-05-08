@@ -3,18 +3,23 @@ import { useParams } from 'react-router-dom';
 import { useUser } from "@clerk/react";
 import styles from './ProductReviews.module.css';
 
-const Stars = ({ count, interactive = false, onSelect }) => (
-  <span className={styles.stars}>
-    {[1, 2, 3, 4, 5].map(num => (
-      <span 
-        key={num} 
-        onClick={() => interactive && onSelect(num)}
-        style={{ cursor: interactive ? 'pointer' : 'default', color: num <= count ? '#B8965A' : '#E8D5B5' }}
+const StarRating = ({ rating, interactive = false, onRate }) => (
+  <div className={styles.starRating} style={{ display: 'flex', gap: '4px' }}>
+    {[1, 2, 3, 4, 5].map(star => (
+      <span
+        key={star}
+        onClick={() => interactive && onRate && onRate(star)}
+        style={{
+          fontSize: interactive ? '28px' : '16px',
+          color: star <= rating ? '#C4948A' : '#E8E0D5',
+          cursor: interactive ? 'pointer' : 'default',
+          transition: 'color 0.15s'
+        }}
       >
         ★
       </span>
     ))}
-  </span>
+  </div>
 );
 
 export default function ProductReviews() {
@@ -23,13 +28,17 @@ export default function ProductReviews() {
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [newReview, setNewReview] = useState({ rating: 5, comment: '', customerName: '' });
+  const [submitting, setSubmitting] = useState(false);
   const { user, isSignedIn } = useUser();
 
   const fetchReviews = () => {
     if (!slug) return;
     fetch(`${import.meta.env.VITE_API_URL}/api/reviews/${slug}`)
       .then(r => r.json())
-      .then(data => { setReviews(Array.isArray(data) ? data : []); setLoading(false); })
+      .then(data => {
+        setReviews(Array.isArray(data) ? data : []);
+        setLoading(false);
+      })
       .catch(() => setLoading(false));
   };
 
@@ -37,8 +46,10 @@ export default function ProductReviews() {
     fetchReviews();
   }, [slug]);
 
-  const handleSubmitReview = async () => {
+  const handleSubmitReview = async (e) => {
+    e.preventDefault();
     if (!newReview.comment.trim()) return alert("Please write a comment.");
+    setSubmitting(true);
     
     try {
       const res = await fetch(`${import.meta.env.VITE_API_URL}/api/reviews`, {
@@ -58,6 +69,8 @@ export default function ProductReviews() {
       }
     } catch (err) {
       console.error("Review submission failed:", err);
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -65,24 +78,24 @@ export default function ProductReviews() {
     ? (reviews.reduce((acc, r) => acc + r.rating, 0) / reviews.length).toFixed(1)
     : 0;
 
-  if (loading) return <div className={styles.container}><p>Loading reviews...</p></div>;
+  if (loading) return <div className={styles.loading}>Loading reviews...</div>;
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <div>
-          <h2 className={styles.title}>Customer Reviews</h2>
-          {reviews.length > 0 && (
-            <div className={styles.avgWrapper}>
-              <span className={styles.avgScore}>{avgRating}</span>
-              <Stars count={Math.round(avgRating)} />
-              <span className={styles.countText}>Based on {reviews.length} reviews</span>
-            </div>
-          )}
+      <div className={styles.topSection}>
+        <div className={styles.avgContainer}>
+          <span className={styles.avgNumber}>{avgRating}</span>
+          <div className={styles.avgMeta}>
+            <StarRating rating={Math.round(avgRating)} />
+            <span className={styles.totalCount}>Based on {reviews.length} reviews</span>
+          </div>
         </div>
         {isSignedIn && (
-          <button className={styles.writeBtn} onClick={() => setShowForm(!showForm)}>
-            {showForm ? 'Cancel' : 'Write a Review'}
+          <button 
+            className={styles.writeBtn} 
+            onClick={() => setShowForm(!showForm)}
+          >
+            {showForm ? 'CANCEL' : 'WRITE A REVIEW'}
           </button>
         )}
       </div>
@@ -90,49 +103,60 @@ export default function ProductReviews() {
       {showForm && (
         <div className={styles.reviewForm}>
           <h3>Share your experience</h3>
-          <div className={styles.formGroup}>
-            <label>Rating</label>
-            <Stars 
-              count={newReview.rating} 
-              interactive={true} 
-              onSelect={num => setNewReview(prev => ({ ...prev, rating: num }))} 
-            />
-          </div>
-          <div className={styles.formGroup}>
-            <label>Your Name (Optional)</label>
-            <input 
-              type="text" 
-              placeholder={user?.fullName || "Anonymous"} 
-              value={newReview.customerName}
-              onChange={e => setNewReview(prev => ({ ...prev, customerName: e.target.value }))}
-            />
-          </div>
-          <div className={styles.formGroup}>
-            <label>Review</label>
-            <textarea 
-              placeholder="What did you like or dislike?" 
-              rows="4"
-              value={newReview.comment}
-              onChange={e => setNewReview(prev => ({ ...prev, comment: e.target.value }))}
-            />
-          </div>
-          <button className={styles.submitBtn} onClick={handleSubmitReview}>Submit Review</button>
+          <form onSubmit={handleSubmitReview}>
+            <div className={styles.formGroup}>
+              <label>How would you rate it?</label>
+              <StarRating 
+                rating={newReview.rating} 
+                interactive={true} 
+                onRate={num => setNewReview(prev => ({ ...prev, rating: num }))} 
+              />
+            </div>
+            <div className={styles.formGroup}>
+              <label>Your Name (Optional)</label>
+              <input 
+                type="text" 
+                placeholder={user?.fullName || "Anonymous"} 
+                value={newReview.customerName}
+                onChange={e => setNewReview(prev => ({ ...prev, customerName: e.target.value }))}
+              />
+            </div>
+            <div className={styles.formGroup}>
+              <label>Your Review</label>
+              <textarea 
+                placeholder="What did you like or dislike about this product?" 
+                rows="4"
+                value={newReview.comment}
+                onChange={e => setNewReview(prev => ({ ...prev, comment: e.target.value }))}
+                required
+              />
+            </div>
+            <button type="submit" className={styles.submitBtn} disabled={submitting}>
+              {submitting ? 'SUBMITTING...' : 'SUBMIT REVIEW'}
+            </button>
+          </form>
         </div>
       )}
 
       <div className={styles.reviewsList}>
         {reviews.length === 0 ? (
-          <p className={styles.emptyText}>No reviews yet. Be the first to share your thoughts!</p>
+          <div className={styles.emptyState}>
+            <p>No reviews yet. Be the first to share your experience!</p>
+          </div>
         ) : (
           reviews.map(review => (
-            <div key={review.id} className={styles.reviewItem}>
-              <div className={styles.itemHeader}>
-                <Stars count={review.rating} />
-                <span className={styles.itemDate}>{new Date(review.createdAt).toLocaleDateString()}</span>
+            <div key={review.id} className={styles.reviewCard}>
+              <div className={styles.cardHeader}>
+                <div className={styles.authorInfo}>
+                  <span className={styles.authorName}>{review.customerName}</span>
+                  {review.verified && <span className={styles.verifiedBadge}>✓ Verified Purchase</span>}
+                </div>
+                <span className={styles.reviewDate}>
+                  {new Date(review.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+                </span>
               </div>
-              <p className={styles.itemAuthor}>{review.customerName}</p>
-              <p className={styles.itemComment}>{review.comment}</p>
-              {review.verified && <span className={styles.verifiedBadge}>✓ Verified Purchase</span>}
+              <StarRating rating={review.rating} />
+              <p className={styles.comment}>{review.comment}</p>
             </div>
           ))
         )}

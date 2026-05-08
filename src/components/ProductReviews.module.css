@@ -1,69 +1,223 @@
 .container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 0;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 32px;
 }
 
-.title {
-  font-family: var(--font-heading);
-  font-size: 24px;
-  color: var(--text-primary);
-  font-weight: 300;
+.topSection {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 24px;
+  padding-bottom: 32px;
+  border-bottom: 1px solid #E8E0D5;
 }
 
-.stars {
-  color: var(--accent-gold);
-  font-size: 14px;
-  letter-spacing: 2px;
+.avgContainer {
+  display: flex;
+  align-items: center;
+  gap: 20px;
 }
 
-.pinnedCard {
-  background: var(--bg-secondary);
-  border-radius: 16px;
-  padding: 24px;
+.avgNumber {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 64px;
+  color: #2d1b0e;
+  line-height: 1;
+}
+
+.avgMeta {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 4px;
 }
 
-.pinnedText {
-  font-family: var(--font-heading);
-  font-style: italic;
-  font-size: 17px;
-  color: var(--text-primary);
-  line-height: 1.6;
+.totalCount {
+  font-family: 'Jost', sans-serif;
+  font-size: 13px;
+  color: #7A7068;
+  letter-spacing: 0.05em;
 }
 
-.author {
+.writeBtn {
+  background: #C4948A;
+  color: #fff;
+  border: none;
+  padding: 14px 28px;
+  font-family: 'Jost', sans-serif;
   font-size: 12px;
-  color: var(--text-secondary);
-  margin-top: 4px;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
-.scrollRow {
+.writeBtn:hover {
+  background: #b38278;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(196, 148, 138, 0.2);
+}
+
+.reviewForm {
+  background: var(--bg-secondary);
+  padding: 32px;
+  border-radius: 12px;
+  max-width: 600px;
+  margin-bottom: 20px;
+  animation: slideDown 0.4s ease-out;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.reviewForm h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 24px;
+  color: #2d1b0e;
+  margin-bottom: 24px;
+}
+
+.formGroup {
+  margin-bottom: 20px;
+}
+
+.formGroup label {
+  display: block;
+  font-family: 'Jost', sans-serif;
+  font-size: 13px;
+  color: #5c4a37;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.formGroup input,
+.formGroup textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #E8E0D5;
+  border-radius: 4px;
+  font-family: 'Jost', sans-serif;
+  font-size: 14px;
+  color: #2d1b0e;
+  background: #fff;
+  transition: border-color 0.2s;
+}
+
+.formGroup input:focus,
+.formGroup textarea:focus {
+  outline: none;
+  border-color: #C4948A;
+}
+
+.submitBtn {
+  background: #2d1b0e;
+  color: #fff;
+  border: none;
+  padding: 14px 32px;
+  font-family: 'Jost', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 100%;
+}
+
+.submitBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.reviewsList {
   display: flex;
-  gap: 12px;
-  overflow-x: auto;
-  padding-bottom: 8px;
-  scrollbar-width: none;
-}
-
-.scrollRow::-webkit-scrollbar {
-  display: none;
+  flex-direction: column;
+  gap: 20px;
 }
 
 .reviewCard {
-  flex: 0 0 260px;
-  background: var(--bg-secondary);
-  border-radius: 16px;
-  padding: 20px;
+  background: var(--bg-secondary, #FAF8F5);
+  padding: 24px;
+  border-radius: 12px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 12px;
 }
 
-.reviewText {
-  font-size: 13px;
-  color: var(--text-primary);
-  line-height: 1.5;
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.authorInfo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.authorName {
+  font-family: 'Jost', sans-serif;
+  font-weight: 600;
+  color: #2d1b0e;
+  font-size: 15px;
+}
+
+.verifiedBadge {
+  font-family: 'Jost', sans-serif;
+  font-size: 11px;
+  color: #155724;
+  background: #d4edda;
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+
+.reviewDate {
+  font-family: 'Jost', sans-serif;
+  font-size: 12px;
+  color: #9c7c5a;
+}
+
+.comment {
+  font-family: 'Jost', sans-serif;
+  font-size: 14px;
+  color: #5c4a37;
+  line-height: 1.6;
+  margin-top: 4px;
+}
+
+.emptyState {
+  text-align: center;
+  padding: 60px 20px;
+  background: var(--bg-secondary);
+  border-radius: 12px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px;
+  color: #7A7068;
+}
+
+.loading {
+  padding: 40px;
+  text-align: center;
+  color: #7A7068;
+  font-family: 'Jost', sans-serif;
+}
+
+@media (max-width: 768px) {
+  .topSection {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .avgNumber {
+    font-size: 48px;
+  }
+  .writeBtn {
+    width: 100%;
+  }
 }

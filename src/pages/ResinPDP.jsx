@@ -131,6 +131,9 @@ export default function ResinPDP() {
         <div className={styles.detailsRow}>
           {product.type && <span className={styles.detailItem}>✨ {product.type}</span>}
           {product.size && <span className={styles.detailItem}>📏 {product.size}</span>}
+          {product.customSize && (
+            <span className={styles.detailItem}>📏 {product.customSize}</span>
+          )}
           <span className={styles.detailItem}>📍 Only {product.stock} left</span>
         </div>
         <p className={styles.tagline}>{product.tagline}</p>

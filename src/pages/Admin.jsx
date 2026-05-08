@@ -519,7 +519,8 @@ function ProductForm({ onClose, refresh, initialData }) {
     basePrice: '', originalPrice: '', badge: '', occasion: 'Self Care',
     stock: 0, inStock: true, bestseller: false, active: true,
     burnTime: '', scentFamily: 'Floral', ingredients: '',
-    sizes: [], colors: [], personalization: { active: false, fields: [], extraCharge: 0 }
+    sizes: [], colors: [], personalization: { active: false, fields: [], extraCharge: 0 },
+    customSize: ''
   });
   const [images, setImages] = useState([]);
   const [existingImages, setExistingImages] = useState(initialData?.images || []);
@@ -818,6 +819,21 @@ function ProductForm({ onClose, refresh, initialData }) {
                 <button type="button" className={styles.removeImg} onClick={() => removeSize(idx)}>&times;</button>
               </div>
             ))}
+            
+            {/* Custom size input */}
+            <div className={styles.optionRow}>
+              <input
+                type="text"
+                placeholder="Custom size (e.g. 19 x 20 inches)"
+                value={formData.customSize || ''}
+                onChange={e => setFormData({ ...formData, customSize: e.target.value })}
+                style={{ flex: 1 }}
+              />
+              <span style={{ fontSize: '12px', color: '#7A7068', padding: '0 8px' }}>
+                Leave blank if using size options above
+              </span>
+            </div>
+
             <button type="button" className={styles.addBtn} onClick={addSize}>+ Add Size</button>
           </div>
         </section>

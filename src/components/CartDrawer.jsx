@@ -70,17 +70,25 @@ const CartDrawer = ({ isOpen, onClose }) => {
                         <div className={styles.itemHeader}>
                           <div>
                             <h3 className={styles.itemName}>{item.name}</h3>
-                            {item.selectedOptions && (
+                            {item.category === 'hamper' && item.selectedOptions?.items ? (
+                              <div className={styles.itemOptions}>
+                                {Array.isArray(item.selectedOptions.items) && item.selectedOptions.items.map((hi, idx) => (
+                                  <span key={idx} className={styles.optionTag}>
+                                    {hi.name || hi.productName}
+                                  </span>
+                                ))}
+                              </div>
+                            ) : item.selectedOptions ? (
                               <div className={styles.itemOptions}>
                                 {Object.entries(item.selectedOptions).map(([key, value]) => {
-                                  if (!value) return null;
+                                  if (!value || key === 'items') return null;
                                   const display = typeof value === 'object'
                                     ? Object.values(value).filter(Boolean).join(' · ')
                                     : value;
                                   return display ? <span key={key} className={styles.optionTag}>{display}</span> : null;
                                 })}
                               </div>
-                            )}
+                            ) : null}
                           </div>
                           <button onClick={() => removeFromCart(item.cartId)} className={styles.removeBtn}>
                             Remove
