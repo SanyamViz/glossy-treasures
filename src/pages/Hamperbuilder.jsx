@@ -7,7 +7,7 @@ import DriedFlowerImg from '../assets/pp.jpeg';
 import HandwrittenCardImg from '../assets/gc.jpeg';
 import WaxSealStickerImg from '../assets/kk.jpeg';
 import MiniPerfumeVialImg from '../assets/kj.jpeg';
-import CrystalCharmImg from '../assets/choclate.jpeg';
+import CrystalCharmImg from '../assets/chocolate.jpeg';
 
 // ── Product data ──────────────────────────────────────
 const ADD_ONS = [
