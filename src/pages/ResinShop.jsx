@@ -16,14 +16,14 @@ const FILTER_CONFIGS = [
       { label: 'Frame', value: 'Frame' },
       { label: 'Baby Keepsake', value: 'Baby Keepsake' },
       { label: 'Wedding Invitation', value: 'Wedding Invitation' },
-      { label: 'Wedding Garland Frame', value: 'Wedding Garland Frame' },
+      { label: 'Wedding Garland Frame', value: 'Wedding Garlands Frame' },
       { label: 'Clock', value: 'Clock' },
       { label: 'Keychain', value: 'Keychain' },
       { label: 'Name Plate', value: 'Name Plate' },
-      { label: 'Bookmarks', value: 'Bookmarks' },
-      { label: 'Jwellery', value: 'Jwellery' },
+      { label: 'Bookmark', value: 'Bookmark' },
+      { label: 'Jewellery', value: 'Jewellery' },
       { label: 'Car Hanging', value: 'Car Hanging' },
-      { label: 'Fridge Magnets', value: 'Fridge Magnets' },
+      { label: 'Fridge Magnet', value: 'Fridge Magnet' },
 
 
     ]

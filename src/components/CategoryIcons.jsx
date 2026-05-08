@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import './CategoryIcons.css'
-import candleImg from '../assets/candleicon.jpeg'
-import resinImg from '../assets/resinicon.jpeg'
+import candleImg from '../assets/candleicon.png'
+import resinImg from '../assets/resinicon.png'
 import hampersImg from '../assets/hampericon.jpg'
 
 const categories = [

@@ -14,7 +14,7 @@ const STATUS_COLORS = {
 
 const ALL_FRAGRANCES = [
   { id: 'lavender', label: 'Lavender' },
-  { id: 'loctus', label: 'Loctus' },
+  { id: 'lotus', label: 'Lotus' },
   { id: 'jasmine', label: 'Jasmine' },
   { id: 'rose', label: 'Rose' },
   { id: 'vanilla', label: 'Vanilla' },
