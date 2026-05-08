@@ -38,11 +38,16 @@ export default function FeaturedProducts() {
             .then(res => res.json())
             .then(data => {
                 if (Array.isArray(data)) {
-                    console.log('DEBUG: Featured Products fetched:', data);
-                    // Double check filtering on frontend to be 100% sure
-                    // Only show products where featured is explicitly true
-                    const onlyFeatured = data.filter(p => p.featured === true);
-                    console.log('DEBUG: Filtered featured:', onlyFeatured);
+                    console.log('DEBUG: Featured Products fetched (count):', data.length);
+                    if (data.length > 0) {
+                        console.log('DEBUG: First product sample:', data[0]);
+                        console.log('DEBUG: First product featured value:', data[0].featured);
+                        console.log('DEBUG: First product featured type:', typeof data[0].featured);
+                    }
+                    
+                    // Use a more robust filter in case of type mismatches
+                    const onlyFeatured = data.filter(p => p.featured === true || p.featured === 'true' || p.featured === 1);
+                    console.log('DEBUG: Filtered featured (count):', onlyFeatured.length);
                     setFeaturedProducts(onlyFeatured);
                 }
                 setLoading(false);
