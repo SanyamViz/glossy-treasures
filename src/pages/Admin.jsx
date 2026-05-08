@@ -508,6 +508,30 @@ function ProductsTab({ products, onEdit, onDelete, onToggle, onAdd, showForm, se
                       🎁 In Hamper
                     </span>
                   )}
+                  {product.featured && (
+                    <span style={{
+                      fontSize: '10px',
+                      background: '#FFD700',
+                      color: '#000',
+                      padding: '2px 8px',
+                      borderRadius: '20px',
+                      marginLeft: '6px'
+                    }}>
+                      ⭐ Featured
+                    </span>
+                  )}
+                  {product.bestseller && (
+                    <span style={{
+                      fontSize: '10px',
+                      background: '#FF4500',
+                      color: 'white',
+                      padding: '2px 8px',
+                      borderRadius: '20px',
+                      marginLeft: '6px'
+                    }}>
+                      🔥 Bestseller
+                    </span>
+                  )}
                 </div>
                 <h4>{product.name}</h4>
                 <div className={styles.productCardPrice}>
@@ -550,7 +574,7 @@ function ProductForm({ onClose, refresh, initialData }) {
     stock: 0, inStock: true, bestseller: false, active: true,
     burnTime: '', scentFamily: 'Floral', ingredients: '',
     sizes: [], colors: [], personalization: { active: false, fields: [], extraCharge: 0 },
-    customSize: '', showInHamper: false
+    customSize: '', showInHamper: false, bestseller: false, featured: false
   });
   const [images, setImages] = useState([]);
   const [existingImages, setExistingImages] = useState(initialData?.images || []);
@@ -653,6 +677,7 @@ function ProductForm({ onClose, refresh, initialData }) {
               <select value={formData.category} onChange={e => setFormData({ ...formData, category: e.target.value })}>
                 <option value="Candle">Candle</option>
                 <option value="Resin">Resin</option>
+                <option value="Hamper">Hamper</option>
               </select>
             </div>
             <div className={styles.formGroup}>
@@ -710,6 +735,14 @@ function ProductForm({ onClose, refresh, initialData }) {
                   onChange={e => setFormData({ ...formData, showInHamper: e.target.checked })}
                 />
                 Show in Hamper Builder 🎁
+              </label>
+              <label className={styles.toggleItem}>
+                <input
+                  type="checkbox"
+                  checked={formData.featured || false}
+                  onChange={e => setFormData({ ...formData, featured: e.target.checked })}
+                />
+                Featured ⭐
               </label>
             </div>
           </div>

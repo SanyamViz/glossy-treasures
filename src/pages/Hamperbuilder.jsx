@@ -23,7 +23,7 @@ const ADD_ONS = [
 const BOX_SIZES = [
     { id: 'small', label: 'Cozy', capacity: 5, basePrice: 0, desc: '3-5 items · Perfect starter' },
     { id: 'medium', label: 'Delight', capacity: 7, basePrice: 100, desc: '5-7 items · Most popular' },
-    { id: 'large', label: 'Luxe', capacity: 10, basePrice: 200, desc: '8-10 items · Ultimate indulgence' },
+    { id: 'large', label: 'Luxe', capacity: 10, basePrice: 250, desc: '8-10 items · Ultimate indulgence' },
 ];
 
 const RIBBON_COLORS = [

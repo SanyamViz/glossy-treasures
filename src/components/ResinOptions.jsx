@@ -65,7 +65,7 @@ export default function ResinOptions({ colors = [], sizes = [], frameSizes = [],
             {colors.map(c => (
               <button
                 key={c.id || c.name}
-                className={`${styles.swatchBtn} ${selectedColor.id === c.id || selectedColor.name === c.name ? styles.active : ''}`}
+                className={`${styles.swatchBtn} ${selectedColor?.name === c.name || selectedColor?.label === c.label ? styles.active : ''}`}
                 onClick={() => setSelectedColor(c)}
                 title={c.label || c.name}
               >
@@ -74,6 +74,7 @@ export default function ResinOptions({ colors = [], sizes = [], frameSizes = [],
                 ) : (
                   <span className={styles.swatchInner} style={{ background: c.hex }} />
                 )}
+                <span className={styles.colorLabel}>{c.label || c.name}</span>
               </button>
             ))}
           </div>

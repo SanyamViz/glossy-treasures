@@ -17,7 +17,9 @@ const ProductCard = ({ product, category }) => {
   };
 
   const handleNavigate = () => {
-    const basePath = category === 'candle' ? '/shop/candles' : '/shop/resin';
+    const cat = (product.category || category || '').toLowerCase();
+    const basePath = cat === 'candle' ? '/shop/candles' : 
+                     cat === 'hamper' ? '/shop/hampers' : '/shop/resin';
     navigate(`${basePath}/${product.slug}`);
   };
 

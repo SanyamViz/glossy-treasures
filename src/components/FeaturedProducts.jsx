@@ -1,15 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import './FeaturedProducts.css';
-import candleImg from '../assets/candlebest.png';
-import candleImg2 from '../assets/candle2.png';
-import resinimg from '../assets/resinframe.png';
-import resinimg2 from '../assets/resinframe2.png';
-
-import { ALL_PRODUCTS } from '../data/products';
-
-const FEATURED_PRODUCTS = ALL_PRODUCTS.filter(p => p.featured);
 
 const MotionLink = motion(Link);
 
@@ -38,13 +30,32 @@ const imageVariants = {
 };
 
 export default function FeaturedProducts() {
+    const [featuredProducts, setFeaturedProducts] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        fetch(`${import.meta.env.VITE_API_URL}/api/products?featured=true`)
+            .then(res => res.json())
+            .then(data => {
+                if (Array.isArray(data)) setFeaturedProducts(data);
+                setLoading(false);
+            })
+            .catch(err => {
+                console.error(err);
+                setLoading(false);
+            });
+    }, []);
+
     // Distribute products into columns dynamically
-    const leftColumnProducts = FEATURED_PRODUCTS.filter((_, idx) => idx % 2 === 0);
-    const rightColumnProducts = FEATURED_PRODUCTS.filter((_, idx) => idx % 2 !== 0);
+    const leftColumnProducts = featuredProducts.filter((_, idx) => idx % 2 === 0);
+    const rightColumnProducts = featuredProducts.filter((_, idx) => idx % 2 !== 0);
 
     const ProductCard = ({ product }) => (
         <MotionLink
-            to={`/shop/${product.category === 'candle' ? 'candles' : 'resin'}/${product.slug}`}
+            to={`/shop/${
+                (product.category || '').toLowerCase() === 'candle' ? 'candles' : 
+                (product.category || '').toLowerCase() === 'hamper' ? 'hampers' : 'resin'
+            }/${product.slug}`}
             className="featured-card"
             variants={cardVariants}
             initial="hidden"
@@ -54,7 +65,7 @@ export default function FeaturedProducts() {
         >
             <div className="featured-img-wrapper">
                 <motion.img
-                    src={product.image}
+                    src={product.images?.[1] || product.images?.[0] || product.image}
                     alt={product.name}
                     loading="lazy"
                     variants={imageVariants}

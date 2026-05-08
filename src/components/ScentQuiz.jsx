@@ -98,7 +98,8 @@ export default function ScentQuiz() {
             .then(r => r.json())
             .then(data => {
               if (Array.isArray(data) && data.length > 0) {
-                setRecommendedProduct(data[0]);
+                const randomIdx = Math.floor(Math.random() * data.length);
+                setRecommendedProduct(data[randomIdx]);
               }
             })
             .catch(console.error);

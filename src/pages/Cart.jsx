@@ -89,7 +89,10 @@ const Cart = () => {
                 style={{ '--i': i }}
               >
                 <Link
-                  to={`/shop/${item.category === 'resin' ? 'resin' : 'candles'}/${item.slug}`}
+                  to={`/shop/${
+                    (item.category || '').toLowerCase() === 'resin' ? 'resin' : 
+                    (item.category || '').toLowerCase() === 'hamper' ? 'hampers' : 'candles'
+                  }/${item.slug}`}
                   className={styles.itemImageWrap}
                 >
                   <img
