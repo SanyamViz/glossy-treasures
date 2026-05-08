@@ -8,15 +8,16 @@ import HandwrittenCardImg from '../assets/gc.jpeg';
 import WaxSealStickerImg from '../assets/kk.jpeg';
 import MiniPerfumeVialImg from '../assets/kj.jpeg';
 import CrystalCharmImg from '../assets/chocolate.jpeg';
-
+import flowerclawclips from '../assets/fcc.jpeg';
 // ── Product data ──────────────────────────────────────
 const ADD_ONS = [
     { id: 'a1', name: 'Silk Scrunchie', category: 'addon', price: 50, image: ScrunchieImg },
-    { id: 'a2', name: '4 Poloroid Photos', category: 'addon', price: 299, image: DriedFlowerImg },
-    { id: 'a3', name: 'Greeting Card', category: 'addon', price: 50, image: HandwrittenCardImg },
-    { id: 'a4', name: 'Kit Kat', category: 'addon', price: 99, image: WaxSealStickerImg },
-    { id: 'a5', name: 'Kinder Joy', category: 'addon', price: 399, image: MiniPerfumeVialImg },
-    { id: 'a6', name: 'Choclate', category: 'addon', price: 249, image: CrystalCharmImg },
+    { id: 'a2', name: '4 Poloroid Photos', category: 'addon', price: 60, image: DriedFlowerImg },
+    { id: 'a3', name: 'Greeting Card', category: 'addon', price: 40, image: HandwrittenCardImg },
+    { id: 'a4', name: 'Kit Kat', category: 'addon', price: 50, image: WaxSealStickerImg },
+    { id: 'a5', name: 'Kinder Joy', category: 'addon', price: 60, image: MiniPerfumeVialImg },
+    { id: 'a6', name: 'Choclate', category: 'addon', price: 180, image: CrystalCharmImg },
+    { id: 'a7', name: 'Flower Clawclips', category: 'addon', price: 50, image: flowerclawclips },
 ];
 
 const BOX_SIZES = [
