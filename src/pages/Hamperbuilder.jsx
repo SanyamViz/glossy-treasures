@@ -2,12 +2,12 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import styles from './Hamperbuilder.module.css';
-import ScrunchieImg from '../assets/Silk Scrunhie.jpeg';
-import DriedFlowerImg from '../assets/4 Poloroid photos.jpeg';
-import HandwrittenCardImg from '../assets/Greeting Card.jpeg';
-import WaxSealStickerImg from '../assets/kit kat.jpeg';
-import MiniPerfumeVialImg from '../assets/kinder joy.jpeg';
-import CrystalCharmImg from '../assets/chocolate.jpeg';
+import ScrunchieImg from '../assets/ss.jpeg';
+import DriedFlowerImg from '../assets/pp.jpeg';
+import HandwrittenCardImg from '../assets/gc.jpeg';
+import WaxSealStickerImg from '../assets/kk.jpeg';
+import MiniPerfumeVialImg from '../assets/kj.jpeg';
+import CrystalCharmImg from '../assets/choclate.jpeg';
 
 // ── Product data ──────────────────────────────────────
 const ADD_ONS = [
