@@ -7,6 +7,7 @@ export default function ResinOptions({ colors = [], sizes = [], frameSizes = [],
   const [selectedFrameSize, setSelectedFrameSize] = useState(frameSizes[0] || null);
   const [selectedStand, setSelectedStand] = useState(standMaterials[0] || null);
   const [customColor, setCustomColor] = useState('');
+  const [customSizeText, setCustomSizeText] = useState(customSize || '');
   const [msg, setMsg] = useState('');
   const [personName, setPersonName] = useState('');
   const [personDate, setPersonDate] = useState('');
@@ -28,10 +29,15 @@ export default function ResinOptions({ colors = [], sizes = [], frameSizes = [],
 
     // Also notify parent of all selected options
     if (onOptionsChange) {
+      let finalSize = selectedSize?.label || selectedFrameSize?.label || customSize || null;
+      if (finalSize === 'Custom' && customSizeText) {
+        finalSize = customSizeText;
+      }
+
       onOptionsChange({
         color: selectedColor ? (selectedColor.hex === 'custom' ? `Custom: ${customColor}` : `${selectedColor.label || selectedColor.name}`) : null,
         colorHex: selectedColor?.hex || null,
-        size: selectedSize?.label || selectedFrameSize?.label || customSize || null,
+        size: finalSize,
         stand: selectedStand?.label || null,
         personalization: {
           name: personName,
@@ -40,7 +46,7 @@ export default function ResinOptions({ colors = [], sizes = [], frameSizes = [],
         }
       });
     }
-  }, [selectedSize, selectedFrameSize, selectedStand, selectedColor, customColor, msg, personName, personDate, basePrice, onPriceChange, onOptionsChange]);
+  }, [selectedSize, selectedFrameSize, selectedStand, selectedColor, customColor, customSizeText, msg, personName, personDate, basePrice, customSize, onPriceChange, onOptionsChange]);
 
   const handleFrameSizeChange = (s) => {
     setSelectedFrameSize(s);
@@ -85,7 +91,10 @@ export default function ResinOptions({ colors = [], sizes = [], frameSizes = [],
 
       {sizes.length > 0 && (
         <div className={styles.optionGroup}>
-          <span className={styles.label}>Choose Size</span>
+          <div className={styles.groupHeader}>
+            <span className={styles.label}>Choose Size</span>
+            {selectedSize && <span className={styles.selectedValue}>{selectedSize.label === 'Custom' ? customSizeText : selectedSize.label}</span>}
+          </div>
           <div className={styles.chipScroll}>
             {sizes.map(s => (
               <button
@@ -99,6 +108,15 @@ export default function ResinOptions({ colors = [], sizes = [], frameSizes = [],
               </button>
             ))}
           </div>
+          {selectedSize?.label === 'Custom' && (
+            <input
+              type="text"
+              className={styles.customInput}
+              placeholder="Enter dimensions (e.g. 15x15 cm)..."
+              value={customSizeText}
+              onChange={(e) => setCustomSizeText(e.target.value)}
+            />
+          )}
         </div>
       )}
 
