@@ -2,15 +2,21 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import styles from './Hamperbuilder.module.css';
+import ScrunchieImg from '../assets/Silk Scrunhie.jpeg';
+import DriedFlowerImg from '../assets/4 Poloroid photos.jpeg';
+import HandwrittenCardImg from '../assets/Greeting Card.jpeg';
+import WaxSealStickerImg from '../assets/kit kat.jpeg';
+import MiniPerfumeVialImg from '../assets/kinder joy.jpeg';
+import CrystalCharmImg from '../assets/chocolate.jpeg';
 
 // ── Product data ──────────────────────────────────────
 const ADD_ONS = [
-    { id: 'a1', name: 'Silk Scrunchie', category: 'addon', price: 50, image: '/placeholder-addon.jpg' },
-    { id: 'a2', name: 'Dried Flower Bouquet', category: 'addon', price: 299, image: '/placeholder-addon.jpg' },
-    { id: 'a3', name: 'Handwritten Card', category: 'addon', price: 50, image: '/placeholder-addon.jpg' },
-    { id: 'a4', name: 'Wax Seal Sticker', category: 'addon', price: 99, image: '/placeholder-addon.jpg' },
-    { id: 'a5', name: 'Mini Perfume Vial', category: 'addon', price: 399, image: '/placeholder-addon.jpg' },
-    { id: 'a6', name: 'Crystal Charm', category: 'addon', price: 249, image: '/placeholder-addon.jpg' },
+    { id: 'a1', name: 'Silk Scrunchie', category: 'addon', price: 50, image: ScrunchieImg },
+    { id: 'a2', name: '4 Poloroid Photos', category: 'addon', price: 299, image: DriedFlowerImg },
+    { id: 'a3', name: 'Greeting Card', category: 'addon', price: 50, image: HandwrittenCardImg },
+    { id: 'a4', name: 'Kit Kat', category: 'addon', price: 99, image: WaxSealStickerImg },
+    { id: 'a5', name: 'Kinder Joy', category: 'addon', price: 399, image: MiniPerfumeVialImg },
+    { id: 'a6', name: 'Choclate', category: 'addon', price: 249, image: CrystalCharmImg },
 ];
 
 const BOX_SIZES = [
