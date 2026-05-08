@@ -4,7 +4,14 @@ import { useCart } from '../context/CartContext';
 import styles from './Hamperbuilder.module.css';
 
 // ── Product data ──────────────────────────────────────
-// Now using dbProducts from API
+const ADD_ONS = [
+    { id: 'a1', name: 'Silk Scrunchie', category: 'addon', price: 50, image: '/placeholder-addon.jpg' },
+    { id: 'a2', name: 'Dried Flower Bouquet', category: 'addon', price: 299, image: '/placeholder-addon.jpg' },
+    { id: 'a3', name: 'Handwritten Card', category: 'addon', price: 50, image: '/placeholder-addon.jpg' },
+    { id: 'a4', name: 'Wax Seal Sticker', category: 'addon', price: 99, image: '/placeholder-addon.jpg' },
+    { id: 'a5', name: 'Mini Perfume Vial', category: 'addon', price: 399, image: '/placeholder-addon.jpg' },
+    { id: 'a6', name: 'Crystal Charm', category: 'addon', price: 249, image: '/placeholder-addon.jpg' },
+];
 
 const BOX_SIZES = [
     { id: 'small', label: 'Cozy', capacity: 5, basePrice: 0, desc: '3-5 items · Perfect starter' },
@@ -100,9 +107,11 @@ const HamperBuilder = () => {
     const cardPrice = includeCard ? 50 : 0;
     const grandTotal = boxPrice + productsTotal + cardPrice;
 
+    const allAvailableProducts = [...dbProducts, ...ADD_ONS];
+
     const filteredProducts = filter === 'all'
-        ? dbProducts
-        : dbProducts.filter(p => p.category?.toLowerCase() === filter);
+        ? allAvailableProducts
+        : allAvailableProducts.filter(p => p.category?.toLowerCase() === filter);
 
     const getProductQty = (productId) => {
         const item = selected.find(s => s.product.id === productId);
@@ -216,13 +225,13 @@ const HamperBuilder = () => {
             </div>
 
             <div className={styles.filterTabs}>
-                {['all', 'candle', 'resin'].map(f => (
+                {['all', 'candle', 'resin', 'addon'].map(f => (
                     <button
                         key={f}
                         className={`${styles.filterTab} ${filter === f ? styles.filterTabActive : ''}`}
                         onClick={() => setFilter(f)}
                     >
-                        {f === 'all' ? 'All' : f === 'candle' ? '🕯️ Candles' : '✨ Resin Art'}
+                        {f === 'all' ? 'All' : f === 'candle' ? '🕯️ Candles' : f === 'resin' ? '✨ Resin Art' : '🎁 Add-ons'}
                     </button>
                 ))}
             </div>

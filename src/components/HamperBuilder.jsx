@@ -2,6 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { useCart } from '../context/CartContext';
 import styles from './HamperBuilder.module.css';
 
+const ADD_ONS = [
+  { id: 'a1', name: 'Silk Scrunchie', category: 'addon', price: 50, image: '/placeholder-addon.jpg' },
+  { id: 'a2', name: 'Dried Flower Bouquet', category: 'addon', price: 299, image: '/placeholder-addon.jpg' },
+  { id: 'a3', name: 'Handwritten Card', category: 'addon', price: 50, image: '/placeholder-addon.jpg' },
+  { id: 'a4', name: 'Wax Seal Sticker', category: 'addon', price: 99, image: '/placeholder-addon.jpg' },
+  { id: 'a5', name: 'Mini Perfume Vial', category: 'addon', price: 399, image: '/placeholder-addon.jpg' },
+  { id: 'a6', name: 'Crystal Charm', category: 'addon', price: 249, image: '/placeholder-addon.jpg' },
+];
+
 export default function HamperBuilder({ currentProduct }) {
   const { addToCart } = useCart();
   const [availableProducts, setAvailableProducts] = useState([]);
@@ -14,7 +23,7 @@ export default function HamperBuilder({ currentProduct }) {
   useEffect(() => {
     fetch(`${import.meta.env.VITE_API_URL}/api/products/hamper`)
       .then(r => r.json())
-      .then(data => setAvailableProducts(Array.isArray(data) ? data : []))
+      .then(data => setAvailableProducts([...(Array.isArray(data) ? data : []), ...ADD_ONS]))
       .catch(console.error);
   }, []);
 

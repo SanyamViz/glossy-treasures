@@ -472,7 +472,7 @@ function ProductsTab({ products, onEdit, onDelete, onToggle, onAdd, showForm, se
           <button
             className={styles.actionBtn}
             onClick={() => setShowHamperDialog(true)}
-            style={{ background: '#C4948A', color: 'white', border: 'none', borderRadius: '10px', padding: '10px 16px', cursor: 'pointer', fontSize: '12px', fontWeight: '500', letterSpacing: '0.08em' }}
+            style={{ background: '#C4948A', color: 'white', border: 'none', padding: '10px 16px', cursor: 'pointer', fontSize: '12px', fontWeight: '500', letterSpacing: '0.08em' }}
           >
             🎁 Manage Hamper
           </button>
@@ -764,7 +764,7 @@ function ProductForm({ onClose, refresh, initialData }) {
                 <textarea rows="2" value={formData.ingredients} onChange={e => setFormData({ ...formData, ingredients: e.target.value })} />
               </div>
             </div>
-            
+
             <div className={styles.formGroupFull} style={{ marginTop: '20px' }}>
               <label style={{ marginBottom: '10px', display: 'block' }}>
                 Available Fragrances
@@ -860,7 +860,7 @@ function ProductForm({ onClose, refresh, initialData }) {
                 <button type="button" className={styles.removeImg} onClick={() => removeSize(idx)}>&times;</button>
               </div>
             ))}
-            
+
             {/* Custom size input */}
             <div className={styles.optionRow}>
               <input
