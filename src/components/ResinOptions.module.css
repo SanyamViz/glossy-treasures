@@ -68,7 +68,7 @@
   margin-top: 8px;
 }
 
-.swatchBtn {
+.colorBtn {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -81,11 +81,11 @@
   transition: border-color 0.2s;
 }
 
-.swatchBtn:hover {
+.colorBtn:hover {
   border-color: var(--card, #E8E0D5);
 }
 
-.active {
+.colorActive {
   border-color: var(--accent-rose, #C4948A) !important;
 }
 

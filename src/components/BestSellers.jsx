@@ -63,9 +63,8 @@ export default function BestSellers() {
                 <div className="products-grid">
                     {filteredProducts.map(product => (
                         <Link
-                            to={`/shop/${
-                              (product.category || '').toLowerCase() === 'candle' ? 'candles' : 
-                              (product.category || '').toLowerCase() === 'hamper' ? 'hampers' : 'resin'
+                            to={(product.category || '').toLowerCase() === 'hamper' ? '/shop/hamper-builder' : `/shop/${
+                              (product.category || '').toLowerCase() === 'candle' ? 'candles' : 'resin'
                             }/${product.slug}`}
                             className="product-card"
                             key={product.id}

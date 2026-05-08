@@ -18,7 +18,7 @@ import CandlePDP from './pages/CandlePDP';
 import Shipping from './pages/Shipping';
 import Hamperbuilder from './pages/Hamperbuilder';
 import ResinPDP from './pages/ResinPDP';
-import HamperPDP from './pages/HamperPDP';
+import ResinPDP from './pages/ResinPDP';
 import Contact from './pages/Contact';
 import NotFound from './pages/Notfound';
 import Wholesale from './pages/Wholesale';
@@ -72,7 +72,6 @@ function App() {
         <Route path="/shop/resin" element={<ResinShop />} />
         <Route path="/shop/candles/:slug" element={<PageTransition><CandlePDP /></PageTransition>} />
         <Route path="/shop/resin/:slug" element={<PageTransition><ResinPDP /></PageTransition>} />
-        <Route path="/shop/hampers/:slug" element={<PageTransition><HamperPDP /></PageTransition>} />
         <Route path="/admin" element={<Admin />} />
         <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />
       </Routes>

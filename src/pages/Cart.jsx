@@ -89,9 +89,8 @@ const Cart = () => {
                 style={{ '--i': i }}
               >
                 <Link
-                  to={`/shop/${
-                    (item.category || '').toLowerCase() === 'resin' ? 'resin' : 
-                    (item.category || '').toLowerCase() === 'hamper' ? 'hampers' : 'candles'
+                  to={(item.category || '').toLowerCase() === 'hamper' ? '/shop/hamper-builder' : `/shop/${
+                    (item.category || '').toLowerCase() === 'resin' ? 'resin' : 'candles'
                   }/${item.slug}`}
                   className={styles.itemImageWrap}
                 >

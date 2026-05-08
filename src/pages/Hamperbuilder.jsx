@@ -9,6 +9,9 @@ import WaxSealStickerImg from '../assets/kk.jpeg';
 import MiniPerfumeVialImg from '../assets/kj.jpeg';
 import CrystalCharmImg from '../assets/chocolate.jpeg';
 import flowerclawclips from '../assets/fcc.jpeg';
+import HamperDefaultImg from '../assets/hampers.jpg';
+import HamperDelightImg from '../assets/bestseller/hampers/hamper.jpeg';
+
 // ── Product data ──────────────────────────────────────
 const ADD_ONS = [
     { id: 'a1', name: 'Silk Scrunchie', category: 'addon', price: 50, image: ScrunchieImg },
@@ -21,9 +24,9 @@ const ADD_ONS = [
 ];
 
 const BOX_SIZES = [
-    { id: 'small', label: 'Cozy', capacity: 5, basePrice: 0, desc: '3-5 items · Perfect starter' },
-    { id: 'medium', label: 'Delight', capacity: 7, basePrice: 100, desc: '5-7 items · Most popular' },
-    { id: 'large', label: 'Luxe', capacity: 10, basePrice: 250, desc: '8-10 items · Ultimate indulgence' },
+    { id: 'small', label: 'Cozy', capacity: 5, basePrice: 0, desc: '3-5 items · Perfect starter', image: HamperDefaultImg },
+    { id: 'medium', label: 'Delight', capacity: 7, basePrice: 100, desc: '5-7 items · Most popular', image: HamperDelightImg },
+    { id: 'large', label: 'Luxe', capacity: 10, basePrice: 250, desc: '8-10 items · Ultimate indulgence', image: HamperDefaultImg },
 ];
 
 const RIBBON_COLORS = [
@@ -171,7 +174,7 @@ const HamperBuilder = () => {
             slug: 'custom-hamper-' + Date.now(),
             name: `Custom ${currentBox.label} Hamper`,
             price: grandTotal,
-            image: '/placeholder-hamper.jpg',
+            image: currentBox?.image || HamperDefaultImg,
             quantity: 1,
             customDetails: {
                 boxSize: currentBox.label,
@@ -202,7 +205,7 @@ const HamperBuilder = () => {
                         onClick={() => setBoxSize(box.id)}
                     >
                         <div className={styles.boxVisual}>
-                            <div className={`${styles.boxIllustration} ${styles[`box${box.id}`]}`} />
+                            <img src={box.image} alt={box.label} className={styles.boxIllustrationImg} />
                         </div>
                         <span className={styles.boxLabel}>{box.label}</span>
                         <span className={styles.boxDesc}>{box.desc}</span>

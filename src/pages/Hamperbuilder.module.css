@@ -166,38 +166,24 @@
 
 .boxVisual {
     width: 100%;
-    height: 100px;
+    height: 120px;
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow: hidden;
+    margin-bottom: 8px;
 }
 
-.boxIllustration {
-    width: 60px;
-    height: 60px;
-    border-radius: 8px;
-    background: var(--card);
-    position: relative;
-    transition: transform 0.3s ease;
+.boxIllustrationImg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 12px;
+    transition: transform 0.4s ease;
 }
 
-.boxCard:hover .boxIllustration {
-    transform: scale(1.08);
-}
-
-.boxsmall {
-    width: 50px;
-    height: 50px;
-}
-
-.boxmedium {
-    width: 60px;
-    height: 60px;
-}
-
-.boxlarge {
-    width: 70px;
-    height: 70px;
+.boxCard:hover .boxIllustrationImg {
+    transform: scale(1.1);
 }
 
 .boxLabel {

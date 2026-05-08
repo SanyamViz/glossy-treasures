@@ -18,8 +18,11 @@ const ProductCard = ({ product, category }) => {
 
   const handleNavigate = () => {
     const cat = (product.category || category || '').toLowerCase();
-    const basePath = cat === 'candle' ? '/shop/candles' : 
-                     cat === 'hamper' ? '/shop/hampers' : '/shop/resin';
+    if (cat === 'hamper') {
+      navigate('/shop/hamper-builder');
+      return;
+    }
+    const basePath = cat === 'candle' ? '/shop/candles' : '/shop/resin';
     navigate(`${basePath}/${product.slug}`);
   };
 

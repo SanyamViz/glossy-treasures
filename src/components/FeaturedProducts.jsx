@@ -52,9 +52,8 @@ export default function FeaturedProducts() {
 
     const ProductCard = ({ product }) => (
         <MotionLink
-            to={`/shop/${
-                (product.category || '').toLowerCase() === 'candle' ? 'candles' : 
-                (product.category || '').toLowerCase() === 'hamper' ? 'hampers' : 'resin'
+            to={(product.category || '').toLowerCase() === 'hamper' ? '/shop/hamper-builder' : `/shop/${
+                (product.category || '').toLowerCase() === 'candle' ? 'candles' : 'resin'
             }/${product.slug}`}
             className="featured-card"
             variants={cardVariants}
