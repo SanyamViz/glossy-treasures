@@ -109,7 +109,10 @@ export default function Admin() {
     try {
       const response = await fetch(`${import.meta.env.VITE_API_URL}/api/products?all=true`);
       const data = await response.json();
-      if (Array.isArray(data)) setProducts(data);
+      if (Array.isArray(data)) {
+        console.log('DEBUG: Admin Products fetched sample:', data[0]);
+        setProducts(data);
+      }
     } catch (err) {
       console.error('Failed to fetch products:', err);
     }
@@ -588,6 +591,7 @@ function ProductForm({ onClose, refresh, initialData }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    console.log('DEBUG: Admin Form Data before submit:', formData);
     try {
       const data = new FormData();
       Object.keys(formData).forEach(key => {

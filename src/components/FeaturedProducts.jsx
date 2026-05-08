@@ -41,6 +41,7 @@ export default function FeaturedProducts() {
                     console.log('DEBUG: Featured Products fetched (count):', data.length);
                     if (data.length > 0) {
                         console.log('DEBUG: First product sample:', data[0]);
+                        console.log('DEBUG: Product keys:', Object.keys(data[0]));
                         console.log('DEBUG: First product featured value:', data[0].featured);
                         console.log('DEBUG: First product featured type:', typeof data[0].featured);
                     }
