@@ -4,32 +4,10 @@ import { useCart } from '../context/CartContext';
 import styles from './Hamperbuilder.module.css';
 
 // ── Product data ──────────────────────────────────────
-const PRODUCTS = [
-    // Candles
-    { id: 'c1', name: 'Lavender Dreams', category: 'candle', price: 449, image: '/placeholder-candle.jpg' },
-    { id: 'c2', name: 'Sandalwood Bliss', category: 'candle', price: 449, image: '/placeholder-candle.jpg' },
-    { id: 'c3', name: 'Rose Garden', category: 'candle', price: 499, image: '/placeholder-candle.jpg' },
-    { id: 'c4', name: 'Ocean Breeze', category: 'candle', price: 449, image: '/placeholder-candle.jpg' },
-    { id: 'c5', name: 'Vanilla Comfort', category: 'candle', price: 399, image: '/placeholder-candle.jpg' },
-    { id: 'c6', name: 'Citrus Burst', category: 'candle', price: 449, image: '/placeholder-candle.jpg' },
-    // Resin
-    { id: 'r1', name: 'Marble Coaster Set', category: 'resin', price: 799, image: '/placeholder-resin.jpg' },
-    { id: 'r2', name: 'Agate Tray', category: 'resin', price: 1299, image: '/placeholder-resin.jpg' },
-    { id: 'r3', name: 'Ocean Wave Plate', category: 'resin', price: 899, image: '/placeholder-resin.jpg' },
-    { id: 'r4', name: 'Gold Leaf Frame', category: 'resin', price: 1499, image: '/placeholder-resin.jpg' },
-    { id: 'r5', name: 'Rose Keepsake Box', category: 'resin', price: 999, image: '/placeholder-resin.jpg' },
-    { id: 'r6', name: 'Celestial Dish', category: 'resin', price: 699, image: '/placeholder-resin.jpg' },
-    // Add-ons
-    { id: 'a1', name: 'Silk Scrunchie', category: 'addon', price: 149, image: '/placeholder-addon.jpg' },
-    { id: 'a2', name: 'Dried Flower Bouquet', category: 'addon', price: 299, image: '/placeholder-addon.jpg' },
-    { id: 'a3', name: 'Handwritten Card', category: 'addon', price: 50, image: '/placeholder-addon.jpg' },
-    { id: 'a4', name: 'Wax Seal Sticker', category: 'addon', price: 99, image: '/placeholder-addon.jpg' },
-    { id: 'a5', name: 'Mini Perfume Vial', category: 'addon', price: 399, image: '/placeholder-addon.jpg' },
-    { id: 'a6', name: 'Crystal Charm', category: 'addon', price: 249, image: '/placeholder-addon.jpg' },
-];
+// Now using dbProducts from API
 
 const BOX_SIZES = [
-    { id: 'small', label: 'Cozy', capacity: 4, basePrice: 0, desc: '3-4 items · Perfect starter' },
+    { id: 'small', label: 'Cozy', capacity: 5, basePrice: 0, desc: '3-5 items · Perfect starter' },
     { id: 'medium', label: 'Delight', capacity: 7, basePrice: 100, desc: '5-7 items · Most popular' },
     { id: 'large', label: 'Luxe', capacity: 10, basePrice: 200, desc: '8-10 items · Ultimate indulgence' },
 ];
@@ -55,6 +33,14 @@ const HamperBuilder = () => {
     const [includeCard, setIncludeCard] = useState(false);
     const [mounted, setMounted] = useState(false);
     const [showConfetti, setShowConfetti] = useState(false);
+    const [dbProducts, setDbProducts] = useState([]);
+
+    useEffect(() => {
+        fetch(`${import.meta.env.VITE_API_URL}/api/products/hamper`)
+            .then(r => r.json())
+            .then(data => setDbProducts(Array.isArray(data) ? data : []))
+            .catch(err => console.error('Hamper products error:', err));
+    }, []);
 
     const canvasRef = useRef(null);
 
@@ -114,9 +100,9 @@ const HamperBuilder = () => {
     const cardPrice = includeCard ? 50 : 0;
     const grandTotal = boxPrice + productsTotal + cardPrice;
 
-    const filteredProducts = PRODUCTS.filter(p =>
-        filter === 'all' || p.category === filter
-    );
+    const filteredProducts = filter === 'all'
+        ? dbProducts
+        : dbProducts.filter(p => p.category?.toLowerCase() === filter);
 
     const getProductQty = (productId) => {
         const item = selected.find(s => s.product.id === productId);
@@ -230,13 +216,13 @@ const HamperBuilder = () => {
             </div>
 
             <div className={styles.filterTabs}>
-                {['all', 'candle', 'resin', 'addon'].map(f => (
+                {['all', 'candle', 'resin'].map(f => (
                     <button
                         key={f}
                         className={`${styles.filterTab} ${filter === f ? styles.filterTabActive : ''}`}
                         onClick={() => setFilter(f)}
                     >
-                        {f === 'all' ? 'All' : f === 'candle' ? 'Candles' : f === 'resin' ? 'Resin Art' : 'Add-ons'}
+                        {f === 'all' ? 'All' : f === 'candle' ? '🕯️ Candles' : '✨ Resin Art'}
                     </button>
                 ))}
             </div>
@@ -247,11 +233,11 @@ const HamperBuilder = () => {
                     const isFull = totalItems >= (currentBox?.capacity || 0);
                     return (
                         <div key={p.id} className={styles.productCard}>
-                            <div className={styles.productImg}>
-                                <div className={styles.productImgPlaceholder}>
-                                    {p.category === 'candle' ? '🕯️' : p.category === 'resin' ? '✨' : '🎁'}
-                                </div>
-                            </div>
+                            <img
+                                src={p.images?.[0] || p.image || '/placeholder.jpg'}
+                                alt={p.name}
+                                className={styles.productImg}
+                            />
                             <div className={styles.productInfo}>
                                 <span className={styles.productName}>{p.name}</span>
                                 <span className={styles.productPrice}>₹{p.price}</span>
@@ -394,6 +380,12 @@ const HamperBuilder = () => {
             </div>
         </div>
     ];
+
+    if (dbProducts.length === 0) return (
+        <div style={{ textAlign: 'center', padding: '100px 40px', fontFamily: 'Jost, sans-serif', color: '#7A7068', fontSize: '13px' }}>
+            Loading products...
+        </div>
+    );
 
     return (
         <div className={`${styles.page} ${mounted ? styles.visible : ''}`}>

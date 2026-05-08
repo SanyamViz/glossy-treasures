@@ -446,6 +446,7 @@ export default function Admin() {
 
 function ProductsTab({ products, onEdit, onDelete, onToggle, onAdd, showForm, setShowForm, refresh, editingProduct }) {
   const [searchTerm, setSearchTerm] = useState('');
+  const [showHamperDialog, setShowHamperDialog] = useState(false);
 
   const filteredProducts = products.filter(p =>
     p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -467,10 +468,19 @@ function ProductsTab({ products, onEdit, onDelete, onToggle, onAdd, showForm, se
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
           <input type="text" placeholder="Search products..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} />
         </div>
-        <button className={styles.addNewBtn} onClick={onAdd}>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-          Add New Product
-        </button>
+        <div style={{ display: 'flex', gap: '10px' }}>
+          <button
+            className={styles.actionBtn}
+            onClick={() => setShowHamperDialog(true)}
+            style={{ background: '#C4948A', color: 'white', border: 'none', borderRadius: '10px', padding: '10px 16px', cursor: 'pointer', fontSize: '12px', fontWeight: '500', letterSpacing: '0.08em' }}
+          >
+            🎁 Manage Hamper
+          </button>
+          <button className={styles.addNewBtn} onClick={onAdd}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            Add New Product
+          </button>
+        </div>
       </div>
 
       <div className={styles.productGrid}>
@@ -486,6 +496,18 @@ function ProductsTab({ products, onEdit, onDelete, onToggle, onAdd, showForm, se
                   <span className={`${styles.stockBadge} ${product.stock <= 0 ? styles.outOfStock : product.stock < 5 ? styles.lowStock : styles.inStock}`}>
                     {product.stock} in stock
                   </span>
+                  {product.showInHamper && (
+                    <span style={{
+                      fontSize: '10px',
+                      background: '#C4948A',
+                      color: 'white',
+                      padding: '2px 8px',
+                      borderRadius: '20px',
+                      marginLeft: '6px'
+                    }}>
+                      🎁 In Hamper
+                    </span>
+                  )}
                 </div>
                 <h4>{product.name}</h4>
                 <div className={styles.productCardPrice}>
@@ -509,6 +531,14 @@ function ProductsTab({ products, onEdit, onDelete, onToggle, onAdd, showForm, se
           ))
         )}
       </div>
+
+      {showHamperDialog && (
+        <HamperDialog
+          products={products}
+          onClose={() => setShowHamperDialog(false)}
+          refresh={refresh}
+        />
+      )}
     </div>
   );
 }
@@ -520,7 +550,7 @@ function ProductForm({ onClose, refresh, initialData }) {
     stock: 0, inStock: true, bestseller: false, active: true,
     burnTime: '', scentFamily: 'Floral', ingredients: '',
     sizes: [], colors: [], personalization: { active: false, fields: [], extraCharge: 0 },
-    customSize: ''
+    customSize: '', showInHamper: false
   });
   const [images, setImages] = useState([]);
   const [existingImages, setExistingImages] = useState(initialData?.images || []);
@@ -672,6 +702,14 @@ function ProductForm({ onClose, refresh, initialData }) {
               <label className={styles.toggleItem}>
                 <input type="checkbox" checked={formData.active} onChange={e => setFormData({ ...formData, active: e.target.checked })} />
                 Active
+              </label>
+              <label className={styles.toggleItem}>
+                <input
+                  type="checkbox"
+                  checked={formData.showInHamper || false}
+                  onChange={e => setFormData({ ...formData, showInHamper: e.target.checked })}
+                />
+                Show in Hamper Builder 🎁
               </label>
             </div>
           </div>
@@ -933,6 +971,105 @@ function ProductForm({ onClose, refresh, initialData }) {
           <button type="submit" className={styles.saveBtn} disabled={loading}>{loading ? 'Saving...' : 'Save Product'}</button>
         </div>
       </form>
+    </div>
+  );
+}
+
+function HamperDialog({ products, onClose, refresh }) {
+  const [hamperProducts, setHamperProducts] = useState(
+    products.reduce((acc, p) => ({ ...acc, [p.id]: p.showInHamper || false }), {})
+  );
+  const [saving, setSaving] = useState(false);
+
+  const handleSave = async () => {
+    setSaving(true);
+    try {
+      // Update each product that changed
+      const updates = products.filter(p => hamperProducts[p.id] !== (p.showInHamper || false));
+      await Promise.all(updates.map(p => {
+        const formData = new FormData();
+        formData.append('showInHamper', hamperProducts[p.id]);
+        formData.append('existingImages', JSON.stringify(p.images || []));
+        return fetch(`${import.meta.env.VITE_API_URL}/api/products/${p.id}`, {
+          method: 'PUT',
+          headers: { 'Authorization': 'Bearer AngelManchanda@152116' },
+          body: formData
+        });
+      }));
+      await refresh();
+      onClose();
+      alert('Hamper products updated!');
+    } catch (err) {
+      alert('Error saving changes');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return (
+    <div style={{
+      position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)',
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      zIndex: 1000, padding: '20px'
+    }}>
+      <div style={{
+        background: '#FAF8F5', borderRadius: '16px', padding: '32px',
+        width: '100%', maxWidth: '600px', maxHeight: '80vh', overflow: 'auto'
+      }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+          <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.6rem', margin: 0 }}>
+            Manage Hamper Products
+          </h2>
+          <button onClick={onClose} style={{ background: 'none', border: 'none', fontSize: '24px', cursor: 'pointer' }}>×</button>
+        </div>
+        <p style={{ fontFamily: 'Jost, sans-serif', fontSize: '13px', color: '#7A7068', marginBottom: '20px' }}>
+          Select which products appear in the Hamper Builder on the website.
+        </p>
+
+        {/* Group by category */}
+        {['Candle', 'Resin'].map(cat => (
+          <div key={cat} style={{ marginBottom: '24px' }}>
+            <h3 style={{ fontFamily: 'Jost, sans-serif', fontSize: '11px', letterSpacing: '0.2em', textTransform: 'uppercase', color: '#C4948A', marginBottom: '12px' }}>
+              {cat === 'Candle' ? '🕯️ Candles' : '✨ Resin Art'}
+            </h3>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              {products.filter(p => p.category === cat).map(p => (
+                <label key={p.id} style={{
+                  display: 'flex', alignItems: 'center', gap: '12px',
+                  padding: '12px 16px', background: hamperProducts[p.id] ? 'rgba(196,148,138,0.08)' : '#fff',
+                  borderRadius: '10px', border: `1px solid ${hamperProducts[p.id] ? '#C4948A' : '#E8E0D5'}`,
+                  cursor: 'pointer', transition: 'all 0.2s'
+                }}>
+                  <input
+                    type="checkbox"
+                    checked={hamperProducts[p.id] || false}
+                    onChange={e => setHamperProducts(prev => ({ ...prev, [p.id]: e.target.checked }))}
+                    style={{ width: '18px', height: '18px', cursor: 'pointer' }}
+                  />
+                  <img
+                    src={p.images?.[0] || '/placeholder.jpg'}
+                    alt={p.name}
+                    style={{ width: '40px', height: '40px', borderRadius: '8px', objectFit: 'cover' }}
+                  />
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontFamily: 'Jost, sans-serif', fontSize: '13px', fontWeight: '500', color: '#1A1A1A' }}>{p.name}</div>
+                    <div style={{ fontFamily: 'Jost, sans-serif', fontSize: '11px', color: '#7A7068' }}>₹{p.basePrice}</div>
+                  </div>
+                </label>
+              ))}
+            </div>
+          </div>
+        ))}
+
+        <div style={{ display: 'flex', gap: '12px', marginTop: '24px' }}>
+          <button onClick={onClose} style={{ flex: 1, height: '48px', background: 'transparent', border: '1px solid #E8E0D5', borderRadius: '10px', fontFamily: 'Jost, sans-serif', fontSize: '12px', cursor: 'pointer' }}>
+            Cancel
+          </button>
+          <button onClick={handleSave} disabled={saving} style={{ flex: 1, height: '48px', background: '#C4948A', color: 'white', border: 'none', borderRadius: '10px', fontFamily: 'Jost, sans-serif', fontSize: '12px', fontWeight: '500', cursor: 'pointer' }}>
+            {saving ? 'Saving...' : 'Save Changes'}
+          </button>
+        </div>
+      </div>
     </div>
   );
 }

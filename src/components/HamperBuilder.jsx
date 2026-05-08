@@ -12,7 +12,7 @@ export default function HamperBuilder({ currentProduct }) {
   const [total, setTotal] = useState(baseProductPrice);
 
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_API_URL}/api/products`)
+    fetch(`${import.meta.env.VITE_API_URL}/api/products/hamper`)
       .then(r => r.json())
       .then(data => setAvailableProducts(Array.isArray(data) ? data : []))
       .catch(console.error);
@@ -73,7 +73,7 @@ export default function HamperBuilder({ currentProduct }) {
         {availableProducts.filter(p => p.slug !== currentProduct?.slug).map(product => (
           <div key={product.id} className={styles.productCard}>
             <div className={styles.imgWrapper}>
-              <img src={product.images?.[0] || 'https://via.placeholder.com/400'} alt={product.name} />
+              <img src={product.images?.[0] || product.image || 'https://via.placeholder.com/400'} alt={product.name} />
               <button
                 className={`${styles.addBtn} ${items.find(i => i.id === product.id) ? styles.added : ''}`}
                 onClick={(e) => addItem(e, product)}
