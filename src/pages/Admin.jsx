@@ -774,36 +774,39 @@ function ProductForm({ onClose, refresh, initialData }) {
           <h3>Sizes</h3>
           <div className={styles.formGroupFull}>
             <p style={{ fontSize: '12px', color: '#7A7068', marginBottom: '10px' }}>
-              Add sizes for your product. (Candle: Small, Big | Resin: 4inch, 5inch, 6inch, 8inch, 10inch, 12inch)
+              Add sizes for your product. You can select standard sizes or type your own (e.g. "6 inch Heart").
             </p>
             {formData.sizes?.map((size, idx) => (
               <div key={idx} className={styles.optionRow}>
-                <select 
-                  value={size.label} 
+                <input
+                  type="text"
+                  list={`size-suggestions-${formData.category}`}
+                  placeholder="Size Label (e.g. 6inch or 8 inch Heart)"
+                  value={size.label}
                   onChange={e => {
                     const newSizes = [...formData.sizes];
                     newSizes[idx].label = e.target.value;
                     setFormData({ ...formData, sizes: newSizes });
                   }}
-                  style={{ flex: 1, padding: '10px', border: '1px solid #E5E0D8', borderRadius: '4px' }}
-                >
-                  <option value="">Select Size</option>
+                  style={{ flex: 1 }}
+                />
+                <datalist id={`size-suggestions-${formData.category}`}>
                   {formData.category === 'Candle' ? (
                     <>
-                      <option value="Small">Small</option>
-                      <option value="Big">Big</option>
+                      <option value="Small" />
+                      <option value="Big" />
                     </>
                   ) : (
                     <>
-                      <option value="4inch">4inch</option>
-                      <option value="5inch">5inch</option>
-                      <option value="6inch">6inch</option>
-                      <option value="8inch">8inch</option>
-                      <option value="10inch">10inch</option>
-                      <option value="12inch">12inch</option>
+                      <option value="4inch" />
+                      <option value="5inch" />
+                      <option value="6inch" />
+                      <option value="8inch" />
+                      <option value="10inch" />
+                      <option value="12inch" />
                     </>
                   )}
-                </select>
+                </datalist>
                 <input type="number" placeholder="Price" value={size.price} onChange={e => {
                   const newSizes = [...formData.sizes];
                   newSizes[idx].price = e.target.value;
