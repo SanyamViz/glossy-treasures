@@ -651,6 +651,20 @@
     color: var(--text-secondary);
 }
 
+.reviewItemVariants {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 10px;
+    margin: 4px 0;
+}
+
+.reviewItemVariant {
+    color: #9c7c5a;
+    background: #fdf6ee;
+    padding: 1px 8px;
+    border-radius: 4px;
+}
+
 .reviewItemPrice {
     font-family: var(--font-body, 'Jost', sans-serif);
     font-size: 13px;

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styles from './ResinOptions.module.css';
 
-export default function ResinOptions({ colors = [], sizes = [], frameSizes = [], standMaterials = [], basePrice = 0, onPriceChange, onOptionsChange }) {
+export default function ResinOptions({ colors = [], sizes = [], frameSizes = [], standMaterials = [], basePrice = 0, customSize = null, onPriceChange, onOptionsChange }) {
   const [selectedColor, setSelectedColor] = useState(colors[0] || { label: 'Custom', hex: 'custom' });
   const [selectedSize, setSelectedSize] = useState(sizes[0] || null);
   const [selectedFrameSize, setSelectedFrameSize] = useState(frameSizes[0] || null);
@@ -31,7 +31,7 @@ export default function ResinOptions({ colors = [], sizes = [], frameSizes = [],
       onOptionsChange({
         color: selectedColor ? (selectedColor.hex === 'custom' ? `Custom: ${customColor}` : `${selectedColor.label || selectedColor.name}`) : null,
         colorHex: selectedColor?.hex || null,
-        size: selectedSize?.label || selectedFrameSize?.label || null,
+        size: selectedSize?.label || selectedFrameSize?.label || customSize || null,
         stand: selectedStand?.label || null,
         personalization: {
           name: personName,

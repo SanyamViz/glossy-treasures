@@ -138,6 +138,34 @@
   line-height: 1.6;
 }
 
+.reviewsShortcut {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.reviewsShortcut:hover {
+  opacity: 0.7;
+}
+
+.shortcutStars {
+  color: #C4948A;
+  font-size: 12px;
+  letter-spacing: 1px;
+}
+
+.shortcutText {
+  font-size: 12px;
+  color: #9c7c5a;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
 /* CTA row */
 .ctaSection {
   display: flex;

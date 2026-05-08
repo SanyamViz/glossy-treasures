@@ -388,7 +388,16 @@ const Checkout = () => {
       <div className={styles.reviewItems}>
         {cartItems.map(item => (
           <div key={item.cartId} className={styles.reviewItem}>
-            <div className={styles.reviewItemInfo}><span className={styles.reviewItemName}>{item.name}</span><span className={styles.reviewItemQty}>Qty: {item.quantity}</span></div>
+            <div className={styles.reviewItemInfo}>
+              <span className={styles.reviewItemName}>{item.name}</span>
+              <div className={styles.reviewItemVariants}>
+                {item.selectedSize && <span className={styles.reviewItemVariant}>{item.selectedSize}</span>}
+                {item.selectedColor && <span className={styles.reviewItemVariant}>{item.selectedColor}</span>}
+                {item.selectedFragrance && <span className={styles.reviewItemVariant}>{item.selectedFragrance}</span>}
+                {item.selectedOptions?.stand && <span className={styles.reviewItemVariant}>Stand: {item.selectedOptions.stand}</span>}
+              </div>
+              <span className={styles.reviewItemQty}>Qty: {item.quantity}</span>
+            </div>
             <span className={styles.reviewItemPrice}>₹{((item.basePrice || item.price || 0) * item.quantity).toLocaleString('en-IN')}</span>
           </div>
         ))}

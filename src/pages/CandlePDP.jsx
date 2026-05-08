@@ -138,6 +138,10 @@ export default function CandlePDP() {
           <span className={styles.detailItem}>📍 Only {product.stock} left</span>
         </div>
         <p className={styles.tagline}>{product.tagline}</p>
+        <div className={styles.reviewsShortcut} onClick={() => sectionRefs.current[5]?.scrollIntoView({ behavior: 'smooth' })}>
+          <span className={styles.shortcutStars}>★★★★★</span>
+          <span className={styles.shortcutText}>Reviews</span>
+        </div>
       </header>
 
       {/* 3. Candle Options */}

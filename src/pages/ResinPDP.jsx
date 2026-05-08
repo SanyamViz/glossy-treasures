@@ -79,7 +79,7 @@ export default function ResinPDP() {
       price: currentPrice,
       basePrice: currentPrice,
       selectedColor: selectedOptions?.color || null,
-      selectedSize: selectedOptions?.size || null,
+      selectedSize: selectedOptions?.size || product.customSize || null,
       personalization: selectedOptions?.personalization || null,
       selectedOptions
     }, qty);
@@ -137,6 +137,10 @@ export default function ResinPDP() {
           <span className={styles.detailItem}>📍 Only {product.stock} left</span>
         </div>
         <p className={styles.tagline}>{product.tagline}</p>
+        <div className={styles.reviewsShortcut} onClick={() => sectionRefs.current[5]?.scrollIntoView({ behavior: 'smooth' })}>
+          <span className={styles.shortcutStars}>★★★★★</span>
+          <span className={styles.shortcutText}>Reviews</span>
+        </div>
       </header>
 
       {/* 3. Resin Options */}
@@ -146,6 +150,7 @@ export default function ResinPDP() {
           basePrice={product.basePrice || product.price || 0}
           colors={product.colors || []}
           sizes={product.sizes || []}
+          customSize={product.customSize}
           frameSizes={product.frameSizes || []}
           standMaterials={product.standMaterials || []}
           onOptionsChange={setSelectedOptions}

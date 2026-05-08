@@ -90,17 +90,21 @@ export default function ProductReviews() {
             <span className={styles.totalCount}>Based on {reviews.length} reviews</span>
           </div>
         </div>
-        {isSignedIn && (
-          <button 
-            className={styles.writeBtn} 
-            onClick={() => setShowForm(!showForm)}
-          >
-            {showForm ? 'CANCEL' : 'WRITE A REVIEW'}
-          </button>
-        )}
+        <button 
+          className={styles.writeBtn} 
+          onClick={() => {
+            if (!isSignedIn) {
+              alert("Please sign in to write a review.");
+              return;
+            }
+            setShowForm(!showForm);
+          }}
+        >
+          {showForm ? 'CANCEL' : 'WRITE A REVIEW'}
+        </button>
       </div>
 
-      {showForm && (
+      {showForm && isSignedIn && (
         <div className={styles.reviewForm}>
           <h3>Share your experience</h3>
           <form onSubmit={handleSubmitReview}>
