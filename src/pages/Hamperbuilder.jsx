@@ -176,9 +176,13 @@ const HamperBuilder = () => {
             price: grandTotal,
             image: currentBox?.image || HamperDefaultImg,
             quantity: 1,
-            customDetails: {
+            selectedOptions: {
                 boxSize: currentBox.label,
-                items: selected,
+                items: selected.map(s => ({
+                    productName: s.product.name,
+                    quantity: s.qty,
+                    type: s.product.category || 'addon'
+                })),
                 giftNote,
                 recipientName,
                 ribbon,
@@ -202,7 +206,13 @@ const HamperBuilder = () => {
                     <button
                         key={box.id}
                         className={`${styles.boxCard} ${boxSize === box.id ? styles.boxCardActive : ''}`}
-                        onClick={() => setBoxSize(box.id)}
+                        onClick={() => {
+                            setBoxSize(box.id);
+                            setTimeout(() => {
+                                setStep(2);
+                                window.scrollTo({ top: 0, behavior: 'smooth' });
+                            }, 300);
+                        }}
                     >
                         <div className={styles.boxVisual}>
                             <img src={box.image} alt={box.label} className={styles.boxIllustrationImg} />
@@ -438,7 +448,7 @@ const HamperBuilder = () => {
                             ← Back
                         </button>
                     )}
-                    {step < 4 && (
+                    {step < 4 && step !== 1 && (
                         <button
                             className={styles.nextBtn}
                             onClick={handleNext}
