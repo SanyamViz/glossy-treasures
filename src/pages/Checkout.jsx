@@ -239,6 +239,7 @@ const Checkout = () => {
               personalization: item.selectedOptions?.personalization
                 ? JSON.stringify(item.selectedOptions.personalization)
                 : null,
+              selectedOptions: item.selectedOptions || null,
             };
           })
         }),

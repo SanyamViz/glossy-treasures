@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './BestSellers.css';
 
-const TABS = ["See All", "Candles", "Platters", "Frames", "Keepsakes", "Hampers", "Jewellery"];
+const TABS = ["See All", "Candles", "Platters", "Frames", "keychain", "Wedding Invitations", "Jewellery"];
 
 export default function BestSellers() {
     const [activeTab, setActiveTab] = useState("See All");
@@ -36,8 +36,8 @@ export default function BestSellers() {
             if (tab === 'candles') return cat === 'candle';
             if (tab === 'platters') return type === 'platter';
             if (tab === 'frames') return type === 'frame';
-            if (tab === 'keepsakes') return type === 'box' || type === 'keepsake';
-            if (tab === 'hampers') return cat === 'hamper';
+            if (tab === 'keychain') return type === 'keychain' || type === 'box' || type === 'keepsake';
+            if (tab === 'wedding invitations') return cat === 'hamper' || type === 'invitation';
             if (tab === 'jewellery') return type === 'dish' || type === 'jewellery';
 
             return cat === tab || type === tab;

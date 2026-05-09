@@ -55,9 +55,12 @@ const NAV_LINKS = [
     label: 'Collections', href: '/collections',
     children: [
       { label: 'All Collections', href: '/collections' },
-      { label: 'Gifting Edit', href: '/collections/gifting-edit' },
-      { label: 'Wedding Season', href: '/collections/wedding-season' },
-      { label: 'Self Care Rituals', href: '/collections/self-care-rituals' },
+      { label: 'Gifting Edit', href: '/collections/gifting' },
+      { label: 'Wedding Season', href: '/collections/wedding' },
+      { label: 'Self Care Rituals', href: '/collections/self-care' },
+      { label: 'New Arrivals', href: '/collections/new-arrivals' },
+      { label: 'Home Decor', href: '/collections/home-decor' },
+      { label: 'Best Sellers', href: '/collections/bestsellers' },
     ]
   },
   { label: 'Candles', href: '/shop/candles' },
@@ -253,15 +256,15 @@ export default function Navbar() {
           <SearchIcon />
           <input type="text" className="gt-search-input" placeholder="Search for a scent, a piece..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
         </div>
-        
+
         {searchTerm.length >= 2 ? (
           <div className="gt-search-results-container">
             {searchLoading ? <p>Searching...</p> : (
               searchResults.length > 0 ? (
                 <div className="gt-search-results-grid">
                   {searchResults.map(product => (
-                    <div 
-                      key={product.id} 
+                    <div
+                      key={product.id}
                       className="gt-search-result-item"
                       style={{ cursor: 'pointer' }}
                       onClick={() => {
@@ -288,8 +291,8 @@ export default function Navbar() {
             <ul className="gt-quick-links-list">
               {POPULAR_SEARCHES.map((link) => (
                 <li key={link.label}>
-                  <div 
-                    className="gt-quick-link-item" 
+                  <div
+                    className="gt-quick-link-item"
                     style={{ cursor: 'pointer' }}
                     onClick={() => {
                       navigate(link.path);

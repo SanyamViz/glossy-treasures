@@ -122,7 +122,15 @@ export default function ForeverInResin() {
                 </div>
 
                 <div className="forever-actions">
-                    <button className="action-btn btn-primary">PRESERVE MY MEMORY</button>
+                    <a 
+                      href="https://wa.me/918544911357?text=Hi! I'd like to preserve my memories with Glossy Treasures." 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="action-btn btn-primary"
+                      style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
+                    >
+                      PRESERVE MY MEMORY
+                    </a>
                     <button className="action-btn btn-secondary">SEE PAST CREATIONS &rarr;</button>
                 </div>
 
