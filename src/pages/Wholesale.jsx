@@ -93,7 +93,7 @@ const Wholesale = () => {
                             <div>
                                 <h3 className={styles.benefitTitle}>Handcrafted Quality</h3>
                                 <p className={styles.benefitText}>
-                                    Every piece is made by Angel herself. No mass production, no shortcuts.
+                                    Every piece is carefully handcrafted by our team. No mass production. No shortcuts
                                 </p>
                             </div>
                         </div>
@@ -153,7 +153,7 @@ const Wholesale = () => {
 
                         {/* Quick contact */}
                         <div className={styles.quickContact}>
-                            <p className={styles.quickContactText}>Prefer to talk? Reach Angel directly:</p>
+                            <p className={styles.quickContactText}>Prefer to talk? Reach Us directly:</p>
                             <a
                                 href="https://wa.me/918544911357"
                                 target="_blank"
@@ -298,7 +298,7 @@ const Wholesale = () => {
                                 <div className={styles.successIcon}>✓</div>
                                 <h3 className={styles.successTitle}>Quote request sent!</h3>
                                 <p className={styles.successText}>
-                                    Angel will review your request and get back to you within 24 hours with pricing and next steps.
+                                    We will review your request and get back to you within 24 hours with pricing and next steps.
                                 </p>
                                 <button
                                     className={styles.successBtn}

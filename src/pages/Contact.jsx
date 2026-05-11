@@ -72,7 +72,7 @@ const Contact = () => {
                     <p className={styles.heroEyebrow}>Get in Touch</p>
                     <h1 className={styles.heroTitle}>Let's create something beautiful together.</h1>
                     <p className={styles.heroSub}>
-                        Whether you have a question, want a custom piece, or just want to say hi — Angel is here to help.
+                        Whether you have a question, want a custom piece, or just want to say hi — We are here to help.
                     </p>
                 </div>
             </section>
@@ -171,7 +171,7 @@ const Contact = () => {
                                 <div className={styles.successIcon}>✓</div>
                                 <h3 className={styles.successTitle}>Message sent!</h3>
                                 <p className={styles.successText}>
-                                    Angel will get back to you within 24 hours. Check your inbox (and spam, just in case).
+                                    We will get back to you within 24 hours. Check your inbox (and spam, just in case).
                                 </p>
                                 <button
                                     className={styles.successBtn}
@@ -194,7 +194,7 @@ const Contact = () => {
                             <div className={styles.infoCardContent}>
                                 <h3 className={styles.infoCardTitle}>WhatsApp</h3>
                                 <p className={styles.infoCardText}>
-                                    Fastest way to reach Angel directly.
+                                    Fastest way to reach us directly.
                                 </p>
                                 <a
                                     href="https://wa.me/918544911357"
@@ -290,7 +290,7 @@ const Contact = () => {
                         <div className={styles.faqCard}>
                             <h3 className={styles.faqQuestion}>Do you do custom orders?</h3>
                             <p className={styles.faqAnswer}>
-                                Absolutely! WhatsApp Angel with your idea and she'll bring it to life.
+                                Absolutely! WhatsApp us with your idea and we'll bring it to life.
                             </p>
                         </div>
                         <div className={styles.faqCard}>

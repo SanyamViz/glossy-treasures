@@ -128,7 +128,7 @@ const Shipping = () => {
 
                     <InfoCard icon="📬" title="Tracking Your Order" delay={500}>
                         <p>
-                            Once your order ships, you'll receive an email with a tracking link. You can monitor your delivery in real-time. No tracking number? Check your spam folder or WhatsApp Angel at <a href="https://wa.me/918544911357" target="_blank" rel="noreferrer">+91 85449 11357</a>.
+                            Once your order ships, you'll receive an email with a tracking link. You can monitor your delivery in real-time. No tracking number? Check your spam folder or WhatsApp us at <a href="https://wa.me/918544911357" target="_blank" rel="noreferrer">+91 85449 11357</a>.
                         </p>
                     </InfoCard>
                 </section>

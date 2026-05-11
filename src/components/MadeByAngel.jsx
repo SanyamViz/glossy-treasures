@@ -16,7 +16,7 @@ export default function MadeByAngel() {
         </div>
       </div>
       <button className={styles.waBtn} onClick={openWhatsApp}>
-        💬 Chat with Angel
+        💬 Chat with Us
       </button>
     </div>
   );

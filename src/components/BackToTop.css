@@ -2,7 +2,7 @@
   position: fixed;
   /* Sits above the WhatsApp button: 24 (wa bottom) + 52 (wa height) + 16 (gap) = 92 */
   bottom: 92px;
-  right: 10px;
+  right: 20px;
   z-index: 9997;
   /* One below WhatsApp and Popups */
 
