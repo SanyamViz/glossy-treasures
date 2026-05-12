@@ -167,6 +167,7 @@ export default function ResinPDP() {
           customSize={product.customSize}
           frameSizes={product.frameSizes || []}
           standMaterials={product.standMaterials || []}
+          personalizationConfig={product.personalization}
           onOptionsChange={setSelectedOptions}
         />
       </div>

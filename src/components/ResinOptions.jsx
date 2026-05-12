@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styles from './ResinOptions.module.css';
 
-export default function ResinOptions({ colors = [], sizes = [], frameSizes = [], standMaterials = [], basePrice = 0, customSize = null, onPriceChange, onOptionsChange }) {
+export default function ResinOptions({ colors = [], sizes = [], frameSizes = [], standMaterials = [], basePrice = 0, customSize = null, personalizationConfig = {}, onPriceChange, onOptionsChange }) {
   const [selectedColor, setSelectedColor] = useState(colors[0] || { label: 'Custom', hex: 'custom' });
   const [selectedSize, setSelectedSize] = useState(sizes[0] || null);
   const [selectedFrameSize, setSelectedFrameSize] = useState(frameSizes[0] || null);
@@ -11,7 +11,7 @@ export default function ResinOptions({ colors = [], sizes = [], frameSizes = [],
   const [msg, setMsg] = useState('');
   const [personName, setPersonName] = useState('');
   const [personDate, setPersonDate] = useState('');
-  const [photoUrl, setPhotoUrl] = useState('');
+  const [photos, setPhotos] = useState([]); // Up to 4 photos
   const [isUploadingPhoto, setIsUploadingPhoto] = useState(false);
 
   // Update total price whenever frame size or stand material changes
@@ -45,31 +45,40 @@ export default function ResinOptions({ colors = [], sizes = [], frameSizes = [],
           name: personName,
           date: personDate,
           message: msg,
-          photo: photoUrl
+          photos: photos
         }
       });
     }
-  }, [selectedSize, selectedFrameSize, selectedStand, selectedColor, customColor, customSizeText, msg, personName, personDate, photoUrl, basePrice, customSize, onPriceChange, onOptionsChange]);
+  }, [selectedSize, selectedFrameSize, selectedStand, selectedColor, customColor, customSizeText, msg, personName, personDate, photos, basePrice, customSize, onPriceChange, onOptionsChange]);
 
   const handlePhotoUpload = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
+    const files = Array.from(e.target.files);
+    if (!files.length) return;
+
+    if (photos.length + files.length > 4) {
+      alert("You can only upload up to 4 photos.");
+      return;
+    }
 
     setIsUploadingPhoto(true);
-    const formData = new FormData();
-    formData.append('image', file);
 
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/upload`, {
-        method: 'POST',
-        body: formData,
-      });
-      const data = await res.json();
-      if (data.url) {
-        setPhotoUrl(data.url);
-      } else {
-        alert('Upload failed: ' + (data.error || 'Unknown error'));
+      const newUrls = [];
+      for (const file of files) {
+        const formData = new FormData();
+        formData.append('image', file);
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/api/upload`, {
+          method: 'POST',
+          body: formData,
+        });
+        const data = await res.json();
+        if (data.url) {
+          newUrls.push(data.url);
+        } else {
+          alert('Upload failed: ' + (data.error || 'Unknown error'));
+        }
       }
+      setPhotos(prev => [...prev, ...newUrls].slice(0, 4));
     } catch (err) {
       console.error(err);
       alert('Photo upload failed. Please try again.');
@@ -185,59 +194,80 @@ export default function ResinOptions({ colors = [], sizes = [], frameSizes = [],
         </div>
       )}
 
-      <div className={styles.personalCard}>
-        <p className={styles.personalTitle}>Personalize This Piece</p>
-        <p className={styles.personalSub}>Add a name, date, or message — cast right into the resin.</p>
+      {personalizationConfig?.active && (
+        <div className={styles.personalCard}>
+          <p className={styles.personalTitle}>Personalize This Piece</p>
+          <p className={styles.personalSub}>Add a name, date, or message — cast right into the resin.</p>
 
-        <div className={styles.fields}>
-          <input
-            type="text"
-            placeholder="Name / Initial"
-            className={styles.input}
-            value={personName}
-            onChange={e => setPersonName(e.target.value)}
-          />
-          <input
-            type="text"
-            placeholder="Date (e.g. 14 Feb 2024)"
-            className={styles.input}
-            value={personDate}
-            onChange={e => setPersonDate(e.target.value)}
-          />
-          <div className={styles.textareaWrap}>
-            <textarea
-              placeholder="Special message..."
-              className={styles.textarea}
-              rows="2"
-              maxLength="80"
-              value={msg}
-              onChange={(e) => setMsg(e.target.value)}
-            />
-            <span className={styles.counter}>{msg.length}/80</span>
-          </div>
-          
-          <div className={styles.photoUploadWrap}>
-            <label className={styles.photoLabel}>
-              {isUploadingPhoto ? 'Uploading...' : (photoUrl ? 'Change Photo' : 'Upload Photo (Optional)')}
-              <input 
-                type="file" 
-                accept="image/*" 
-                onChange={handlePhotoUpload} 
-                className={styles.fileInput} 
-                disabled={isUploadingPhoto}
+          <div className={styles.fields}>
+            {personalizationConfig.fields?.includes('Name') && (
+              <input
+                type="text"
+                placeholder="Name / Initial"
+                className={styles.input}
+                value={personName}
+                onChange={e => setPersonName(e.target.value)}
               />
-            </label>
-            {photoUrl && (
-              <div className={styles.photoPreview}>
-                <img src={photoUrl} alt="Uploaded personalization" />
-                <button onClick={() => setPhotoUrl('')} className={styles.removePhotoBtn}>✕</button>
+            )}
+            {personalizationConfig.fields?.includes('Date') && (
+              <input
+                type="text"
+                placeholder="Date (e.g. 14 Feb 2024)"
+                className={styles.input}
+                value={personDate}
+                onChange={e => setPersonDate(e.target.value)}
+              />
+            )}
+            {personalizationConfig.fields?.includes('Message') && (
+              <div className={styles.textareaWrap}>
+                <textarea
+                  placeholder="Special message..."
+                  className={styles.textarea}
+                  rows="2"
+                  maxLength="80"
+                  value={msg}
+                  onChange={(e) => setMsg(e.target.value)}
+                />
+                <span className={styles.counter}>{msg.length}/80</span>
+              </div>
+            )}
+            
+            {personalizationConfig.fields?.includes('Photo') && (
+              <div className={styles.photoUploadWrap}>
+                {photos.length < 4 && (
+                  <label className={styles.photoLabel}>
+                    {isUploadingPhoto ? 'Uploading...' : 'Upload Photos (Up to 4)'}
+                    <input 
+                      type="file" 
+                      accept="image/*" 
+                      multiple
+                      onChange={handlePhotoUpload} 
+                      className={styles.fileInput} 
+                      disabled={isUploadingPhoto || photos.length >= 4}
+                    />
+                  </label>
+                )}
+                {photos.length > 0 && (
+                  <div style={{ display: 'flex', gap: '10px', marginTop: '10px', flexWrap: 'wrap' }}>
+                    {photos.map((p, idx) => (
+                      <div key={idx} className={styles.photoPreview} style={{ position: 'relative' }}>
+                        <img src={p} alt="Uploaded personalization" style={{ width: '60px', height: '60px', objectFit: 'cover', borderRadius: '4px' }} />
+                        <button 
+                          onClick={() => setPhotos(photos.filter((_, i) => i !== idx))} 
+                          className={styles.removePhotoBtn}
+                          style={{ position: 'absolute', top: '-5px', right: '-5px', background: 'red', color: 'white', borderRadius: '50%', border: 'none', width: '20px', height: '20px', cursor: 'pointer' }}
+                        >✕</button>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             )}
           </div>
-        </div>
 
-        <p className={styles.note}>Made to order · Crafted in 5–7 days · Ships with a handwritten note</p>
-      </div>
+          <p className={styles.note}>Made to order · Crafted in 5–7 days · Ships with a handwritten note</p>
+        </div>
+      )}
     </div>
   );
 }

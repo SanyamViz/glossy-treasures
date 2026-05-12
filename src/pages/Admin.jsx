@@ -649,9 +649,11 @@ function ProductForm({ onClose, refresh, initialData }) {
   };
 
   const removeSize = (index) => {
-    const newSizes = [...formData.sizes];
-    newSizes.splice(index, 1);
-    setFormData({ ...formData, sizes: newSizes });
+    if (window.confirm("Are you sure you want to delete this size option? This cannot be undone.")) {
+      const newSizes = [...formData.sizes];
+      newSizes.splice(index, 1);
+      setFormData({ ...formData, sizes: newSizes });
+    }
   };
 
   const addColor = () => {
@@ -983,7 +985,7 @@ function ProductForm({ onClose, refresh, initialData }) {
                 {formData.personalization?.active && (
                   <div style={{ marginTop: '15px', background: '#FAF8F5', padding: '16px', borderRadius: '8px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
                     <div style={{ display: 'flex', gap: '20px' }}>
-                      {['Name', 'Date', 'Message'].map(field => (
+                      {['Name', 'Date', 'Message', 'Photo'].map(field => (
                         <label key={field} style={{ fontSize: '13px', display: 'flex', alignItems: 'center', gap: '6px' }}>
                           <input type="checkbox" checked={formData.personalization.fields?.includes(field)} onChange={e => {
                             const newFields = e.target.checked

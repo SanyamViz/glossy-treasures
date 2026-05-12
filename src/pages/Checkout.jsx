@@ -400,6 +400,9 @@ const Checkout = () => {
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', marginTop: '4px' }}>
                     {item.personalization.name && <span className={styles.reviewItemVariant}>Name: {item.personalization.name}</span>}
                     {item.personalization.date && <span className={styles.reviewItemVariant}>Date: {item.personalization.date}</span>}
+                    {item.personalization.photos && item.personalization.photos.map((p, idx) => (
+                       <img key={idx} src={p} alt={`Custom ${idx+1}`} style={{ width: '40px', height: '40px', borderRadius: '4px', objectFit: 'cover' }} />
+                    ))}
                     {item.personalization.photo && (
                        <img src={item.personalization.photo} alt="Custom" style={{ width: '40px', height: '40px', borderRadius: '4px', objectFit: 'cover' }} />
                     )}
