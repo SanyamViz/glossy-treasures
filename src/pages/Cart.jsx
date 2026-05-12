@@ -106,8 +106,20 @@ const Cart = () => {
                     <div>
                       <h3 className={styles.itemName}>{item.name}</h3>
                       {item.selectedFragrance && <p className={styles.itemVariant}>Fragrance: {item.selectedFragrance}</p>}
-                      {item.selectedSize && <p className={styles.itemVariant}>{item.selectedSize}</p>}
-                      {item.selectedType && <p className={styles.itemVariant}>{item.selectedType}</p>}
+                      {item.selectedSize && <p className={styles.itemVariant}>Size: {item.selectedSize}</p>}
+                      {item.selectedType && <p className={styles.itemVariant}>Type: {item.selectedType}</p>}
+                      {item.selectedColor && <p className={styles.itemVariant}>Color: {item.selectedColor}</p>}
+                      {item.personalization && (
+                        <div className={styles.personalizationWrap}>
+                          {item.personalization.name && <p className={styles.itemVariant}>Name: {item.personalization.name}</p>}
+                          {item.personalization.date && <p className={styles.itemVariant}>Date: {item.personalization.date}</p>}
+                          {item.personalization.photo && (
+                            <div className={styles.cartPhotoPreview}>
+                              <img src={item.personalization.photo} alt="Custom" />
+                            </div>
+                          )}
+                        </div>
+                      )}
                       {item.category === 'hamper' && item.selectedOptions?.items && (
                         <div className={styles.hamperItemsList}>
                           {Array.isArray(item.selectedOptions.items)

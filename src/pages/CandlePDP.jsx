@@ -89,6 +89,21 @@ export default function CandlePDP() {
     setTimeout(() => setIsSuccess(false), 1000);
   };
 
+  const handleBuyNow = () => {
+    if (!product) return;
+    addToCart({
+      ...product,
+      price: currentPrice,
+      basePrice: currentPrice,
+      selectedColor: selectedOptions?.color || null,
+      selectedSize: selectedOptions?.size || null,
+      selectedFragrance: selectedOptions?.fragrance || null,
+      personalization: selectedOptions?.personalization || null,
+      selectedOptions,
+    }, qty);
+    navigate('/checkout');
+  };
+
 
   if (pdpLoading) return (
     <div className={styles.page} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '50vh' }}>
@@ -205,7 +220,7 @@ export default function CandlePDP() {
         <MadeByAngel />
       </div>
 
-      <StickyCartBar price={currentPrice} onAddToCart={handleAddToCart} isVisible={!isMainCTAVisible} />
+      <StickyCartBar price={currentPrice} onBuyNow={handleBuyNow} isVisible={!isMainCTAVisible} />
     </div>
   );
 }

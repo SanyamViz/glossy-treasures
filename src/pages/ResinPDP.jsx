@@ -86,6 +86,20 @@ export default function ResinPDP() {
     setTimeout(() => setIsSuccess(false), 1000);
   };
 
+  const handleBuyNow = () => {
+    if (!product) return;
+    addToCart({
+      ...product,
+      price: currentPrice,
+      basePrice: currentPrice,
+      selectedColor: selectedOptions?.color || null,
+      selectedSize: selectedOptions?.size || product.customSize || null,
+      personalization: selectedOptions?.personalization || null,
+      selectedOptions
+    }, qty);
+    navigate('/checkout');
+  };
+
   // 4. Fallback guard after all hooks
   if (pdpLoading) return (
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh', background: '#FAF8F5' }}>
@@ -206,7 +220,7 @@ export default function ResinPDP() {
         <MadeByAngel />
       </div>
 
-      <StickyCartBar price={currentPrice} onAddToCart={handleAddToCart} isVisible={!isMainCTAVisible} />
+      <StickyCartBar price={currentPrice} onBuyNow={handleBuyNow} isVisible={!isMainCTAVisible} />
     </div>
   );
 }

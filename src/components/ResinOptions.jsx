@@ -11,6 +11,8 @@ export default function ResinOptions({ colors = [], sizes = [], frameSizes = [],
   const [msg, setMsg] = useState('');
   const [personName, setPersonName] = useState('');
   const [personDate, setPersonDate] = useState('');
+  const [photoUrl, setPhotoUrl] = useState('');
+  const [isUploadingPhoto, setIsUploadingPhoto] = useState(false);
 
   // Update total price whenever frame size or stand material changes
   useEffect(() => {
@@ -42,11 +44,39 @@ export default function ResinOptions({ colors = [], sizes = [], frameSizes = [],
         personalization: {
           name: personName,
           date: personDate,
-          message: msg
+          message: msg,
+          photo: photoUrl
         }
       });
     }
-  }, [selectedSize, selectedFrameSize, selectedStand, selectedColor, customColor, customSizeText, msg, personName, personDate, basePrice, customSize, onPriceChange, onOptionsChange]);
+  }, [selectedSize, selectedFrameSize, selectedStand, selectedColor, customColor, customSizeText, msg, personName, personDate, photoUrl, basePrice, customSize, onPriceChange, onOptionsChange]);
+
+  const handlePhotoUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    setIsUploadingPhoto(true);
+    const formData = new FormData();
+    formData.append('image', file);
+
+    try {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/upload`, {
+        method: 'POST',
+        body: formData,
+      });
+      const data = await res.json();
+      if (data.url) {
+        setPhotoUrl(data.url);
+      } else {
+        alert('Upload failed: ' + (data.error || 'Unknown error'));
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Photo upload failed. Please try again.');
+    } finally {
+      setIsUploadingPhoto(false);
+    }
+  };
 
   const handleFrameSizeChange = (s) => {
     setSelectedFrameSize(s);
@@ -184,6 +214,25 @@ export default function ResinOptions({ colors = [], sizes = [], frameSizes = [],
               onChange={(e) => setMsg(e.target.value)}
             />
             <span className={styles.counter}>{msg.length}/80</span>
+          </div>
+          
+          <div className={styles.photoUploadWrap}>
+            <label className={styles.photoLabel}>
+              {isUploadingPhoto ? 'Uploading...' : (photoUrl ? 'Change Photo' : 'Upload Photo (Optional)')}
+              <input 
+                type="file" 
+                accept="image/*" 
+                onChange={handlePhotoUpload} 
+                className={styles.fileInput} 
+                disabled={isUploadingPhoto}
+              />
+            </label>
+            {photoUrl && (
+              <div className={styles.photoPreview}>
+                <img src={photoUrl} alt="Uploaded personalization" />
+                <button onClick={() => setPhotoUrl('')} className={styles.removePhotoBtn}>✕</button>
+              </div>
+            )}
           </div>
         </div>
 

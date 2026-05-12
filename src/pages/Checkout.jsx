@@ -396,6 +396,15 @@ const Checkout = () => {
                 {item.selectedColor && <span className={styles.reviewItemVariant}>{item.selectedColor}</span>}
                 {item.selectedFragrance && <span className={styles.reviewItemVariant}>{item.selectedFragrance}</span>}
                 {item.selectedOptions?.stand && <span className={styles.reviewItemVariant}>Stand: {item.selectedOptions.stand}</span>}
+                {item.personalization && (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', marginTop: '4px' }}>
+                    {item.personalization.name && <span className={styles.reviewItemVariant}>Name: {item.personalization.name}</span>}
+                    {item.personalization.date && <span className={styles.reviewItemVariant}>Date: {item.personalization.date}</span>}
+                    {item.personalization.photo && (
+                       <img src={item.personalization.photo} alt="Custom" style={{ width: '40px', height: '40px', borderRadius: '4px', objectFit: 'cover' }} />
+                    )}
+                  </div>
+                )}
               </div>
               <span className={styles.reviewItemQty}>Qty: {item.quantity}</span>
             </div>

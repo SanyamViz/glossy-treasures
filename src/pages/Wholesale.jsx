@@ -56,11 +56,25 @@ const Wholesale = () => {
         e.preventDefault();
         if (!validate()) return;
         setSubmitting(true);
-        await new Promise(r => setTimeout(r, 1500));
-        setSubmitting(false);
-        setSubmitted(true);
-        setForm({ name: '', business: '', email: '', phone: '', interest: '', quantity: '', message: '' });
-        setTimeout(() => setSubmitted(false), 5000);
+        try {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/wholesale`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(form)
+            });
+            if (res.ok) {
+                setSubmitted(true);
+                setForm({ name: '', business: '', email: '', phone: '', interest: '', quantity: '', message: '' });
+                setTimeout(() => setSubmitted(false), 5000);
+            } else {
+                alert('Failed to submit. Please try again.');
+            }
+        } catch (err) {
+            console.error(err);
+            alert('Error submitting form.');
+        } finally {
+            setSubmitting(false);
+        }
     };
 
     return (

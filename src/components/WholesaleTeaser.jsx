@@ -30,12 +30,12 @@ export default function WholesaleTeaser() {
                         >
                             WhatsApp Us
                         </a>
-                        <a 
-                            href="mailto:glossytreasures@gmail.com" 
+                        <Link 
+                            to="/wholesale" 
                             className="wt-btn wt-btn-email"
                         >
                             Send an Enquiry
-                        </a>
+                        </Link>
                         <Link to="/wholesale" className="wt-btn-link">
                             View Wholesale Details &rarr;
                         </Link>
