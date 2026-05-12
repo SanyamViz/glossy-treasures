@@ -20,13 +20,13 @@ export default function ResinOptions({ colors = [], sizes = [], frameSizes = [],
     if (selectedSize) {
       totalPrice = selectedSize.price || basePrice;
     } else if (selectedFrameSize) {
-      totalPrice = selectedFrameSize.price; 
+      totalPrice = selectedFrameSize.price;
     }
-    
+
     if (selectedStand) {
       totalPrice += (selectedStand.priceAdd || 0);
     }
-    
+
     if (onPriceChange) onPriceChange(totalPrice);
 
     // Also notify parent of all selected options
@@ -231,18 +231,18 @@ export default function ResinOptions({ colors = [], sizes = [], frameSizes = [],
                 <span className={styles.counter}>{msg.length}/80</span>
               </div>
             )}
-            
+
             {personalizationConfig.fields?.includes('Photo') && (
               <div className={styles.photoUploadWrap}>
                 {photos.length < 4 && (
                   <label className={styles.photoLabel}>
-                    {isUploadingPhoto ? 'Uploading...' : 'Upload Photos (Up to 4)'}
-                    <input 
-                      type="file" 
-                      accept="image/*" 
+                    {isUploadingPhoto ? 'Uploading...' : 'Upload Photo'}
+                    <input
+                      type="file"
+                      accept="image/*"
                       multiple
-                      onChange={handlePhotoUpload} 
-                      className={styles.fileInput} 
+                      onChange={handlePhotoUpload}
+                      className={styles.fileInput}
                       disabled={isUploadingPhoto || photos.length >= 4}
                     />
                   </label>
@@ -252,8 +252,8 @@ export default function ResinOptions({ colors = [], sizes = [], frameSizes = [],
                     {photos.map((p, idx) => (
                       <div key={idx} className={styles.photoPreview} style={{ position: 'relative' }}>
                         <img src={p} alt="Uploaded personalization" style={{ width: '60px', height: '60px', objectFit: 'cover', borderRadius: '4px' }} />
-                        <button 
-                          onClick={() => setPhotos(photos.filter((_, i) => i !== idx))} 
+                        <button
+                          onClick={() => setPhotos(photos.filter((_, i) => i !== idx))}
                           className={styles.removePhotoBtn}
                           style={{ position: 'absolute', top: '-5px', right: '-5px', background: 'red', color: 'white', borderRadius: '50%', border: 'none', width: '20px', height: '20px', cursor: 'pointer' }}
                         >✕</button>
