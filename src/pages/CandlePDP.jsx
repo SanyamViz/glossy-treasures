@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useCart } from '../context/CartContext';
 import { useWishlist } from '../context/WishlistContext';
-import { useUser, SignInButton } from '@clerk/clerk-react';
+import { useUser, SignInButton } from '@clerk/react';
 import ProductGallery from '../components/ProductGallery';
 import CandleOptions from '../components/CandleOptions';
 import HamperBuilder from '../components/HamperBuilder';
