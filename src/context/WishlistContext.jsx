@@ -6,6 +6,12 @@ const WishlistContext = createContext();
 export function WishlistProvider({ children }) {
   const { user, isSignedIn } = useUser();
   const [wishlist, setWishlist] = useState([]);
+  const [wishlistPulse, setWishlistPulse] = useState(false);
+
+  const triggerPulse = () => {
+    setWishlistPulse(true);
+    setTimeout(() => setWishlistPulse(false), 600);
+  };
 
   useEffect(() => {
     if (isSignedIn && user) {
@@ -35,6 +41,7 @@ export function WishlistProvider({ children }) {
     
     const previousWishlist = [...wishlist];
     setWishlist(prev => [...prev.filter(i => i.productSlug !== product.slug), newItem]);
+    triggerPulse();
 
     try {
       const res = await fetch(`${import.meta.env.VITE_API_URL}/api/wishlist`, {
@@ -87,10 +94,11 @@ export function WishlistProvider({ children }) {
 
   const value = React.useMemo(() => ({
     wishlist,
+    wishlistPulse,
     addToWishlist,
     removeFromWishlist,
     isInWishlist
-  }), [wishlist, addToWishlist, removeFromWishlist, isInWishlist]);
+  }), [wishlist, wishlistPulse, addToWishlist, removeFromWishlist, isInWishlist]);
 
   return (
     <WishlistContext.Provider value={value}>

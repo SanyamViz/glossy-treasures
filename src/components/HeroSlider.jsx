@@ -8,9 +8,9 @@ import './HeroSlider.css';
 
 const SLIDES = [
   { id: 1, image: candleImg, label: 'Shop Candles', link: '/shop/candles' },
-  { id: 2, image: hampersImg, label: 'Build a Hamper', link: '/build-hamper' },
+  { id: 2, image: hampersImg, label: 'Build a Hamper', link: '/hamperbuilder' },
   { id: 3, image: resinImg, label: 'Shop Resin', link: '/shop/resin' },
-  { id: 4, image: weddingImg, label: 'Shop Wedding', link: '/shop/wedding' },
+  { id: 4, image: weddingImg, label: 'Shop Wedding', link: '/collections/wedding-essentials' },
 ];
 
 export default function HeroSlider() {

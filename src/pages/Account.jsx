@@ -133,7 +133,7 @@ const Account = () => {
                         className={styles.atcBtnSmall}
                         onClick={() => {
                           addToCart({ ...item, name: item.productName, slug: item.productSlug, image: item.productImage }, 1);
-                          alert('Added to cart!');
+                          removeFromWishlist(item.productSlug);
                         }}
                       >
                         Add to Cart
