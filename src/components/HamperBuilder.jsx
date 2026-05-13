@@ -7,8 +7,8 @@ import HandwrittenCardImg from '../assets/gc.jpeg';
 import WaxSealStickerImg from '../assets/kk.jpeg';
 import MiniPerfumeVialImg from '../assets/kj.jpeg';
 import CrystalCharmImg from '../assets/chocolate.jpeg';
-import flowerclawclips from '../assets/fcc.jpeg';
-import hamperbox from '../assets/hamper.jpg';
+import flowerclawclips from '../assets/bestseller/hampers/hamper.jpeg';
+
 const ADD_ONS = [
   { id: 'a1', name: 'Silk Scrunchie', category: 'addon', price: 50, image: ScrunchieImg },
   { id: 'a2', name: '4 Poloroid Photos', category: 'addon', price: 60, image: DriedFlowerImg },
