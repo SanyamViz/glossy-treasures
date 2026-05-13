@@ -121,10 +121,16 @@ const ResinShop = () => {
     }
 
     // Sort
-    if (sortBy === 'price-low') result.sort((a, b) => a.price - b.price);
-    if (sortBy === 'price-high') result.sort((a, b) => b.price - a.price);
-    if (sortBy === 'bestsellers') {
-      result.sort((a, b) => (a.badge === 'Bestseller' ? -1 : 1));
+    if (sortBy === 'price-low') {
+      result.sort((a, b) => (a.basePrice || a.price || 0) - (b.basePrice || b.price || 0));
+    } else if (sortBy === 'price-high') {
+      result.sort((a, b) => (b.basePrice || b.price || 0) - (a.basePrice || a.price || 0));
+    } else if (sortBy === 'newest') {
+      result.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    } else if (sortBy === 'oldest') {
+      result.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+    } else if (sortBy === 'bestsellers') {
+      result.sort((a, b) => (a.bestseller ? -1 : 1));
     }
 
     return result;

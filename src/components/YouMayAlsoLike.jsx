@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import ProductCard from './ProductCard';
 import styles from './YouMayAlsoLike.module.css';
 
 export default function YouMayAlsoLike() {
@@ -10,14 +11,29 @@ export default function YouMayAlsoLike() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        // Determine category from URL (resin or candles). Here we fetch all products and filter later.
         const res = await fetch(`${import.meta.env.VITE_API_URL}/api/products`);
+        if (!res.ok) throw new Error('Failed to fetch');
         const data = await res.json();
-        // Exclude the current product
-        const filtered = data.filter(p => p.slug !== slug);
-        // Optionally narrow to same category (if needed)
-        const sameCategory = filtered.filter(p => p.category === 'resin' || p.category === 'candle');
-        const shuffled = sameCategory.sort(() => Math.random() - 0.5);
+        
+        if (!Array.isArray(data)) {
+          setProducts([]);
+          return;
+        }
+
+        // Exclude current product
+        let pool = data.filter(p => p.slug !== slug && p.active !== false);
+        
+        // Try to match same category (case-insensitive)
+        // Since we don't know the current product's category here without fetching it,
+        // we'll just prioritize products that are in the standard categories.
+        const sameCategory = pool.filter(p => 
+          p.category?.toLowerCase() === 'resin' || 
+          p.category?.toLowerCase() === 'candle'
+        );
+        
+        const finalSelection = sameCategory.length > 0 ? sameCategory : pool;
+        
+        const shuffled = finalSelection.sort(() => Math.random() - 0.5);
         setProducts(shuffled.slice(0, 5));
       } catch (e) {
         console.error('Failed to fetch recommendations', e);
@@ -30,7 +46,12 @@ export default function YouMayAlsoLike() {
   }, [slug]);
 
   if (loading) {
-    return <div className={styles.container}>Loading recommendations…</div>;
+    return (
+      <div className={styles.container}>
+        <h2 className={styles.title}>You May Also Like</h2>
+        <div className={styles.loading}>Loading recommendations...</div>
+      </div>
+    );
   }
 
   if (!products.length) {
@@ -42,20 +63,9 @@ export default function YouMayAlsoLike() {
       <h2 className={styles.title}>You May Also Like</h2>
       <div className={styles.scrollRow}>
         {products.map(product => (
-          <Link
-            key={product.id}
-            to={`/shop/${product.category === 'candle' ? 'candles' : 'resin'}/${product.slug}`}
-            className={styles.card}
-          >
-            <div className={styles.imgWrapper}>
-              <img src={product.image || product.images?.[0]} alt={product.name} />
-              <button className={styles.addBtn} onClick={e => e.preventDefault()}>+</button>
-            </div>
-            <div className={styles.info}>
-              <p className={styles.name}>{product.name}</p>
-              <p className={styles.price}>₹{(product.basePrice || product.price || 0).toLocaleString('en-IN')}</p>
-            </div>
-          </Link>
+          <div key={product.id} className={styles.cardWrapper}>
+            <ProductCard product={product} category={product.category} />
+          </div>
         ))}
       </div>
     </div>

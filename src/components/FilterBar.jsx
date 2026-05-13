@@ -41,9 +41,10 @@ const FilterBar = ({
               value={sortBy} 
               onChange={(e) => onSortChange(e.target.value)}
             >
-              <option value="newest">Sort: Newest</option>
-              <option value="price-low">Price: Low to High</option>
-              <option value="price-high">Price: High to Low</option>
+              <option value="newest">New to Old</option>
+              <option value="oldest">Old to New</option>
+              <option value="price-low">Low Price to High</option>
+              <option value="price-high">High Price to Low</option>
               <option value="bestsellers">Bestsellers</option>
             </select>
             <span className={styles.sortArrow}>▾</span>
