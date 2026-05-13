@@ -122,22 +122,22 @@ export default function ForeverInResin() {
                 </div>
 
                 <div className="forever-actions">
-                    <a 
-                      href="https://wa.me/918544911357?text=Hi! I'd like to preserve my memories with Glossy Treasures." 
-                      target="_blank" 
-                      rel="noopener noreferrer" 
-                      className="action-btn btn-primary"
-                      style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
+                    <a
+                        href="https://wa.me/918544911357?text=Hi! I'd like to preserve my memories with Glossy Treasures."
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="action-btn btn-primary"
+                        style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
                     >
-                      PRESERVE MY MEMORY
+                        PRESERVE MY MEMORY
                     </a>
-                    <a 
-                      href="/preservation-portfolio.pdf" 
-                      download 
-                      className="action-btn btn-secondary"
-                      style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
+                    <a
+                        href="/preservation-portfolio.pdf"
+                        download
+                        className="action-btn btn-secondary"
+                        style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
                     >
-                      DOWNLOAD PORTFOLIO &darr;
+                        SEE OUR WORK
                     </a>
                 </div>
 
