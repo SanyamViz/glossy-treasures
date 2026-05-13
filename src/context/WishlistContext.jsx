@@ -21,6 +21,8 @@ export function WishlistProvider({ children }) {
   const addToWishlist = async (product) => {
     if (!isSignedIn || !user) return false;
     const email = user.primaryEmailAddress?.emailAddress;
+    if (!email) return false;
+
     try {
       const res = await fetch(`${import.meta.env.VITE_API_URL}/api/wishlist`, {
         method: 'POST',
@@ -29,17 +31,28 @@ export function WishlistProvider({ children }) {
           userEmail: email,
           productSlug: product.slug,
           productName: product.name,
-          productImage: product.images?.[0] || product.image,
-          price: product.basePrice || product.price,
+          productImage: product.images?.[0] || product.image || '',
+          price: product.basePrice || product.price || 0,
           category: product.category,
         })
       });
       if (res.ok) {
-        setWishlist(prev => [...prev.filter(i => i.productSlug !== product.slug), { productSlug: product.slug, ...product }]);
+        const newItem = {
+          productSlug: product.slug,
+          productName: product.name,
+          productImage: product.images?.[0] || product.image,
+          price: product.basePrice || product.price,
+          category: product.category,
+          ...product
+        };
+        setWishlist(prev => [...prev.filter(i => i.productSlug !== product.slug), newItem]);
         return true;
       }
       return false;
-    } catch { return false; }
+    } catch (err) { 
+      console.error('Add to wishlist error:', err);
+      return false; 
+    }
   };
 
   const removeFromWishlist = async (slug) => {

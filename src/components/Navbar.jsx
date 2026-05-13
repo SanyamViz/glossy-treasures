@@ -172,6 +172,9 @@ export default function Navbar() {
           <button className="gt-icon-btn" onClick={() => setMenuOpen(true)} aria-label="Open navigation menu">
             <HamburgerIcon />
           </button>
+          <button className="gt-icon-btn" onClick={() => setSearchOpen(true)} aria-label="Search">
+            <SearchIcon />
+          </button>
         </div>
 
         <div className="gt-nav-center">
@@ -179,9 +182,6 @@ export default function Navbar() {
         </div>
 
         <div className="gt-nav-right">
-          <button className="gt-icon-btn" onClick={() => setSearchOpen(true)} aria-label="Search">
-            <SearchIcon />
-          </button>
           
           {isSignedIn && (
             <Link to="/account" className="gt-icon-btn gt-wishlist-nav" aria-label="Wishlist">

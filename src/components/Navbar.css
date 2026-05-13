@@ -98,12 +98,13 @@
 .gt-nav-right {
   display: flex;
   align-items: center;
-  min-width: 72px;
+  min-width: 100px;
   /* keeps center balanced */
 }
 
 .gt-nav-left {
   justify-content: flex-start;
+  gap: 4px;
 }
 
 .gt-nav-right {

@@ -14,9 +14,7 @@ export default function BestSellers() {
             .then(res => res.json())
             .then(data => {
                 if (Array.isArray(data)) {
-                    // Double check filtering on frontend
-                    const onlyBestsellers = data.filter(p => p.bestseller === true);
-                    setBestSellers(onlyBestsellers);
+                    setBestSellers(data);
                 }
                 setLoading(false);
             })

@@ -38,18 +38,7 @@ export default function FeaturedProducts() {
             .then(res => res.json())
             .then(data => {
                 if (Array.isArray(data)) {
-                    console.log('DEBUG: Featured Products fetched (count):', data.length);
-                    if (data.length > 0) {
-                        console.log('DEBUG: First product sample:', data[0]);
-                        console.log('DEBUG: Product keys:', Object.keys(data[0]));
-                        console.log('DEBUG: First product featured value:', data[0].featured);
-                        console.log('DEBUG: First product featured type:', typeof data[0].featured);
-                    }
-                    
-                    // Use the exact requested logic for featured filtering
-                    const onlyFeatured = data.filter(product => product.featured === true);
-                    console.log('DEBUG: Filtered featured (count):', onlyFeatured.length);
-                    setFeaturedProducts(onlyFeatured);
+                    setFeaturedProducts(data);
                 }
                 setLoading(false);
             })
