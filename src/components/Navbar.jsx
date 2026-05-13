@@ -71,11 +71,11 @@ const NAV_LINKS = [
 ];
 
 const POPULAR_SEARCHES = [
-  { label: 'Rose Candle', path: '/shop/candles/rose-bouquet' },
+  { label: 'Rose Candle', path: '/shop/candles/rose-boquet' },
   { label: 'Resin Frame', path: '/shop/resin?type=Frame' },
   { label: 'Wedding', path: '/collections/wedding' },
   { label: 'Gifting', path: '/collections/gifting' },
-  { label: 'Bubble Candle', path: '/shop/candles/bubble' },
+  { label: 'Bubble Candle', path: '/shop/candles/bubble-candle' },
 ];
 
 /* ═══════════════════════════════════════════════════════════
@@ -182,7 +182,7 @@ export default function Navbar() {
         </div>
 
         <div className="gt-nav-right">
-          
+
           {isSignedIn && (
             <Link to="/account" className="gt-icon-btn gt-wishlist-nav" aria-label="Wishlist">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
@@ -193,22 +193,22 @@ export default function Navbar() {
               )}
             </Link>
           )}
-          <motion.button 
-            className="gt-icon-btn gt-cart-btn" 
-            onClick={() => setIsCartOpen(true)} 
+          <motion.button
+            className="gt-icon-btn gt-cart-btn"
+            onClick={() => setIsCartOpen(true)}
             aria-label="Cart"
-            animate={cartPulse ? { 
+            animate={cartPulse ? {
               scale: [1, 1.3, 1],
               rotate: [0, -10, 10, -10, 0]
             } : { scale: 1 }}
-            transition={{ 
+            transition={{
               duration: 0.45,
               ease: "easeInOut"
             }}
           >
             <CartIcon />
             {totalItems > 0 && (
-              <motion.span 
+              <motion.span
                 className="gt-cart-badge"
                 initial={{ scale: 0.5, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}

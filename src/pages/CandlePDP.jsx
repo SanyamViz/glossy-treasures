@@ -119,7 +119,7 @@ export default function CandlePDP() {
     navigate('/checkout');
   };
 
-  const handleWishlist = async () => {
+  const handleWishlist = React.useCallback(async () => {
     if (!isSignedIn) return;
     if (isInWishlist(product.slug)) {
       await removeFromWishlist(product.slug);
@@ -129,7 +129,7 @@ export default function CandlePDP() {
       setWishlistMsg('Added to wishlist ♡');
     }
     setTimeout(() => setWishlistMsg(''), 2000);
-  };
+  }, [isSignedIn, product, isInWishlist, removeFromWishlist, addToWishlist]);
 
 
   if (pdpLoading) return (

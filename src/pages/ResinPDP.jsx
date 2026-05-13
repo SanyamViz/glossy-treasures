@@ -115,7 +115,7 @@ export default function ResinPDP() {
     navigate('/checkout');
   };
 
-  const handleWishlist = async () => {
+  const handleWishlist = React.useCallback(async () => {
     if (!isSignedIn) return;
     if (isInWishlist(product.slug)) {
       await removeFromWishlist(product.slug);
@@ -125,7 +125,7 @@ export default function ResinPDP() {
       setWishlistMsg('Added to wishlist ♡');
     }
     setTimeout(() => setWishlistMsg(''), 2000);
-  };
+  }, [isSignedIn, product, isInWishlist, removeFromWishlist, addToWishlist]);
 
   // 4. Fallback guard after all hooks
   if (pdpLoading) return (

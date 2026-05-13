@@ -18,10 +18,23 @@ export function WishlistProvider({ children }) {
     }
   }, [isSignedIn, user]);
 
-  const addToWishlist = async (product) => {
+  const addToWishlist = React.useCallback(async (product) => {
     if (!isSignedIn || !user) return false;
     const email = user.primaryEmailAddress?.emailAddress;
     if (!email) return false;
+
+    // Optimistic Update
+    const newItem = {
+      productSlug: product.slug,
+      productName: product.name,
+      productImage: product.images?.[0] || product.image,
+      price: product.basePrice || product.price || 0,
+      category: product.category,
+      ...product
+    };
+    
+    const previousWishlist = [...wishlist];
+    setWishlist(prev => [...prev.filter(i => i.productSlug !== product.slug), newItem]);
 
     try {
       const res = await fetch(`${import.meta.env.VITE_API_URL}/api/wishlist`, {
@@ -36,36 +49,51 @@ export function WishlistProvider({ children }) {
           category: product.category,
         })
       });
-      if (res.ok) {
-        const newItem = {
-          productSlug: product.slug,
-          productName: product.name,
-          productImage: product.images?.[0] || product.image,
-          price: product.basePrice || product.price,
-          category: product.category,
-          ...product
-        };
-        setWishlist(prev => [...prev.filter(i => i.productSlug !== product.slug), newItem]);
-        return true;
+      
+      if (!res.ok) {
+        setWishlist(previousWishlist);
+        return false;
       }
-      return false;
+      return true;
     } catch (err) { 
       console.error('Add to wishlist error:', err);
+      setWishlist(previousWishlist);
       return false; 
     }
-  };
+  }, [isSignedIn, user, wishlist]);
 
-  const removeFromWishlist = async (slug) => {
+  const removeFromWishlist = React.useCallback(async (slug) => {
     if (!isSignedIn || !user) return;
     const email = user.primaryEmailAddress?.emailAddress;
-    await fetch(`${import.meta.env.VITE_API_URL}/api/wishlist/${email}/${slug}`, { method: 'DELETE' });
-    setWishlist(prev => prev.filter(i => i.productSlug !== slug));
-  };
+    if (!email) return;
 
-  const isInWishlist = (slug) => wishlist.some(i => i.productSlug === slug);
+    const previousWishlist = [...wishlist];
+    setWishlist(prev => prev.filter(i => i.productSlug !== slug));
+
+    try {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/wishlist/${email}/${slug}`, { 
+        method: 'DELETE' 
+      });
+      if (!res.ok) {
+        setWishlist(previousWishlist);
+      }
+    } catch (err) {
+      console.error('Remove from wishlist error:', err);
+      setWishlist(previousWishlist);
+    }
+  }, [isSignedIn, user, wishlist]);
+
+  const isInWishlist = React.useCallback((slug) => wishlist.some(i => i.productSlug === slug), [wishlist]);
+
+  const value = React.useMemo(() => ({
+    wishlist,
+    addToWishlist,
+    removeFromWishlist,
+    isInWishlist
+  }), [wishlist, addToWishlist, removeFromWishlist, isInWishlist]);
 
   return (
-    <WishlistContext.Provider value={{ wishlist, addToWishlist, removeFromWishlist, isInWishlist }}>
+    <WishlistContext.Provider value={value}>
       {children}
     </WishlistContext.Provider>
   );
