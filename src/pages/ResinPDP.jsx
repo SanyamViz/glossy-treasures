@@ -71,6 +71,39 @@ export default function ResinPDP() {
     return () => timers.forEach(clearTimeout);
   }, [product]);
 
+  const triggerAddToCartAnimation = () => {
+    // Find the Add to Cart button element
+    const btn = mainCTARef.current;
+    if (!btn) return;
+    // Create a temporary image element
+    const tempImg = document.createElement('img');
+    tempImg.src = product?.image || product?.images?.[0] || '';
+    tempImg.style.position = 'fixed';
+    tempImg.style.pointerEvents = 'none';
+    const rect = btn.getBoundingClientRect();
+    tempImg.style.left = `${rect.left}px`;
+    tempImg.style.top = `${rect.top}px`;
+    tempImg.style.width = `${rect.width}px`;
+    tempImg.style.height = `${rect.height}px`;
+    tempImg.style.transition = 'all 0.8s ease-in-out';
+    tempImg.style.zIndex = '1000';
+    document.body.appendChild(tempImg);
+    const cartBtn = document.querySelector('.gt-cart-btn');
+    if (cartBtn) {
+      const cartRect = cartBtn.getBoundingClientRect();
+      requestAnimationFrame(() => {
+        tempImg.style.left = `${cartRect.left}px`;
+        tempImg.style.top = `${cartRect.top}px`;
+        tempImg.style.width = '20px';
+        tempImg.style.height = '20px';
+        tempImg.style.opacity = '0.5';
+      });
+    }
+    setTimeout(() => {
+      tempImg.remove();
+    }, 800);
+  };
+
   const handleAddToCart = () => {
     if (!product) return;
     setIsSuccess(true);
@@ -83,6 +116,7 @@ export default function ResinPDP() {
       personalization: selectedOptions?.personalization || null,
       selectedOptions
     }, qty);
+    triggerAddToCartAnimation();
     setTimeout(() => setIsSuccess(false), 1000);
   };
 
