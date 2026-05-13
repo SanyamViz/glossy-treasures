@@ -78,7 +78,7 @@ export default function HamperBuilder({ currentProduct }) {
     }, 1);
 
     // Provide some feedback
-    alert("Hamper added to cart!");
+    // The cart pulse animation now handles feedback
   };
 
   return (

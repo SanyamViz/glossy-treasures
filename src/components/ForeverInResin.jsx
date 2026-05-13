@@ -131,7 +131,14 @@ export default function ForeverInResin() {
                     >
                       PRESERVE MY MEMORY
                     </a>
-                    <button className="action-btn btn-secondary">SEE PAST CREATIONS &rarr;</button>
+                    <a 
+                      href="/preservation-portfolio.pdf" 
+                      download 
+                      className="action-btn btn-secondary"
+                      style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
+                    >
+                      DOWNLOAD PORTFOLIO &darr;
+                    </a>
                 </div>
 
                 <div className="trust-line">

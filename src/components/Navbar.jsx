@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform, useSpring } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
-import { Show, SignInButton, SignUpButton, UserButton } from "@clerk/react";
+import { useWishlist } from '../context/WishlistContext';
+import { useUser, Show, SignInButton, SignUpButton, UserButton } from "@clerk/react";
 import CartDrawer from './CartDrawer';
 import './Navbar.css';
 
@@ -81,7 +82,9 @@ const POPULAR_SEARCHES = [
    Navbar Component
    ═══════════════════════════════════════════════════════════ */
 export default function Navbar() {
-  const { totalItems } = useCart();
+  const { totalItems, cartPulse } = useCart();
+  const { wishlist } = useWishlist();
+  const { isSignedIn } = useUser();
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
@@ -179,10 +182,42 @@ export default function Navbar() {
           <button className="gt-icon-btn" onClick={() => setSearchOpen(true)} aria-label="Search">
             <SearchIcon />
           </button>
-          <button className="gt-icon-btn gt-cart-btn" onClick={() => setIsCartOpen(true)} aria-label="Cart">
+          
+          {isSignedIn && (
+            <Link to="/account" className="gt-icon-btn gt-wishlist-nav" aria-label="Wishlist">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+              </svg>
+              {wishlist.length > 0 && (
+                <span className="gt-wishlist-badge">{wishlist.length}</span>
+              )}
+            </Link>
+          )}
+          <motion.button 
+            className="gt-icon-btn gt-cart-btn" 
+            onClick={() => setIsCartOpen(true)} 
+            aria-label="Cart"
+            animate={cartPulse ? { 
+              scale: [1, 1.3, 1],
+              rotate: [0, -10, 10, -10, 0]
+            } : { scale: 1 }}
+            transition={{ 
+              duration: 0.45,
+              ease: "easeInOut"
+            }}
+          >
             <CartIcon />
-            {totalItems > 0 && <span className="gt-cart-badge">{totalItems}</span>}
-          </button>
+            {totalItems > 0 && (
+              <motion.span 
+                className="gt-cart-badge"
+                initial={{ scale: 0.5, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                key={totalItems} // Re-animate on count change
+              >
+                {totalItems}
+              </motion.span>
+            )}
+          </motion.button>
         </div>
       </motion.nav>
 

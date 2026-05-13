@@ -38,6 +38,8 @@ export const CartProvider = ({ children }) => {
     return `${slug}-${JSON.stringify(options)}`;
   };
 
+  const [cartPulse, setCartPulse] = useState(false);
+
   const addToCart = (product, quantity = 1) => {
     setCartItems((prev) => {
       const productKey = getItemKey(product.slug, product.selectedOptions);
@@ -52,6 +54,10 @@ export const CartProvider = ({ children }) => {
       }
       return [...prev, { ...product, quantity, cartId: productKey }];
     });
+    
+    // Trigger pulse animation
+    setCartPulse(true);
+    setTimeout(() => setCartPulse(false), 400);
   };
 
   const removeFromCart = (cartId) => {
@@ -91,6 +97,7 @@ export const CartProvider = ({ children }) => {
         clearCart,
         totalItems,
         cartTotal,
+        cartPulse
       }}
     >
       {children}

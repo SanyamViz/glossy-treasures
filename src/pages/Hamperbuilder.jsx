@@ -172,12 +172,14 @@ const HamperBuilder = () => {
     const handleAddToCart = () => {
         const hamperItem = {
             slug: 'custom-hamper-' + Date.now(),
-            name: `Custom ${currentBox.label} Hamper`,
+            name: `Custom ${currentBox?.label || ''} Hamper`,
             price: grandTotal,
-            image: currentBox?.image || HamperDefaultImg,
+            basePrice: grandTotal,
+            category: 'hamper',
+            images: [],
             quantity: 1,
             selectedOptions: {
-                boxSize: currentBox.label,
+                boxSize: currentBox?.label || '',
                 items: selected.map(s => ({
                     productName: s.product.name,
                     quantity: s.qty,

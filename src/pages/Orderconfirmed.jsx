@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
 import styles from './Orderconfirmed.module.css';
+import { trackPurchase } from '../utils/analytics';
 
 // ── Confetti particle system ──────────────────────────
 const CONFETTI_COLORS = ['#C4948A', '#B8965A', '#E8E0D5', '#1A1A1A', '#F0EBE3', '#D4A55A'];
@@ -139,6 +140,10 @@ const OrderConfirmed = () => {
             setTimeout(() => setPhase(4), 1900),  // timeline
             setTimeout(() => setPhase(5), 2400),  // CTA buttons
         ];
+        
+        // Track purchase
+        trackPurchase({ orderNumber, total });
+
         return () => timers.forEach(clearTimeout);
     }, []);
 

@@ -198,6 +198,30 @@
   }
 }
 
+/* ── Wishlist Badge ── */
+.gt-wishlist-nav {
+  position: relative;
+}
+
+.gt-wishlist-badge {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background-color: var(--accent-gold, #B8965A);
+  color: #ffffff;
+  font-family: var(--font-body, 'Jost', sans-serif);
+  font-weight: 500;
+  font-size: 9px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
 /* ── Mobile Full-Screen Menu ─────────────────────────────── */
 .gt-mobile-menu {
   position: fixed;

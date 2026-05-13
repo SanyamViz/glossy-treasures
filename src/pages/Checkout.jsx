@@ -213,11 +213,19 @@ const Checkout = () => {
           items: cartItems.map(item => {
             if (item.category === 'hamper') {
               const hamperContents = Array.isArray(item.selectedOptions?.items)
-                ? item.selectedOptions.items.map(hi => `${hi.name || hi.productName}${hi.quantity > 1 ? ` ×${hi.quantity}` : ''}`).join(', ')
+                ? item.selectedOptions.items.map(hi =>
+                    `${hi.product?.name || hi.name || hi.productName}${hi.qty > 1 ? ` ×${hi.qty}` : ''}`
+                  ).join(', ')
                 : 'Custom Hamper';
+              const recipient = item.selectedOptions?.recipientName
+                ? ` | For: ${item.selectedOptions.recipientName}`
+                : '';
+              const note = item.selectedOptions?.giftNote
+                ? ` | Note: "${item.selectedOptions.giftNote}"`
+                : '';
               return {
                 productSlug: item.slug,
-                productName: `Custom Hamper: ${hamperContents}`,
+                productName: `Custom Hamper: ${hamperContents}${recipient}${note}`,
                 category: 'hamper',
                 price: item.basePrice || item.price || 0,
                 quantity: item.quantity,

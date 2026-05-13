@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useCart } from '../context/CartContext';
+import { useWishlist } from '../context/WishlistContext';
+import { useUser, SignInButton } from '@clerk/clerk-react';
 import ProductGallery from '../components/ProductGallery';
 import ResinOptions from '../components/ResinOptions';
 import HamperBuilder from '../components/HamperBuilder';
@@ -9,6 +12,9 @@ import StickyCartBar from '../components/StickyCartBar';
 import ProductReviews from '../components/ProductReviews';
 import YouMayAlsoLike from '../components/YouMayAlsoLike';
 import MadeByAngel from '../components/MadeByAngel';
+import ShareButton from '../components/ShareButton';
+import SEOMeta from '../components/SEOMeta';
+import { trackViewItem, trackAddToCart } from '../utils/analytics';
 import styles from './ResinPDP.module.css';
 
 
@@ -29,6 +35,10 @@ export default function ResinPDP() {
   const [isSuccess, setIsSuccess] = useState(false);
   const [isMainCTAVisible, setIsMainCTAVisible] = useState(true);
 
+  const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
+  const { isSignedIn, user } = useUser();
+  const [wishlistMsg, setWishlistMsg] = useState('');
+
   const mainCTARef = useRef(null);
   const hamperRef = useRef(null);
   const sectionRefs = useRef([]);
@@ -43,7 +53,11 @@ export default function ResinPDP() {
     setPdpLoading(true);
     fetch(`${import.meta.env.VITE_API_URL}/api/products/${slug}`)
       .then(r => r.json())
-      .then(data => { setProduct(data); setPdpLoading(false); })
+      .then(data => { 
+        setProduct(data); 
+        setPdpLoading(false); 
+        if (data) trackViewItem(data);
+      })
       .catch(() => setPdpLoading(false));
   }, [slug]);
 
@@ -71,39 +85,6 @@ export default function ResinPDP() {
     return () => timers.forEach(clearTimeout);
   }, [product]);
 
-  const triggerAddToCartAnimation = () => {
-    // Find the Add to Cart button element
-    const btn = mainCTARef.current;
-    if (!btn) return;
-    // Create a temporary image element
-    const tempImg = document.createElement('img');
-    tempImg.src = product?.image || product?.images?.[0] || '';
-    tempImg.style.position = 'fixed';
-    tempImg.style.pointerEvents = 'none';
-    const rect = btn.getBoundingClientRect();
-    tempImg.style.left = `${rect.left}px`;
-    tempImg.style.top = `${rect.top}px`;
-    tempImg.style.width = `${rect.width}px`;
-    tempImg.style.height = `${rect.height}px`;
-    tempImg.style.transition = 'all 0.8s ease-in-out';
-    tempImg.style.zIndex = '1000';
-    document.body.appendChild(tempImg);
-    const cartBtn = document.querySelector('.gt-cart-btn');
-    if (cartBtn) {
-      const cartRect = cartBtn.getBoundingClientRect();
-      requestAnimationFrame(() => {
-        tempImg.style.left = `${cartRect.left}px`;
-        tempImg.style.top = `${cartRect.top}px`;
-        tempImg.style.width = '20px';
-        tempImg.style.height = '20px';
-        tempImg.style.opacity = '0.5';
-      });
-    }
-    setTimeout(() => {
-      tempImg.remove();
-    }, 800);
-  };
-
   const handleAddToCart = () => {
     if (!product) return;
     setIsSuccess(true);
@@ -116,7 +97,7 @@ export default function ResinPDP() {
       personalization: selectedOptions?.personalization || null,
       selectedOptions
     }, qty);
-    triggerAddToCartAnimation();
+    trackAddToCart(product);
     setTimeout(() => setIsSuccess(false), 1000);
   };
 
@@ -132,6 +113,18 @@ export default function ResinPDP() {
       selectedOptions
     }, qty);
     navigate('/checkout');
+  };
+
+  const handleWishlist = async () => {
+    if (!isSignedIn) return;
+    if (isInWishlist(product.slug)) {
+      await removeFromWishlist(product.slug);
+      setWishlistMsg('Removed from wishlist');
+    } else {
+      await addToWishlist(product);
+      setWishlistMsg('Added to wishlist ♡');
+    }
+    setTimeout(() => setWishlistMsg(''), 2000);
   };
 
   // 4. Fallback guard after all hooks
@@ -154,6 +147,13 @@ export default function ResinPDP() {
 
   return (
     <div className={styles.page}>
+      <SEOMeta 
+        title={product.name} 
+        description={product.description || product.tagline} 
+        image={product.images?.[0] || product.image}
+        url={window.location.href}
+        type="product"
+      />
       {/* Back button */}
       <button
         className={styles.backBtn}
@@ -214,20 +214,43 @@ export default function ResinPDP() {
             <span>{qty}</span>
             <button onClick={() => setQty(q => q + 1)}>+</button>
           </div>
-          <button
+          <motion.button
             ref={mainCTARef}
             className={`${styles.atcBtn} ${isSuccess ? styles.success : ''}`}
             onClick={handleAddToCart}
+            whileTap={{ scale: 0.96 }}
+            animate={isSuccess ? { 
+              scale: [1, 1.04, 1],
+            } : { scale: 1 }}
+            transition={{ duration: 0.3 }}
           >
-            {isSuccess ? '✓ ADDED' : 'ADD TO CART'}
-          </button>
+            {isSuccess ? (
+              <motion.span
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.2 }}
+              >
+                ✓ ADDED
+              </motion.span>
+            ) : 'ADD TO CART'}
+          </motion.button>
         </div>
         <div className={styles.altLinks}>
-          <button className={styles.wishBtn}>♡ Save to Wishlist</button>
+          {isSignedIn ? (
+            <button className={styles.wishBtn} onClick={handleWishlist}>
+              {isInWishlist(product.slug) ? '♥ Saved' : '♡ Save to Wishlist'}
+            </button>
+          ) : (
+            <SignInButton mode="modal">
+              <button className={styles.wishBtn}>♡ Save to Wishlist</button>
+            </SignInButton>
+          )}
+          <ShareButton product={product} />
           <button className={styles.hamperLink} onClick={() => hamperRef.current?.scrollIntoView({ behavior: 'smooth' })}>
             🎁 Add to a Hamper →
           </button>
         </div>
+        {wishlistMsg && <p style={{ fontSize: '11px', color: '#C4948A', textAlign: 'center', marginTop: '4px' }}>{wishlistMsg}</p>}
       </div>
 
       {/* 5. Accordion */}

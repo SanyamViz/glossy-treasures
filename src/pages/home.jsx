@@ -17,6 +17,7 @@ import TrustBar from '../components/TrustBar'
 import InstagramFeed from '../components/InstagramFeed'
 import WholesaleTeaser from '../components/WholesaleTeaser'
 import PreFooter from '../components/PreFooter'
+import SEOMeta from '../components/SEOMeta'
 import './home.css';
 
 export default function Home() {
@@ -24,6 +25,7 @@ export default function Home() {
 
     return (
         <>
+            <SEOMeta />
             <WelcomePopup setIsPopupOpen={setIsPopupOpen} />
             <FloatingWhatsApp isPopupOpen={isPopupOpen} />
             <BackToTop isPopupOpen={isPopupOpen} />
