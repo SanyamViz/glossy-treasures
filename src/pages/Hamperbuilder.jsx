@@ -51,6 +51,8 @@ const HamperBuilder = () => {
     const [mounted, setMounted] = useState(false);
     const [showConfetti, setShowConfetti] = useState(false);
     const [dbProducts, setDbProducts] = useState([]);
+    const [uploadedImage, setUploadedImage] = useState(null);
+    const [uploading, setUploading] = useState(false);
 
     useEffect(() => {
         fetch(`${import.meta.env.VITE_API_URL}/api/products/hamper`)
@@ -58,6 +60,31 @@ const HamperBuilder = () => {
             .then(data => setDbProducts(Array.isArray(data) ? data : []))
             .catch(err => console.error('Hamper products error:', err));
     }, []);
+
+    const handleImageUpload = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        setUploading(true);
+        const formData = new FormData();
+        formData.append('image', file);
+
+        try {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/upload`, {
+                method: 'POST',
+                body: formData
+            });
+            const data = await res.json();
+            if (data.url) {
+                setUploadedImage(data.url);
+            }
+        } catch (err) {
+            console.error('Upload failed:', err);
+            alert('Upload failed. Please try again.');
+        } finally {
+            setUploading(false);
+        }
+    };
 
     const canvasRef = useRef(null);
 
@@ -176,7 +203,7 @@ const HamperBuilder = () => {
             price: grandTotal,
             basePrice: grandTotal,
             category: 'hamper',
-            images: currentBox?.image ? [currentBox.image] : [],
+            images: uploadedImage ? [uploadedImage] : (currentBox?.image ? [currentBox.image] : []),
             quantity: 1,
             selectedOptions: {
                 boxSize: currentBox?.label || '',
@@ -339,6 +366,24 @@ const HamperBuilder = () => {
                             <span className={styles.ribbonLabel}>{r.label}</span>
                         </button>
                     ))}
+                </div>
+            </div>
+
+            <div className={styles.personalizeSection}>
+                <label className={styles.fieldLabel}>Include a Custom Photo</label>
+                <p className={styles.fieldHint}>We'll print and include this in your hamper</p>
+                <div className={styles.uploadArea}>
+                    {uploadedImage ? (
+                        <div className={styles.previewWrap}>
+                            <img src={uploadedImage} alt="Preview" className={styles.uploadPreview} />
+                            <button className={styles.removeUpload} onClick={() => setUploadedImage(null)}>✕</button>
+                        </div>
+                    ) : (
+                        <label className={styles.uploadBtn}>
+                            {uploading ? 'Uploading...' : 'Choose Photo'}
+                            <input type="file" accept="image/*" onChange={handleImageUpload} hidden disabled={uploading} />
+                        </label>
+                    )}
                 </div>
             </div>
 

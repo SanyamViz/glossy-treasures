@@ -157,6 +157,25 @@
     margin-bottom: 0;
 }
 
+@media (min-width: 768px) {
+    .products-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        overflow-x: visible;
+        padding: 0 40px;
+        gap: 24px;
+    }
+
+    .product-card {
+        width: 100%;
+    }
+
+    .best-sellers-title {
+        font-size: 42px;
+        margin-bottom: 40px;
+    }
+}
+
 .best-sellers {
     margin-top: 32px;
 }

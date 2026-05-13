@@ -7,7 +7,8 @@ import HandwrittenCardImg from '../assets/gc.jpeg';
 import WaxSealStickerImg from '../assets/kk.jpeg';
 import MiniPerfumeVialImg from '../assets/kj.jpeg';
 import CrystalCharmImg from '../assets/chocolate.jpeg';
-import flowerclawclips from '../assets/bestseller/hampers/hamper.jpeg';
+import flowerclawclips from '../assets/fcc.jpeg';
+import hamperImage from '../assets/bestseller/hampers/hamper.jpeg';
 
 const ADD_ONS = [
   { id: 'a1', name: 'Silk Scrunchie', category: 'addon', price: 50, image: ScrunchieImg },
@@ -27,6 +28,8 @@ export default function HamperBuilder({ currentProduct }) {
   const [usePremiumPkg, setUsePremiumPkg] = useState(false);
   const baseProductPrice = currentProduct?.price || currentProduct?.basePrice || 0;
   const [total, setTotal] = useState(baseProductPrice);
+  const [uploadedImage, setUploadedImage] = useState(null);
+  const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
     fetch(`${import.meta.env.VITE_API_URL}/api/products/hamper`)
@@ -41,6 +44,26 @@ export default function HamperBuilder({ currentProduct }) {
     if (usePremiumPkg) newTotal += 99;
     setTotal(newTotal);
   }, [items, usePremiumPkg, baseProductPrice]);
+
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    setUploading(true);
+    const formData = new FormData();
+    formData.append('image', file);
+    try {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/upload`, {
+        method: 'POST',
+        body: formData
+      });
+      const data = await res.json();
+      if (data.url) setUploadedImage(data.url);
+    } catch (err) {
+      console.error('Upload failed:', err);
+    } finally {
+      setUploading(false);
+    }
+  };
 
   const addItem = (e, product) => {
     e.preventDefault();
@@ -72,7 +95,7 @@ export default function HamperBuilder({ currentProduct }) {
       price: total,
       basePrice: total,
       category: 'hamper',
-      images: [hamperbox],
+      images: uploadedImage ? [uploadedImage] : [hamperImage],
       quantity: 1,
       selectedOptions: { items: selectedItems, premiumPackaging: usePremiumPkg }
     }, 1);
@@ -151,6 +174,21 @@ export default function HamperBuilder({ currentProduct }) {
               rows="2"
             />
           )}
+
+          <div className={styles.uploadSection}>
+            <label className={styles.optionLabel}>Custom Photo</label>
+            {uploadedImage ? (
+              <div className={styles.previewContainer}>
+                <img src={uploadedImage} alt="Custom" className={styles.previewImg} />
+                <button className={styles.removeImg} onClick={() => setUploadedImage(null)}>✕</button>
+              </div>
+            ) : (
+              <label className={styles.uploadBtn}>
+                {uploading ? 'Uploading...' : '＋ Add Photo'}
+                <input type="file" accept="image/*" onChange={handleImageUpload} hidden disabled={uploading} />
+              </label>
+            )}
+          </div>
         </div>
 
         <div className={styles.totalRow}>

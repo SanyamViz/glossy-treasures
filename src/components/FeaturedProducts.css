@@ -126,7 +126,7 @@
         padding: 0 40px;
         align-items: flex-start;
         /* Increase padding top to leave room for the images floating off the top bounds */
-        padding-top: 100px;
+        padding-top: 220px;
     }
 
     .featured-col {
@@ -144,7 +144,7 @@
 
     .featured-img-wrapper {
         position: absolute;
-        top: -150%;
+        top: -100%;
         left: 50%;
         transform: translateX(-50%);
         width: 80%;
