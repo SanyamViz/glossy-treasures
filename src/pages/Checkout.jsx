@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useCart } from '../context/CartContext';
 import { useUser } from "@clerk/react";
 import { api } from '../utils/api';
@@ -397,6 +398,11 @@ const Checkout = () => {
       <div className={styles.reviewItems}>
         {cartItems.map(item => (
           <div key={item.cartId} className={styles.reviewItem}>
+            <img 
+              src={item.image || item.images?.[0] || '/placeholder.jpg'} 
+              alt={item.name} 
+              style={{ width: '50px', height: '50px', borderRadius: '4px', objectFit: 'cover', marginRight: '12px' }} 
+            />
             <div className={styles.reviewItemInfo}>
               <span className={styles.reviewItemName}>{item.name}</span>
               <div className={styles.reviewItemVariants}>
@@ -445,23 +451,42 @@ const Checkout = () => {
         <div className={styles.layout}>
           <div className={styles.formWrap}>
             <button className={styles.summaryToggle} onClick={() => setSummaryOpen(!summaryOpen)}>
+              <span className={styles.toggleIcon}>{summaryOpen ? '↑' : '↓'}</span>
               <span>{summaryOpen ? 'Hide' : 'Show'} summary</span>
-              <span>₹{grandTotal.toLocaleString('en-IN')}</span>
+              <span className={styles.summaryToggleTotal}>₹{grandTotal.toLocaleString('en-IN')}</span>
             </button>
-            <div className={styles.stepContent}>{stepContent[step]}</div>
-            <div className={styles.discountSectionMobile}>
-              {!discountApplied ? (
-                <div className={styles.discountRow}>
-                  <input className={styles.discountInput} type="text" placeholder="Discount code" value={discountCode} onChange={e => setDiscountCode(e.target.value.toUpperCase())} />
-                  <button className={styles.applyBtn} onClick={handleApplyDiscount}>Apply</button>
-                </div>
-              ) : (
-                <div className={styles.discountApplied}>
-                  <span>✓ {discountCode} — saving ₹{discountAmount}</span>
-                  <button className={styles.removeDiscountBtn} onClick={removeDiscount}>×</button>
-                </div>
+
+            <AnimatePresence>
+              {summaryOpen && (
+                <motion.div 
+                  className={styles.mobileSummaryContent}
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: 'auto', opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{ duration: 0.3, ease: 'easeInOut' }}
+                  style={{ overflow: 'hidden' }}
+                >
+                  <div style={{ paddingBottom: '20px' }}>
+                    <SummaryContent 
+                      cartItems={cartItems} 
+                      cartTotal={cartTotal} 
+                      shipping={shipping} 
+                      discountAmount={discountAmount} 
+                      grandTotal={grandTotal} 
+                      freeShipping={freeShipping}
+                      discountApplied={discountApplied}
+                      discountCode={discountCode}
+                      removeDiscount={removeDiscount}
+                      handleApplyDiscount={handleApplyDiscount}
+                      setDiscountCode={setDiscountCode}
+                    />
+                  </div>
+                </motion.div>
               )}
-            </div>
+            </AnimatePresence>
+
+            <div className={styles.stepContent}>{stepContent[step]}</div>
+
             <div className={styles.navBtns}>
               {step > 0 && <button className={styles.backBtn} onClick={handleBack}>← Back</button>}
               {step < 2 ? (
@@ -473,10 +498,106 @@ const Checkout = () => {
               )}
             </div>
           </div>
+
+          <aside className={`${styles.sidebar} ${mounted ? styles.sidebarIn : ''}`}>
+            <div className={styles.sidebarInner}>
+              <SummaryContent 
+                cartItems={cartItems} 
+                cartTotal={cartTotal} 
+                shipping={shipping} 
+                discountAmount={discountAmount} 
+                grandTotal={grandTotal} 
+                freeShipping={freeShipping}
+                discountApplied={discountApplied}
+                discountCode={discountCode}
+                removeDiscount={removeDiscount}
+                handleApplyDiscount={handleApplyDiscount}
+                setDiscountCode={setDiscountCode}
+              />
+              <div className={styles.sidebarTrust}>
+                <span>🔒 Secure Checkout</span>
+                <span>·</span>
+                <span>COD Available</span>
+              </div>
+            </div>
+          </aside>
         </div>
       </div>
     </div>
   );
 };
+
+const SummaryContent = ({ 
+  cartItems, cartTotal, shipping, discountAmount, grandTotal, 
+  freeShipping, discountApplied, discountCode, removeDiscount, 
+  handleApplyDiscount, setDiscountCode 
+}) => (
+  <>
+    <h2 className={styles.sidebarTitle}>Order Summary</h2>
+    <div className={styles.sidebarItems}>
+      {cartItems.map(item => (
+        <div key={item.cartId} className={styles.sidebarItem}>
+          <div className={styles.sidebarImgWrap}>
+            <img src={item.image || item.images?.[0] || '/placeholder.jpg'} alt={item.name} className={styles.sidebarImg} />
+            <span className={styles.sidebarQty}>{item.quantity}</span>
+          </div>
+          <div className={styles.sidebarItemInfo}>
+            <span className={styles.sidebarItemName}>{item.name}</span>
+            <span className={styles.sidebarItemVariant}>
+              {[item.selectedSize, item.selectedColor, item.selectedFragrance].filter(Boolean).join(' · ')}
+            </span>
+          </div>
+          <span className={styles.sidebarItemPrice}>₹{((item.basePrice || item.price || 0) * item.quantity).toLocaleString('en-IN')}</span>
+        </div>
+      ))}
+    </div>
+
+    <div className={styles.discountRow}>
+      {!discountApplied ? (
+        <>
+          <input 
+            className={styles.discountInput} 
+            type="text" 
+            placeholder="Discount code" 
+            value={discountCode} 
+            onChange={e => setDiscountCode(e.target.value.toUpperCase())} 
+          />
+          <button className={styles.applyBtn} onClick={handleApplyDiscount}>Apply</button>
+        </>
+      ) : (
+        <div className={styles.discountApplied}>
+          <span>✓ {discountCode} — saving ₹{discountAmount}</span>
+          <button className={styles.removeDiscountBtn} onClick={removeDiscount}>×</button>
+        </div>
+      )}
+    </div>
+
+    <div className={styles.sidebarDivider} />
+
+    <div className={styles.sidebarCalculations}>
+      <div className={styles.sidebarRow}>
+        <span>Subtotal</span>
+        <span>₹{cartTotal.toLocaleString('en-IN')}</span>
+      </div>
+      <div className={styles.sidebarRow}>
+        <span>Shipping</span>
+        <span className={freeShipping ? styles.free : ''}>
+          {freeShipping ? 'FREE' : `₹${shipping}`}
+        </span>
+      </div>
+      {discountApplied && (
+        <div className={styles.sidebarRow} style={{ color: 'var(--accent-rose)', fontWeight: 500 }}>
+          <span>Discount</span>
+          <span>−₹{discountAmount.toLocaleString('en-IN')}</span>
+        </div>
+      )}
+      <div className={styles.sidebarDivider} />
+      <div className={styles.sidebarTotal}>
+        <span>Total</span>
+        <span>₹{grandTotal.toLocaleString('en-IN')}</span>
+      </div>
+    </div>
+  </>
+);
 
 export default Checkout;

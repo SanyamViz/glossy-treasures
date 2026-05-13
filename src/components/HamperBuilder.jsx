@@ -8,7 +8,7 @@ import WaxSealStickerImg from '../assets/kk.jpeg';
 import MiniPerfumeVialImg from '../assets/kj.jpeg';
 import CrystalCharmImg from '../assets/chocolate.jpeg';
 import flowerclawclips from '../assets/fcc.jpeg';
-
+import hamperbox from '../assets/hamper.jpg';
 const ADD_ONS = [
   { id: 'a1', name: 'Silk Scrunchie', category: 'addon', price: 50, image: ScrunchieImg },
   { id: 'a2', name: '4 Poloroid Photos', category: 'addon', price: 60, image: DriedFlowerImg },
@@ -72,7 +72,7 @@ export default function HamperBuilder({ currentProduct }) {
       price: total,
       basePrice: total,
       category: 'hamper',
-      images: [],
+      images: [hamperbox],
       quantity: 1,
       selectedOptions: { items: selectedItems, premiumPackaging: usePremiumPkg }
     }, 1);

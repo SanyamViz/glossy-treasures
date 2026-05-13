@@ -793,6 +793,12 @@
     -webkit-tap-highlight-color: transparent;
 }
 
+.toggleIcon {
+    margin-right: 8px;
+    font-size: 10px;
+    color: var(--accent-rose);
+}
+
 .summaryToggleTotal {
     margin-left: auto;
     font-weight: 600;

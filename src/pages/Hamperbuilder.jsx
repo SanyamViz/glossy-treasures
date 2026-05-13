@@ -176,7 +176,7 @@ const HamperBuilder = () => {
             price: grandTotal,
             basePrice: grandTotal,
             category: 'hamper',
-            images: [],
+            images: currentBox?.image ? [currentBox.image] : [],
             quantity: 1,
             selectedOptions: {
                 boxSize: currentBox?.label || '',
