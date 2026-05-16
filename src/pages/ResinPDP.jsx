@@ -53,9 +53,9 @@ export default function ResinPDP() {
     setPdpLoading(true);
     fetch(`${import.meta.env.VITE_API_URL}/api/products/${slug}`)
       .then(r => r.json())
-      .then(data => { 
-        setProduct(data); 
-        setPdpLoading(false); 
+      .then(data => {
+        setProduct(data);
+        setPdpLoading(false);
         if (data) trackViewItem(data);
       })
       .catch(() => setPdpLoading(false));
@@ -76,7 +76,31 @@ export default function ResinPDP() {
     if (mainCTARef.current) observer.observe(mainCTARef.current);
     return () => observer.disconnect();
   }, []);
+  // In your PDP component, add this inside useEffect
+  useEffect(() => {
+    if (!product) return;
 
+    const script = document.createElement('script');
+    script.type = 'application/ld+json';
+    script.text = JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": product.name,
+      "image": product.images?.[0],
+      "description": product.description,
+      "brand": { "@type": "Brand", "name": "Glossy Treasures" },
+      "offers": {
+        "@type": "Offer",
+        "price": product.price,
+        "priceCurrency": "INR",
+        "availability": "https://schema.org/InStock",
+        "url": window.location.href
+      }
+    });
+    document.head.appendChild(script);
+
+    return () => document.head.removeChild(script);
+  }, [product]);
   useEffect(() => {
     if (!product) return;
     const timers = sectionRefs.current.map((ref, i) =>
@@ -147,9 +171,9 @@ export default function ResinPDP() {
 
   return (
     <div className={styles.page}>
-      <SEOMeta 
-        title={product.name} 
-        description={product.description || product.tagline} 
+      <SEOMeta
+        title={product.name}
+        description={product.description || product.tagline}
         image={product.images?.[0] || product.image}
         url={window.location.href}
         type="product"
@@ -219,7 +243,7 @@ export default function ResinPDP() {
             className={`${styles.atcBtn} ${isSuccess ? styles.success : ''}`}
             onClick={handleAddToCart}
             whileTap={{ scale: 0.96 }}
-            animate={isSuccess ? { 
+            animate={isSuccess ? {
               scale: [1, 1.04, 1],
             } : { scale: 1 }}
             transition={{ duration: 0.3 }}
