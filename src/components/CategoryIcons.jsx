@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 import './CategoryIcons.css'
 import candleImg from '../assets/candleicon.png'
 import resinImg from '../assets/resinicon.png'
-import hampersImg from '../assets/hampericon.jpg'
+import hampersImg from '../assets/hampericon.png'
 
 const categories = [
     { label: 'Candles', link: '/shop/candles', img: candleImg },

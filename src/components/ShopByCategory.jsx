@@ -1,13 +1,13 @@
 import { Link } from 'react-router-dom'
 import './ShopByCategory.css'
-import giftingImg from '../assets/categoryicons/gifting.jpeg';
-import weddingImg from '../assets/categoryicons/wedding.jpeg';
-import selfcareImg from '../assets/categoryicons/selfcare.jpeg';
-import homeImg from '../assets/categoryicons/home.jpeg';
-import newImg from '../assets/categoryicons/new.jpeg';
-import bestsellerImg from '../assets/categoryicons/bestseller.jpeg';
-import candleImg from '../assets/categoryicons/candle.jpeg';
-import resinImg from '../assets/categoryicons/resin.jpeg';
+import giftingImg from '../assets/categoryicons/gifting.jpg';
+import weddingImg from '../assets/categoryicons/wedding.jpg';
+import selfcareImg from '../assets/categoryicons/selfcare.jpg';
+import homeImg from '../assets/categoryicons/home.jpg';
+import newImg from '../assets/categoryicons/new.jpg';
+import bestsellerImg from '../assets/categoryicons/bestseller.jpg';
+import candleImg from '../assets/categoryicons/candle.jpg';
+import resinImg from '../assets/categoryicons/resin.jpg';
 
 const categories = [
     { label: 'Gifting', to: '/collections/gifting', img: giftingImg },
