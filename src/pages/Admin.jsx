@@ -899,7 +899,29 @@ function ProductForm({ onClose, refresh, initialData }) {
                     setFormData({ ...formData, sizes: newSizes });
                   }} />
                 )}
-                <button type="button" className={styles.removeImg} onClick={() => removeSize(idx)}>&times;</button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const newSizes = [...formData.sizes];
+                    newSizes.splice(idx, 1);
+                    setFormData({ ...formData, sizes: newSizes });
+                  }}
+                  style={{
+                    width: '20px',
+                    height: '20px',
+                    borderRadius: '100%',
+                    border: 'none',
+                    background: '#e28f86ff',
+                    color: 'white',
+                    fontSize: '18px',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}
+                >
+                  ×
+                </button>
               </div>
             ))}
 
