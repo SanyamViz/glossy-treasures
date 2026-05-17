@@ -74,14 +74,9 @@ const CandleShop = () => {
   const handleFilterChange = (key, value) => {
     setIsLoading(true);
     setActiveFilters(prev => {
-      const current = prev[key];
       if (value === 'all') return { ...prev, [key]: [] };
-
-      const next = current.includes(value)
-        ? current.filter(v => v !== value)
-        : [...current, value];
-
-      return { ...prev, [key]: next };
+      const isSame = prev[key].includes(value);
+      return { ...prev, [key]: isSame ? [] : [value] };
     });
     setVisibleCount(6);
     setTimeout(() => setIsLoading(false), 200);

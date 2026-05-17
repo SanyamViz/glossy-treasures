@@ -18,7 +18,7 @@
   background: white;
   padding: 40px;
   border-radius: 16px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
   width: 100%;
   max-width: 400px;
   text-align: center;
@@ -102,7 +102,7 @@
 .tabActive {
   background: white;
   color: #1A1A1A;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .logoutBtn {
@@ -171,7 +171,9 @@
   font-size: 14px;
 }
 
-.searchBar svg { color: #888; }
+.searchBar svg {
+  color: #888;
+}
 
 /* Table Container */
 .content {
@@ -252,8 +254,15 @@ td {
   background: #f0f0f0;
 }
 
-.paymentUPI { background: #E3F2FD; color: #1976D2; }
-.paymentCOD { background: #FFF3E0; color: #E65100; }
+.paymentUPI {
+  background: #E3F2FD;
+  color: #1976D2;
+}
+
+.paymentCOD {
+  background: #FFF3E0;
+  color: #E65100;
+}
 
 .statusBadgeWrapper {
   position: relative;
@@ -334,7 +343,8 @@ td {
   gap: 12px;
 }
 
-.discountForm input, .discountForm select {
+.discountForm input,
+.discountForm select {
   padding: 10px 14px;
   border: 1.5px solid #E8E0D5;
   border-radius: 8px;
@@ -342,7 +352,9 @@ td {
   outline: none;
 }
 
-.discountForm input:focus { border-color: #C4948A; }
+.discountForm input:focus {
+  border-color: #C4948A;
+}
 
 .createBtn {
   background: #1A1A1A;
@@ -354,8 +366,21 @@ td {
   cursor: pointer;
 }
 
-.activeBadge { background: #D4EDDA; color: #155724; padding: 4px 8px; border-radius: 4px; font-size: 11px; }
-.inactiveBadge { background: #F8D7DA; color: #721c24; padding: 4px 8px; border-radius: 4px; font-size: 11px; }
+.activeBadge {
+  background: #D4EDDA;
+  color: #155724;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+}
+
+.inactiveBadge {
+  background: #F8D7DA;
+  color: #721c24;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+}
 
 .deleteBtn {
   background: none;
@@ -379,16 +404,39 @@ td {
 }
 
 @media (max-width: 768px) {
-  .header { padding: 15px 20px; flex-direction: column; gap: 15px; height: auto; }
-  .headerRight { width: 100%; justify-content: space-between; }
-  .statsGrid { padding: 20px; }
-  .content { padding: 0 20px; }
-  
-  .tableContainer table, .tableContainer thead, .tableContainer tbody, .tableContainer th, .tableContainer td, .tableContainer tr {
+  .header {
+    padding: 15px 20px;
+    flex-direction: column;
+    gap: 15px;
+    height: auto;
+  }
+
+  .headerRight {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .statsGrid {
+    padding: 20px;
+  }
+
+  .content {
+    padding: 0 20px;
+  }
+
+  .tableContainer table,
+  .tableContainer thead,
+  .tableContainer tbody,
+  .tableContainer th,
+  .tableContainer td,
+  .tableContainer tr {
     display: block;
   }
-  
-  .tableContainer thead { display: none; }
+
+  .tableContainer thead {
+    display: none;
+  }
+
   .tableContainer td {
     border: none;
     position: relative;
@@ -396,7 +444,7 @@ td {
     padding-bottom: 10px;
     text-align: left;
   }
-  
+
   .tableContainer td:before {
     content: attr(data-label);
     position: absolute;
@@ -406,7 +454,7 @@ td {
     font-size: 10px;
     text-transform: uppercase;
   }
-  
+
   .tableContainer tr {
     border-bottom: 1px solid #E8E0D5;
     padding: 15px 0;
@@ -439,7 +487,7 @@ td {
 
 .productCard:hover {
   transform: translateY(-4px);
-  box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
 }
 
 .productCardImage {
@@ -535,8 +583,15 @@ td {
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .formSection h3 {
@@ -571,7 +626,9 @@ td {
   color: #444;
 }
 
-.formGroup input, .formGroup select, .formGroup textarea {
+.formGroup input,
+.formGroup select,
+.formGroup textarea {
   padding: 12px;
   border: 1px solid #E8E0D5;
   border-radius: 8px;
@@ -579,7 +636,10 @@ td {
   font-size: 14px;
 }
 
-.formGroup input:focus { border-color: #C4948A; outline: none; }
+.formGroup input:focus {
+  border-color: #C4948A;
+  outline: none;
+}
 
 .toggleRow {
   display: flex;
@@ -625,7 +685,7 @@ td {
   right: 4px;
   width: 20px;
   height: 20px;
-  background: rgba(0,0,0,0.5);
+  background: rgba(0, 0, 0, 0.5);
   color: white;
   border: none;
   border-radius: 50%;
@@ -723,9 +783,20 @@ td {
   font-weight: 600;
 }
 
-.lowStock { background: #FFF3CD; color: #856404; }
-.outOfStock { background: #F8D7DA; color: #721c24; }
-.inStock { background: #D4EDDA; color: #155724; }
+.lowStock {
+  background: #FFF3CD;
+  color: #856404;
+}
+
+.outOfStock {
+  background: #F8D7DA;
+  color: #721c24;
+}
+
+.inStock {
+  background: #D4EDDA;
+  color: #155724;
+}
 
 .searchContainer {
   display: flex;
@@ -748,7 +819,40 @@ td {
 }
 
 @media (max-width: 600px) {
-  .formGrid { grid-template-columns: 1fr; }
-  .formGroupFull { grid-column: span 1; }
-  .toggleRow { flex-direction: column; }
+  .formGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .formGroupFull {
+    grid-column: span 1;
+  }
+
+  .toggleRow {
+    flex-direction: column;
+  }
+}
+
+.fragranceGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.fragranceOption {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--text-primary, #1A1A1A);
+  cursor: pointer;
+  padding: 8px 12px;
+  background: #FAF8F5;
+  border-radius: 8px;
+  border: 1px solid #E8E0D5;
+  transition: border-color 0.2s;
+}
+
+.fragranceOption:has(input:checked) {
+  border-color: #C4948A;
+  background: rgba(196, 148, 138, 0.05);
 }

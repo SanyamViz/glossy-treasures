@@ -1,14 +1,14 @@
 import React from 'react';
 import styles from './FilterBar.module.css';
 
-const FilterBar = ({ 
-  category, 
-  filterConfigs, 
-  activeFilters, 
-  onFilterChange, 
-  sortBy, 
-  onSortChange, 
-  totalCount 
+const FilterBar = ({
+  category,
+  filterConfigs,
+  activeFilters,
+  onFilterChange,
+  sortBy,
+  onSortChange,
+  totalCount
 }) => {
   return (
     <div className={styles.stickyContainer}>
@@ -36,9 +36,9 @@ const FilterBar = ({
         <div className={styles.bottomRow}>
           <span className={styles.count}>{totalCount} products</span>
           <div className={styles.sortWrapper}>
-            <select 
-              className={styles.sortSelect} 
-              value={sortBy} 
+            <select
+              className={styles.sortSelect}
+              value={sortBy}
               onChange={(e) => onSortChange(e.target.value)}
             >
               <option value="newest">New to Old</option>

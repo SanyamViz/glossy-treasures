@@ -38,8 +38,7 @@ const FILTER_CONFIGS = [
       { label: 'Gifting', value: 'Gifting' },
       { label: 'Wedding', value: 'Wedding' },
       { label: 'Self Care', value: 'Self Care' },
-      { label: 'New Arrival', value: 'New Arrival' },
-      { label: 'Wedding', value: 'Wedding' },
+      { label: 'New Arrival', value: 'New Arrival' }
     ]
   },
   {
@@ -86,19 +85,13 @@ const ResinShop = () => {
   const handleFilterChange = (key, value) => {
     setIsLoading(true);
     setActiveFilters(prev => {
-      const current = prev[key];
       if (value === 'all') return { ...prev, [key]: [] };
-
-      const next = current.includes(value)
-        ? current.filter(v => v !== value)
-        : [...current, value];
-
-      return { ...prev, [key]: next };
+      const isSame = prev[key].includes(value);
+      return { ...prev, [key]: isSame ? [] : [value] }; // deselect if same, else replace
     });
     setVisibleCount(6);
     setTimeout(() => setIsLoading(false), 200);
   };
-
   const filteredProducts = useMemo(() => {
     let result = [...products];
 
