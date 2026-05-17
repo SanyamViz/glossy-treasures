@@ -1,6 +1,7 @@
 .stickyContainer {
-  position: sticky;
-  top: 56px; /* Below Navbar */
+  position: static;
+  top: 56px;
+  /* Below Navbar */
   background-color: var(--bg-primary);
   border-bottom: 1px solid var(--card);
   z-index: 100;
@@ -32,11 +33,13 @@
   gap: 8px;
   overflow-x: auto;
   padding-bottom: 4px;
-  scrollbar-width: none; /* Firefox */
+  scrollbar-width: none;
+  /* Firefox */
 }
 
 .chipRow::-webkit-scrollbar {
-  display: none; /* Chrome/Safari */
+  display: none;
+  /* Chrome/Safari */
 }
 
 .chip {
