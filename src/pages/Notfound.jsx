@@ -82,7 +82,7 @@ const Notfound = () => {
                             <span className={styles.linkIcon}>🎁</span>
                             <span className={styles.linkLabel}>Collections</span>
                         </Link>
-                        <Link to="/build-hamper" className={styles.linkCard}>
+                        <Link to="/hamper-builder" className={styles.linkCard}>
                             <span className={styles.linkIcon}>📦</span>
                             <span className={styles.linkLabel}>Custom Hamper</span>
                         </Link>

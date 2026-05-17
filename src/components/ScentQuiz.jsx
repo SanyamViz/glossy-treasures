@@ -67,7 +67,7 @@ const results = {
         description: 'Curated with love. A candle and resin piece paired together.',
         price: '₹2,499',
         image: 'https://placehold.co/120x120/E8E0D5/7A7068',
-        link: '/build-hamper'
+        link: '/hamper-builder'
     }
 }
     ;
@@ -82,29 +82,29 @@ export default function ScentQuiz() {
     const [recommendedProduct, setRecommendedProduct] = useState(null);
 
     const QUIZ_SCENT_MAP = {
-      'floral': 'Floral',
-      'woody': 'Woody',
-      'fresh': 'Fresh',
-      'warm': 'Warm',
-      'citrus': 'Citrus',
-      'gourmand': 'Gourmand',
+        'floral': 'Floral',
+        'woody': 'Woody',
+        'fresh': 'Fresh',
+        'warm': 'Warm',
+        'citrus': 'Citrus',
+        'gourmand': 'Gourmand',
     };
 
     useEffect(() => {
-      if (quizResult) {
-        const scentFamily = QUIZ_SCENT_MAP[quizResult.toLowerCase()];
-        if (scentFamily) {
-          fetch(`${import.meta.env.VITE_API_URL}/api/products?category=candle&scentFamily=${scentFamily}`)
-            .then(r => r.json())
-            .then(data => {
-              if (Array.isArray(data) && data.length > 0) {
-                const randomIdx = Math.floor(Math.random() * data.length);
-                setRecommendedProduct(data[randomIdx]);
-              }
-            })
-            .catch(console.error);
+        if (quizResult) {
+            const scentFamily = QUIZ_SCENT_MAP[quizResult.toLowerCase()];
+            if (scentFamily) {
+                fetch(`${import.meta.env.VITE_API_URL}/api/products?category=candle&scentFamily=${scentFamily}`)
+                    .then(r => r.json())
+                    .then(data => {
+                        if (Array.isArray(data) && data.length > 0) {
+                            const randomIdx = Math.floor(Math.random() * data.length);
+                            setRecommendedProduct(data[randomIdx]);
+                        }
+                    })
+                    .catch(console.error);
+            }
         }
-      }
     }, [quizResult]);
 
     const handleAnswer = (option) => {

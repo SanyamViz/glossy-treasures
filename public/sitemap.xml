@@ -4,7 +4,9 @@
   <url><loc>https://glossytreasures.shop/collections</loc><priority>0.9</priority></url>
   <url><loc>https://glossytreasures.shop/shop/candles</loc><priority>0.9</priority></url>
   <url><loc>https://glossytreasures.shop/shop/resin</loc><priority>0.9</priority></url>
-  <url><loc>https://glossytreasures.shop/build-hamper</loc><priority>0.8</priority></url>
+  <url><loc>https://glossytreasures.shop/collections/new-arrivals</loc><priority>0.8</priority></url>
+  <url><loc>https://glossytreasures.shop/collections/bestsellers</loc><priority>0.8</priority></url>
+  <url><loc>https://glossytreasures.shop/hamper-builder</loc><priority>0.7</priority></url>
   <url><loc>https://glossytreasures.shop/our-story</loc><priority>0.7</priority></url>
   <url><loc>https://glossytreasures.shop/contact</loc><priority>0.7</priority></url>
   <url><loc>https://glossytreasures.shop/wholesale</loc><priority>0.6</priority></url>
