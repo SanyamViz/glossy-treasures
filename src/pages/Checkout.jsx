@@ -42,7 +42,7 @@ const Checkout = () => {
   const [summaryOpen, setSummaryOpen] = useState(false);
   const [placing, setPlacing] = useState(false);
   const [errors, setErrors] = useState({});
-
+  const [codClicked, setCodClicked] = useState(false);
   const [form, setForm] = useState({
     name: '', phone: '', email: '',
     address: '', city: '', state: '', pincode: '',
@@ -130,6 +130,7 @@ const Checkout = () => {
 
   const handleNext = () => {
     if (step === 0 && !validateDelivery()) return;
+    if (step === 1 && payMethod === 'cod') return;
     setStep(s => s + 1);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -215,8 +216,8 @@ const Checkout = () => {
             if (item.category === 'hamper') {
               const hamperContents = Array.isArray(item.selectedOptions?.items)
                 ? item.selectedOptions.items.map(hi =>
-                    `${hi.product?.name || hi.name || hi.productName}${hi.qty > 1 ? ` ×${hi.qty}` : ''}`
-                  ).join(', ')
+                  `${hi.product?.name || hi.name || hi.productName}${hi.qty > 1 ? ` ×${hi.qty}` : ''}`
+                ).join(', ')
                 : 'Custom Hamper';
               const recipient = item.selectedOptions?.recipientName
                 ? ` | For: ${item.selectedOptions.recipientName}`
@@ -379,11 +380,33 @@ const Checkout = () => {
       <h2 className={styles.sectionTitle}>Payment Method</h2>
       <div className={styles.payMethods}>
         {PAYMENT_METHODS.map(m => (
-          <button key={m.id} className={`${styles.payMethod} ${payMethod === m.id ? styles.payActive : ''}`} onClick={() => setPayMethod(m.id)} type="button">
-            <span className={styles.payIcon}>{m.icon}</span>
-            <div className={styles.payInfo}><span className={styles.payLabel}>{m.label}</span><span className={styles.payDesc}>{m.desc}</span></div>
-            <div className={`${styles.payRadio} ${payMethod === m.id ? styles.payRadioActive : ''}`} />
-          </button>
+          <div key={m.id}>
+            <button
+              className={`${styles.payMethod} ${payMethod === m.id && m.id !== 'cod' ? styles.payActive : ''} ${codClicked && m.id === 'cod' ? styles.payDisabled : ''}`}
+              onClick={() => {
+                if (m.id === 'cod') {
+                  setCodClicked(true);
+                  setPayMethod('cod');
+                } else {
+                  setPayMethod(m.id);
+                  setCodClicked(false);
+                }
+              }}
+              type="button"
+            >
+              <span className={styles.payIcon}>{m.icon}</span>
+              <div className={styles.payInfo}>
+                <span className={styles.payLabel}>{m.label}</span>
+                <span className={styles.payDesc}>{m.desc}</span>
+              </div>
+              <div className={`${styles.payRadio} ${payMethod === m.id && m.id !== 'cod' ? styles.payRadioActive : ''}`} />
+            </button>
+            {m.id === 'cod' && codClicked && (
+              <p className={styles.codNote}>
+                ✦ Cash on Delivery coming soon — please select UPI or Card
+              </p>
+            )}
+          </div>
         ))}
       </div>
     </div>,
@@ -398,10 +421,10 @@ const Checkout = () => {
       <div className={styles.reviewItems}>
         {cartItems.map(item => (
           <div key={item.cartId} className={styles.reviewItem}>
-            <img 
-              src={item.image || item.images?.[0] || '/placeholder.jpg'} 
-              alt={item.name} 
-              style={{ width: '50px', height: '50px', borderRadius: '4px', objectFit: 'cover', marginRight: '12px' }} 
+            <img
+              src={item.image || item.images?.[0] || '/placeholder.jpg'}
+              alt={item.name}
+              style={{ width: '50px', height: '50px', borderRadius: '4px', objectFit: 'cover', marginRight: '12px' }}
             />
             <div className={styles.reviewItemInfo}>
               <span className={styles.reviewItemName}>{item.name}</span>
@@ -415,10 +438,10 @@ const Checkout = () => {
                     {item.personalization.name && <span className={styles.reviewItemVariant}>Name: {item.personalization.name}</span>}
                     {item.personalization.date && <span className={styles.reviewItemVariant}>Date: {item.personalization.date}</span>}
                     {item.personalization.photos && item.personalization.photos.map((p, idx) => (
-                       <img key={idx} src={p} alt={`Custom ${idx+1}`} style={{ width: '40px', height: '40px', borderRadius: '4px', objectFit: 'cover' }} />
+                      <img key={idx} src={p} alt={`Custom ${idx + 1}`} style={{ width: '40px', height: '40px', borderRadius: '4px', objectFit: 'cover' }} />
                     ))}
                     {item.personalization.photo && (
-                       <img src={item.personalization.photo} alt="Custom" style={{ width: '40px', height: '40px', borderRadius: '4px', objectFit: 'cover' }} />
+                      <img src={item.personalization.photo} alt="Custom" style={{ width: '40px', height: '40px', borderRadius: '4px', objectFit: 'cover' }} />
                     )}
                   </div>
                 )}
@@ -458,7 +481,7 @@ const Checkout = () => {
 
             <AnimatePresence>
               {summaryOpen && (
-                <motion.div 
+                <motion.div
                   className={styles.mobileSummaryContent}
                   initial={{ height: 0, opacity: 0 }}
                   animate={{ height: 'auto', opacity: 1 }}
@@ -467,12 +490,12 @@ const Checkout = () => {
                   style={{ overflow: 'hidden' }}
                 >
                   <div style={{ paddingBottom: '20px' }}>
-                    <SummaryContent 
-                      cartItems={cartItems} 
-                      cartTotal={cartTotal} 
-                      shipping={shipping} 
-                      discountAmount={discountAmount} 
-                      grandTotal={grandTotal} 
+                    <SummaryContent
+                      cartItems={cartItems}
+                      cartTotal={cartTotal}
+                      shipping={shipping}
+                      discountAmount={discountAmount}
+                      grandTotal={grandTotal}
                       freeShipping={freeShipping}
                       discountApplied={discountApplied}
                       discountCode={discountCode}
@@ -501,12 +524,12 @@ const Checkout = () => {
 
           <aside className={`${styles.sidebar} ${mounted ? styles.sidebarIn : ''}`}>
             <div className={styles.sidebarInner}>
-              <SummaryContent 
-                cartItems={cartItems} 
-                cartTotal={cartTotal} 
-                shipping={shipping} 
-                discountAmount={discountAmount} 
-                grandTotal={grandTotal} 
+              <SummaryContent
+                cartItems={cartItems}
+                cartTotal={cartTotal}
+                shipping={shipping}
+                discountAmount={discountAmount}
+                grandTotal={grandTotal}
                 freeShipping={freeShipping}
                 discountApplied={discountApplied}
                 discountCode={discountCode}
@@ -527,10 +550,10 @@ const Checkout = () => {
   );
 };
 
-const SummaryContent = ({ 
-  cartItems, cartTotal, shipping, discountAmount, grandTotal, 
-  freeShipping, discountApplied, discountCode, removeDiscount, 
-  handleApplyDiscount, setDiscountCode 
+const SummaryContent = ({
+  cartItems, cartTotal, shipping, discountAmount, grandTotal,
+  freeShipping, discountApplied, discountCode, removeDiscount,
+  handleApplyDiscount, setDiscountCode
 }) => (
   <>
     <h2 className={styles.sidebarTitle}>Order Summary</h2>
@@ -555,12 +578,12 @@ const SummaryContent = ({
     <div className={styles.discountRow}>
       {!discountApplied ? (
         <>
-          <input 
-            className={styles.discountInput} 
-            type="text" 
-            placeholder="Discount code" 
-            value={discountCode} 
-            onChange={e => setDiscountCode(e.target.value.toUpperCase())} 
+          <input
+            className={styles.discountInput}
+            type="text"
+            placeholder="Discount code"
+            value={discountCode}
+            onChange={e => setDiscountCode(e.target.value.toUpperCase())}
           />
           <button className={styles.applyBtn} onClick={handleApplyDiscount}>Apply</button>
         </>

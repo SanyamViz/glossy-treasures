@@ -1129,3 +1129,17 @@
     cursor: pointer;
     padding: 0 4px;
 }
+
+.payDisabled {
+    opacity: 0.5;
+    background: var(--bg-secondary, #F0EBE3);
+}
+
+.codNote {
+    font-size: 8px;
+    color: #C4948A;
+    font-family: 'Jost', sans-serif;
+    margin: -4px 0 8px 16px;
+    border-left: 2px solid #C4948A;
+    padding-left: 8px;
+}
